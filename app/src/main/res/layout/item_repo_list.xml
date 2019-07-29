@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    style="@style/AppCardView">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/margin_default"
+        tools:background="@android:color/white">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/imageRepoAuthor"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:scaleType="centerCrop"
+            tools:src="@drawable/ic_person"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textRepoName"
+            style="@style/AppText.Title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/imageRepoAuthor"
+            app:layout_constraintTop_toTopOf="parent"
+            android:maxLines="1"
+            android:ellipsize="end"
+            tools:text="Repo Name"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textRepoAuthor"
+            style="@style/AppText.Subtitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/imageRepoAuthor"
+            app:layout_constraintTop_toBottomOf="@+id/textRepoName"
+            android:maxLines="1"
+            android:ellipsize="end"
+            tools:text="Author Name"/>
+
+        <LinearLayout
+            android:id="@+id/layoutRepoDescription"
+            android:layout_width="0dp"
+            android:layout_height="80dp"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/imageRepoAuthor"
+            app:layout_constraintTop_toBottomOf="@+id/textRepoAuthor">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/textRepoDescription"
+                style="@style/AppText.Description"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:maxLines="2"
+                tools:text="This os the description from Glide RepoThis os the description from Glide RepoThis os the description from Glide RepoThis os the description from Glide Repo"
+                android:ellipsize="end"/>
+
+        </LinearLayout>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textStarsCount"
+            style="@style/AppText.Details"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_star"
+            android:drawableStart="@drawable/ic_star"
+            app:layout_constraintStart_toEndOf="@+id/imageRepoAuthor"
+            app:layout_constraintTop_toBottomOf="@+id/layoutRepoDescription"
+            tools:text="3000"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textForksCount"
+            style="@style/AppText.Details"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_pull_request"
+            android:drawableStart="@drawable/ic_pull_request"
+            app:layout_constraintStart_toEndOf="@+id/textStarsCount"
+            app:layout_constraintTop_toBottomOf="@+id/layoutRepoDescription"
+            tools:text="300"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textIssuesCount"
+            style="@style/AppText.Details"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_issue"
+            android:drawableStart="@drawable/ic_issue"
+            app:layout_constraintStart_toEndOf="@+id/textForksCount"
+            app:layout_constraintTop_toBottomOf="@+id/layoutRepoDescription"
+            tools:text="5"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>
