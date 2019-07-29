@@ -64,6 +64,9 @@ dependencies {
     implementation "androidx.room:room-ktx:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
 
+    //CircleImageView
+    implementation "de.hdodenhof:circleimageview:$circle_image_view_version"
+
     testImplementation 'junit:junit:4.12'
 
     androidTestImplementation 'androidx.test:runner:1.2.0'

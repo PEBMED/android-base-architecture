@@ -24,6 +24,7 @@ ext {
     koin_version = '2.0.1'
     lifecycle_version = '2.2.0-alpha02'
     room_version = '2.2.0-alpha01'
+    circle_image_view_version = '3.0.0'
 }
 
 allprojects {
