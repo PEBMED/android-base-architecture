@@ -27,6 +27,7 @@ Acompanhe nossa [Wiki]() para entender a estrutura (TODO).
 * [koin](https://insert-koin.io/)
 * [viewModel + liveData](https://developer.android.com/topic/libraries/architecture/adding-components)
 * [room](https://developer.android.com/topic/libraries/architecture/room)
+* [circleImageView](https://github.com/hdodenhof/CircleImageView)
 
 ## Roadmap
 - [ ] Paginar resultados
