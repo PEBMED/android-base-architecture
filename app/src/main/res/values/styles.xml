@@ -42,4 +42,15 @@
         <item name="android:textAppearance">@style/Base.TextAppearance.AppCompat.Small</item>
     </style>
 
+    <style name="AppCardView" parent="CardView">
+        <item name="android:layout_marginBottom">@dimen/margin_medium</item>
+        <item name="android:layout_marginTop">@dimen/margin_medium</item>
+        <item name="android:foreground">?android:attr/selectableItemBackground</item>
+        <item name="android:focusable">true</item>
+        <item name="android:clickable">true</item>
+        <item name="cardElevation">@dimen/margin_small</item>
+        <item name="cardUseCompatPadding">true</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
 </resources>
