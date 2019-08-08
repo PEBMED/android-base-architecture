@@ -14,8 +14,8 @@
         <item name="android:layout_marginLeft">@dimen/margin_default</item>
         <item name="android:layout_marginStart">@dimen/margin_default</item>
         <item name="android:layout_marginTop">@dimen/margin_medium</item>
-        <item name="android:maxLines">4</item>
-        <item name="android:padding">@dimen/margin_default</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:gravity">center|left</item>
         <item name="android:textAppearance">@style/Base.TextAppearance.AppCompat.Small</item>
         <item name="android:textStyle">italic</item>
     </style>
