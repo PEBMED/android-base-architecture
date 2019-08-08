@@ -17,7 +17,11 @@ class MainViewModel(
     val reposState: LiveData<ViewStateResource<List<Repo>>>
         get() = _reposState
 
-    fun test() {
+    init {
+        loadRepos()
+    }
+
+    fun loadRepos() {
         _reposState.postValue(ViewStateResource.Loading())
 
         val params = GetReposUseCase.Params(true)
