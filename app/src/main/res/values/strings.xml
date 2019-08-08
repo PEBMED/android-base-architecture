@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">BaseArch</string>
     <string name="base_url">https://api.github.com</string>
-    <string name="default_loading_message">Loading...</string>
-    <string name="null_body_response_message">Without body response</string>
+    <string name="repo_loading_message">Buscando repositórios</string>
+    <string name="error_message">Ocorreu um erro inesperado</string>
+    <string name="empty_list">Lista vazia</string>
+    <string name="try_again">Tente novamente</string>
 </resources>
