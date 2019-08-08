@@ -60,6 +60,7 @@ object RepoRemoteMapper : BaseMapper<RepoPayload, Repo> {
         updatedAt = from.updatedAt,
         url = from.url,
         watchers = from.watchers,
-        watchersCount = from.watchersCount
+        watchersCount = from.watchersCount,
+        stargazersCount = from.stargazersCount
     )
 }

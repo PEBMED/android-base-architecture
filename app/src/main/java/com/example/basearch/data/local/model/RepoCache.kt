@@ -54,6 +54,7 @@ data class RepoCache(
     @ColumnInfo(name = "trees_url") val treesUrl: String?,
     @ColumnInfo(name = "updated_at") val updatedAt: String?,
     @ColumnInfo(name = "watchers_count") val watchersCount: Int?,
+    @ColumnInfo(name = "stargazers_count") val stargazersCount: Int?,
     @ColumnInfo(name = "is_synchronized") val isSynchronized: Boolean?,
     @ColumnInfo(name = "last_sync_date") val lastSyncDate: String?,
     val description: String?,

@@ -55,5 +55,6 @@ data class Repo(
     val updatedAt: String?,
     val url: String?,
     val watchers: Int?,
-    val watchersCount: Int?
+    val watchersCount: Int?,
+    val stargazersCount: Int?
 )
