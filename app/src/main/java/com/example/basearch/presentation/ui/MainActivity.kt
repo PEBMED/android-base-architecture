@@ -42,4 +42,41 @@ class MainActivity : AppCompatActivity() {
             viewModel.test()
         }
     }
+    //region ViewStates
+    private fun showLoadingView() {
+        hideErrorView()
+        hideReposList()
+
+        layoutReposLoading.setVisible()
+    }
+
+    private fun hideLoadingView() {
+        layoutReposLoading.setGone()
+    }
+    private fun showErrorView(message: String) {
+        hideLoadingView()
+        hideReposList()
+
+        textReposError.text = message
+        layoutReposError.setVisible()
+    }
+
+    private fun hideErrorView() {
+        layoutReposError.setGone()
+        textReposError.text = ""
+    }
+
+    private fun showReposList(repos: List<Repo>) {
+        hideLoadingView()
+        hideErrorView()
+
+        reposAdapter.addItems(repos)
+
+        recyclerViewRepos.setVisible()
+    }
+
+    private fun hideReposList() {
+        recyclerViewRepos.setGone()
+    }
+    //endregion
 }
