@@ -1,29 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".presentation.ui.MainActivity">
+
+    <LinearLayout
+        android:id="@+id/layoutReposLoading"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".presentation.ui.MainActivity">
+        android:orientation="vertical"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-            android:id="@+id/textView"
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Hello World!"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
-    <Button
-            android:text="Buscar"
+            android:text="@string/repo_loading_message"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layoutReposError"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/textReposError"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/button"
-            app:layout_constraintTop_toBottomOf="@+id/textView" app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="8dp" android:layout_marginRight="8dp"
-            app:layout_constraintStart_toStartOf="parent" android:layout_marginLeft="8dp"
-            android:layout_marginStart="8dp"/>
+            tools:text="@string/error_message"/>
+
+        <Button
+            android:id="@+id/buttonReposTryAgain"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/try_again"/>
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewRepos"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
