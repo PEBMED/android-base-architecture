@@ -1,6 +1,6 @@
 package com.example.basearch.domain.usecases
 
-import com.example.basearch.presentation.ui.ViewStateResource
+import br.com.pebmed.domain.base.ViewStateResource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch

@@ -1,4 +1,4 @@
-package com.example.basearch.presentation.ui
+package br.com.pebmed.domain.base
 
 sealed class ViewStateResource<SUCCESS> {
     class Success<SUCCESS>(

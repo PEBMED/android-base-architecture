@@ -7,7 +7,6 @@ val useCaseModule = module {
 
     factory {
         GetReposUseCase(
-            sharedPreferencesUtil = get(),
             repoRepository = get()
         )
     }

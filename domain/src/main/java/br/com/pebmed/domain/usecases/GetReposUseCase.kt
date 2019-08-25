@@ -1,15 +1,13 @@
 package com.example.basearch.domain.usecases
 
+import br.com.pebmed.domain.base.ViewStateResource
+import br.com.pebmed.domain.extensions.getCurrentDateTime
+import br.com.pebmed.domain.extensions.toCacheFormat
 import com.example.basearch.data.ResultWrapper
-import com.example.basearch.data.local.preferences.SharedPreferencesUtil
 import com.example.basearch.domain.entities.Repo
 import com.example.basearch.domain.repository.RepoRepository
-import com.example.basearch.presentation.extensions.getCurrentDateTime
-import com.example.basearch.presentation.extensions.toCacheFormat
-import com.example.basearch.presentation.ui.ViewStateResource
 
 class GetReposUseCase(
-    private val sharedPreferencesUtil: SharedPreferencesUtil,
     private val repoRepository: RepoRepository
 ) : BaseUseCase<List<Repo>, GetReposUseCase.Params>() {
 
@@ -36,7 +34,7 @@ class GetReposUseCase(
         return when (val remoteResult = repoRepository.getAllRemoteRepos(1, "kotlin")) {
             is ResultWrapper.Success -> {
                 if (remoteResult.data.isNotEmpty()) {
-                    sharedPreferencesUtil.lastRepoSyncDate = getCurrentDateTime().toCacheFormat()
+                    repoRepository.saveLastSyncDate(getCurrentDateTime().toCacheFormat())
 
                     ViewStateResource.Success(remoteResult.data)
                 } else

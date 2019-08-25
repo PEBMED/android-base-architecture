@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import br.com.pebmed.domain.base.ViewStateResource
 import com.example.basearch.domain.entities.Repo
 import com.example.basearch.domain.usecases.GetReposUseCase
 

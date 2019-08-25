@@ -1,0 +1,17 @@
+apply plugin: 'java-library'
+apply plugin: 'kotlin'
+
+dependencies {
+    def dependencies = rootProject.ext.dependencies
+
+    implementation dependencies.kotlin
+
+    //Koin
+    implementation dependencies.koin
+
+    //Coroutines
+    implementation dependencies.kotlinxCoroutines
+}
+
+sourceCompatibility = "8"
+targetCompatibility = "8"
