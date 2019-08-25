@@ -4,8 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.basearch.data.ResultWrapper
-import com.example.basearch.data.remote.BaseErrorData
 import com.example.basearch.domain.entities.Repo
 import com.example.basearch.domain.usecases.GetReposUseCase
 

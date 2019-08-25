@@ -1,6 +1,6 @@
 package com.example.basearch.data.di
 
-import com.example.basearch.R
+import br.com.pebmed.data.R
 import com.example.basearch.data.remote.api.RepoApi
 import com.example.basearch.data.remote.source.RepoRemoteDataSouce
 import com.example.basearch.data.remote.source.RepoRemoteDataSourceImpl

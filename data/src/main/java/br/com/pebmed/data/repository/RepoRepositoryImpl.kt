@@ -19,6 +19,10 @@ class RepoRepositoryImpl(
         return sharedPreferencesUtil.lastRepoSyncDate
     }
 
+    override fun saveLastSyncDate(dateString: String) {
+        sharedPreferencesUtil.lastRepoSyncDate = dateString
+    }
+
     override suspend fun getAllRemoteRepos(
         page: Int,
         language: String

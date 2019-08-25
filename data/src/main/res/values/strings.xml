@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">data</string>
+    <string name="base_url">https://api.github.com</string>
+</resources>
