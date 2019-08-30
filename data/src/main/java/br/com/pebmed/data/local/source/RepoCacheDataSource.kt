@@ -1,8 +1,8 @@
-package com.example.basearch.data.local.source
+package br.com.pebmed.data.local.source
 
-import com.example.basearch.data.ResultWrapper
-import com.example.basearch.data.local.model.RepoCache
-import com.example.basearch.data.remote.BaseErrorData
+import br.com.pebmed.domain.base.ResultWrapper
+import br.com.pebmed.data.local.model.RepoCache
+import br.com.pebmed.domain.base.BaseErrorData
 
 interface RepoCacheDataSource {
     suspend fun getRepos(): ResultWrapper<List<RepoCache>?, BaseErrorData<Void>>

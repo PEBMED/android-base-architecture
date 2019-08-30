@@ -1,6 +1,6 @@
-package com.example.basearch.data.remote.model.response
+package br.com.pebmed.data.remote.model.response
 
-import com.example.basearch.data.remote.model.RepoPayload
+import br.com.pebmed.data.remote.model.RepoPayload
 import com.google.gson.annotations.SerializedName
 
 data class GetReposResponse(

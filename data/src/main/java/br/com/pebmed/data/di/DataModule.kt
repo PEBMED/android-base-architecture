@@ -1,7 +1,7 @@
-package com.example.basearch.data.di
+package br.com.pebmed.data.di
 
-import com.example.basearch.data.repository.RepoRepositoryImpl
-import com.example.basearch.domain.repository.RepoRepository
+import br.com.pebmed.data.repository.RepoRepositoryImpl
+import br.com.pebmed.domain.repository.RepoRepository
 import org.koin.dsl.module
 
 val repositoryModule = module {

@@ -1,14 +1,14 @@
-package com.example.basearch.data.repository
+package br.com.pebmed.data.repository
 
-import com.example.basearch.data.ResultWrapper
-import com.example.basearch.data.local.mapper.RepoCacheMapper
+import br.com.pebmed.domain.base.BaseErrorData
+import br.com.pebmed.data.local.mapper.RepoCacheMapper
+import br.com.pebmed.data.local.source.RepoCacheDataSourceImpl
+import br.com.pebmed.data.remote.mapper.RepoRemoteMapper
+import br.com.pebmed.domain.base.ResultWrapper
 import com.example.basearch.data.local.preferences.SharedPreferencesUtil
-import com.example.basearch.data.local.source.RepoCacheDataSourceImpl
-import com.example.basearch.data.remote.BaseErrorData
-import com.example.basearch.data.remote.mapper.RepoRemoteMapper
 import com.example.basearch.data.remote.source.RepoRemoteDataSourceImpl
-import com.example.basearch.domain.entities.Repo
-import com.example.basearch.domain.repository.RepoRepository
+import br.com.pebmed.domain.entities.Repo
+import br.com.pebmed.domain.repository.RepoRepository
 
 class RepoRepositoryImpl(
     private val remoteRepository: RepoRemoteDataSourceImpl,
@@ -50,7 +50,10 @@ class RepoRepositoryImpl(
         }
     }
 
-    override suspend fun getRepo(id: Int, fromRemote: Boolean): ResultWrapper<Repo?, BaseErrorData<Void>> {
+    override suspend fun getRepo(
+        id: Int,
+        fromRemote: Boolean
+    ): ResultWrapper<Repo?, BaseErrorData<Void>> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }

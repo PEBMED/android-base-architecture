@@ -1,6 +1,6 @@
-package com.example.basearch.domain.di
+package br.com.pebmed.domain.di
 
-import com.example.basearch.domain.usecases.GetReposUseCase
+import br.com.pebmed.domain.usecases.GetReposUseCase
 import org.koin.dsl.module
 
 val useCaseModule = module {

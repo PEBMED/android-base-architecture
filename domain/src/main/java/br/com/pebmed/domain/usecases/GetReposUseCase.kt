@@ -1,4 +1,4 @@
-package com.example.basearch.domain.usecases
+package br.com.pebmed.domain.usecases
 
 import br.com.pebmed.domain.base.ViewStateResource
 import br.com.pebmed.domain.extensions.getCurrentDateTime

@@ -1,11 +1,11 @@
 package com.example.basearch.data.remote.source
 
-import com.example.basearch.data.ResultWrapper
-import com.example.basearch.data.remote.BaseErrorData
-import com.example.basearch.data.remote.api.RepoApi
-import com.example.basearch.data.remote.model.response.GetReposResponse
-import com.example.basearch.data.repository.BaseDataSourceImpl
-import com.example.basearch.data.repository.ExecuteApiAsync
+import br.com.pebmed.domain.base.ResultWrapper
+import br.com.pebmed.domain.base.BaseErrorData
+import br.com.pebmed.data.remote.api.RepoApi
+import br.com.pebmed.data.remote.model.response.GetReposResponse
+import br.com.pebmed.data.repository.BaseDataSourceImpl
+import br.com.pebmed.data.repository.ExecuteApiAsync
 import retrofit2.Response
 
 class RepoRemoteDataSourceImpl(private val repoApi: RepoApi) : RepoRemoteDataSouce, BaseDataSourceImpl() {

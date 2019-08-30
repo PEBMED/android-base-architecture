@@ -1,4 +1,4 @@
-package com.example.basearch.data.remote
+package br.com.pebmed.domain.base
 
 enum class StatusType(val code: Int) {
     OK(200),

@@ -1,7 +1,7 @@
-package com.example.basearch.data.local.database
+package br.com.pebmed.data.local.database
 
 import androidx.room.*
-import com.example.basearch.data.local.model.RepoCache
+import br.com.pebmed.data.local.model.RepoCache
 
 @Dao
 interface RepoDao {

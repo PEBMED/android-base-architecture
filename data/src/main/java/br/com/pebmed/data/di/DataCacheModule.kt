@@ -1,10 +1,10 @@
-package com.example.basearch.data.di
+package br.com.pebmed.data.di
 
 import androidx.room.Room
-import com.example.basearch.data.local.database.WBDatabase
+import br.com.pebmed.data.local.database.WBDatabase
 import com.example.basearch.data.local.preferences.SharedPreferencesUtil
-import com.example.basearch.data.local.source.RepoCacheDataSource
-import com.example.basearch.data.local.source.RepoCacheDataSourceImpl
+import br.com.pebmed.data.local.source.RepoCacheDataSource
+import br.com.pebmed.data.local.source.RepoCacheDataSourceImpl
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.bind
 import org.koin.dsl.module

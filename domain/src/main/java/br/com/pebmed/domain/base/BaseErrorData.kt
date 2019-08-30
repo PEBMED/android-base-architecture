@@ -1,4 +1,4 @@
-package com.example.basearch.data.remote
+package br.com.pebmed.domain.base
 
 data class BaseErrorData<ERROR_BODY>(
     val errorBody: ERROR_BODY? = null,

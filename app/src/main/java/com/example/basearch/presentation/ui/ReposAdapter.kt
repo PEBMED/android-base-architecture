@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
 import com.example.basearch.R
-import com.example.basearch.domain.entities.Repo
+import br.com.pebmed.domain.entities.Repo
 import kotlinx.android.synthetic.main.item_repo_list.view.*
 
 class ReposAdapter(private val reposList: MutableList<Repo>, private val requestManager: RequestManager) : RecyclerView.Adapter<ReposAdapter.ReposViewHolder>() {
@@ -42,17 +42,17 @@ class ReposAdapter(private val reposList: MutableList<Repo>, private val request
         holder.bindView(repo, requestManager)
     }
 
-    public fun addItems(repos: List<Repo>) {
+    fun addItems(repos: List<Repo>) {
         val oldSize = reposList.size
         reposList.addAll(repos)
         notifyItemRangeInserted(oldSize, repos.size)
     }
 
-    public fun addItem(repo: Repo) {
+    fun addItem(repo: Repo) {
         reposList.add(repo)
         notifyItemInserted(reposList.size - 1)
     }
 
-    public fun isEmpty() = reposList.isEmpty()
+    fun isEmpty() = reposList.isEmpty()
 
 }

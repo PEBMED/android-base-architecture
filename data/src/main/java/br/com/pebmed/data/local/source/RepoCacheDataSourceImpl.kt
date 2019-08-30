@@ -1,13 +1,14 @@
-package com.example.basearch.data.local.source
+package br.com.pebmed.data.local.source
 
-import com.example.basearch.data.ResultWrapper
-import com.example.basearch.data.local.database.RepoDao
-import com.example.basearch.data.local.model.RepoCache
-import com.example.basearch.data.remote.BaseErrorData
-import com.example.basearch.data.repository.BaseDataSourceImpl
-import com.example.basearch.data.repository.ExecuteAsync
+import br.com.pebmed.domain.base.BaseErrorData
+import br.com.pebmed.data.local.database.RepoDao
+import br.com.pebmed.data.local.model.RepoCache
+import br.com.pebmed.domain.base.ResultWrapper
+import br.com.pebmed.data.repository.BaseDataSourceImpl
+import br.com.pebmed.data.repository.ExecuteAsync
 
-class RepoCacheDataSourceImpl(private val repoDao: RepoDao) : RepoCacheDataSource, BaseDataSourceImpl() {
+class RepoCacheDataSourceImpl(private val repoDao: RepoDao) : RepoCacheDataSource,
+    BaseDataSourceImpl() {
     override suspend fun getRepos(): ResultWrapper<List<RepoCache>?, BaseErrorData<Void>> {
         return safeCall(object : ExecuteAsync<List<RepoCache>?> {
             override suspend fun execute(): List<RepoCache>? {

@@ -1,7 +1,7 @@
-package com.example.basearch.data.di
+package br.com.pebmed.data.di
 
 import br.com.pebmed.data.R
-import com.example.basearch.data.remote.api.RepoApi
+import br.com.pebmed.data.remote.api.RepoApi
 import com.example.basearch.data.remote.source.RepoRemoteDataSouce
 import com.example.basearch.data.remote.source.RepoRemoteDataSourceImpl
 import okhttp3.OkHttpClient

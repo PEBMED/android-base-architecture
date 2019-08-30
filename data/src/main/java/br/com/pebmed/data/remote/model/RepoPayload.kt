@@ -1,4 +1,4 @@
-package com.example.basearch.data.remote.model
+package br.com.pebmed.data.remote.model
 
 import com.google.gson.annotations.SerializedName
 

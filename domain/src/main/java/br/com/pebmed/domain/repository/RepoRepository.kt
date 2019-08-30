@@ -1,13 +1,20 @@
-package com.example.basearch.domain.repository
+package br.com.pebmed.domain.repository
 
-import com.example.basearch.data.ResultWrapper
-import com.example.basearch.data.remote.BaseErrorData
-import com.example.basearch.domain.entities.Repo
+import br.com.pebmed.domain.base.BaseErrorData
+import br.com.pebmed.domain.base.ResultWrapper
+import br.com.pebmed.domain.entities.Repo
 
 interface RepoRepository {
     fun getLastSyncDate(): String
     fun saveLastSyncDate(dateString: String)
-    suspend fun getAllRemoteRepos(page: Int, language: String): ResultWrapper<List<Repo>, BaseErrorData<Void>>
+    suspend fun getAllRemoteRepos(
+        page: Int,
+        language: String
+    ): ResultWrapper<List<Repo>, BaseErrorData<Void>>
+
     suspend fun getAllLocalRepos(): ResultWrapper<List<Repo>?, BaseErrorData<Void>>
-    suspend fun getRepo(id: Int, fromRemote: Boolean = false): ResultWrapper<Repo?, BaseErrorData<Void>>
+    suspend fun getRepo(
+        id: Int,
+        fromRemote: Boolean = false
+    ): ResultWrapper<Repo?, BaseErrorData<Void>>
 }

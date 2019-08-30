@@ -1,6 +1,4 @@
-package com.example.basearch.data
-
-import com.example.basearch.data.remote.StatusType
+package br.com.pebmed.domain.base
 
 sealed class ResultWrapper<SUCCESS, ERROR>(
     var keyValueMap: MutableMap<String, String>? = null,

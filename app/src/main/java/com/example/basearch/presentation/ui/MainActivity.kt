@@ -4,10 +4,9 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import br.com.pebmed.domain.base.ViewStateResource
 import com.bumptech.glide.Glide
 import com.example.basearch.R
-import com.example.basearch.domain.entities.Repo
+import br.com.pebmed.domain.entities.Repo
 import com.example.basearch.presentation.extensions.setGone
 import com.example.basearch.presentation.extensions.setVisible
 import com.example.basearch.presentation.extensions.showToast

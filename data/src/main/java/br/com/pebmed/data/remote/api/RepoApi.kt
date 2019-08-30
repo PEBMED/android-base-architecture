@@ -1,6 +1,6 @@
-package com.example.basearch.data.remote.api
+package br.com.pebmed.data.remote.api
 
-import com.example.basearch.data.remote.model.response.GetReposResponse
+import br.com.pebmed.data.remote.model.response.GetReposResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query

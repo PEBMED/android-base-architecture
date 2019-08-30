@@ -1,10 +1,9 @@
-package com.example.basearch.data.repository
+package br.com.pebmed.data.repository
 
-import com.example.basearch.data.ResultWrapper
-import com.example.basearch.data.local.model.RepoCache
-import com.example.basearch.data.remote.ApiResponseHandler
-import com.example.basearch.data.remote.BaseErrorData
-import com.example.basearch.data.remote.StatusType
+import br.com.pebmed.domain.base.BaseErrorData
+import br.com.pebmed.data.remote.ApiResponseHandler
+import br.com.pebmed.domain.base.ResultWrapper
+import br.com.pebmed.domain.base.StatusType
 import retrofit2.Response
 import java.io.IOException
 import java.net.ConnectException
@@ -49,12 +48,13 @@ open class BaseDataSourceImpl {
         }
     }
 
-    suspend inline fun<SUCCESS, reified ERROR> safeCall(executeAsync: ExecuteAsync<SUCCESS>): ResultWrapper<SUCCESS, BaseErrorData<ERROR>> {
-        return try{
+    suspend inline fun <SUCCESS, reified ERROR> safeCall(executeAsync: ExecuteAsync<SUCCESS>): ResultWrapper<SUCCESS, BaseErrorData<ERROR>> {
+        return try {
             val response = executeAsync.execute()
             ResultWrapper.Success(data = response)
         } catch (exception: Exception) {
-            val baseErrorData = BaseErrorData<ERROR>(errorMessage = exception.message)
+            val baseErrorData =
+                BaseErrorData<ERROR>(errorMessage = exception.message)
             ResultWrapper.Error(baseErrorData)
         }
     }
