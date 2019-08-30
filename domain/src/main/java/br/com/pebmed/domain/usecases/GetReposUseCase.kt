@@ -1,48 +1,43 @@
 package br.com.pebmed.domain.usecases
 
-import br.com.pebmed.domain.base.ViewStateResource
 import br.com.pebmed.domain.extensions.getCurrentDateTime
 import br.com.pebmed.domain.extensions.toCacheFormat
-import com.example.basearch.data.ResultWrapper
-import com.example.basearch.domain.entities.Repo
-import com.example.basearch.domain.repository.RepoRepository
+import br.com.pebmed.domain.base.ResultWrapper
+import br.com.pebmed.domain.entities.Repo
+import br.com.pebmed.domain.repository.RepoRepository
 
 class GetReposUseCase(
     private val repoRepository: RepoRepository
-) : BaseUseCase<List<Repo>, GetReposUseCase.Params>() {
+) : BaseUseCase<ResultWrapper<List<Repo>?, String>, GetReposUseCase.Params>() {
 
-    override suspend fun run(params: Params): ViewStateResource<List<Repo>> {
+    override suspend fun run(params: Params): ResultWrapper<List<Repo>?, String> {
         return if (params.forceSync) {
             getAllFromRemote()
         } else {
             when (val localResult = repoRepository.getAllLocalRepos()) {
                 is ResultWrapper.Success -> {
-                    if (localResult.data != null && localResult.data.isNotEmpty())
-                        ViewStateResource.Success(localResult.data)
-                    else
-                        ViewStateResource.Empty()
+                    ResultWrapper.Success(localResult.data)
                 }
 
                 is ResultWrapper.Error -> {
-                    ViewStateResource.Error(localResult.data?.errorMessage)
+                    ResultWrapper.Error(localResult.data?.errorMessage)
                 }
             }
         }
     }
 
-    private suspend fun getAllFromRemote(): ViewStateResource<List<Repo>> {
+    private suspend fun getAllFromRemote(): ResultWrapper<List<Repo>?, String> {
         return when (val remoteResult = repoRepository.getAllRemoteRepos(1, "kotlin")) {
             is ResultWrapper.Success -> {
                 if (remoteResult.data.isNotEmpty()) {
                     repoRepository.saveLastSyncDate(getCurrentDateTime().toCacheFormat())
+                }
 
-                    ViewStateResource.Success(remoteResult.data)
-                } else
-                    ViewStateResource.Empty()
+                ResultWrapper.Success(remoteResult.data)
             }
 
             is ResultWrapper.Error -> {
-                ViewStateResource.Error(remoteResult.data?.errorMessage)
+                ResultWrapper.Error(remoteResult.data?.errorMessage)
             }
         }
     }
