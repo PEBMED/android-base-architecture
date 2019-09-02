@@ -1,3 +1,6 @@
+[![codebeat badge](https://codebeat.co/badges/38f811e1-c9b4-45d1-9673-0c4e890d086a)](https://codebeat.co/projects/github-com-pebmed-android-base-architecture-master)
+![Code Climate maintainability](https://img.shields.io/codeclimate/maintainability-percentage/PEBMED/android-base-architecture)
+
 ## **Arquitetura para projetos Android**
 >  CLEAN ARCH - KOIN - ROOM - RETROFIT - COROUTINES - MVVM
 
