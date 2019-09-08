@@ -40,7 +40,7 @@ class ApiResponseHandler {
             var errorData: ERROR? = null
 
             when (ERROR::class) {
-                Void::class -> {
+                Unit::class -> {
                 }
                 else -> {
                     val msg = response.errorBody()?.string()
