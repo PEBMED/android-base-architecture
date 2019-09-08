@@ -1,7 +1,7 @@
 package br.com.pebmed.data.repository
 
-import br.com.pebmed.domain.base.BaseErrorData
 import br.com.pebmed.data.remote.ApiResponseHandler
+import br.com.pebmed.domain.base.BaseErrorData
 import br.com.pebmed.domain.base.ResultWrapper
 import br.com.pebmed.domain.base.StatusType
 import retrofit2.Response
@@ -11,13 +11,12 @@ import java.net.NoRouteToHostException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
-
 open class BaseDataSourceImpl {
-    suspend inline fun <SUCCESS, reified ERROR> safeApiCall(executeApiAsync: ExecuteApiAsync<SUCCESS>): ResultWrapper<SUCCESS, BaseErrorData<ERROR>> {
+    inline fun <SUCCESS, reified ERROR> safeApiCall(executeApiAsync: () -> Response<SUCCESS>): ResultWrapper<SUCCESS, BaseErrorData<ERROR>> {
         return try {
-            val response = executeApiAsync.execute()
+            val response = executeApiAsync.invoke()
 
-            ApiResponseHandler().handleApiResponse(response)
+            ApiResponseHandler.build(response)
         } catch (exception: Exception) {
             val baseErrorData = BaseErrorData<ERROR>(
                 errorMessage = exception.message
@@ -48,9 +47,9 @@ open class BaseDataSourceImpl {
         }
     }
 
-    suspend inline fun <SUCCESS, reified ERROR> safeCall(executeAsync: ExecuteAsync<SUCCESS>): ResultWrapper<SUCCESS, BaseErrorData<ERROR>> {
+    inline fun <SUCCESS, reified ERROR> safeCall(executeAsync: () -> SUCCESS): ResultWrapper<SUCCESS, BaseErrorData<ERROR>> {
         return try {
-            val response = executeAsync.execute()
+            val response = executeAsync.invoke()
             ResultWrapper.Success(data = response)
         } catch (exception: Exception) {
             val baseErrorData =
@@ -58,12 +57,4 @@ open class BaseDataSourceImpl {
             ResultWrapper.Error(baseErrorData)
         }
     }
-}
-
-interface ExecuteApiAsync<T> {
-    suspend fun execute(): Response<T>
-}
-
-interface ExecuteAsync<T> {
-    suspend fun execute(): T
 }

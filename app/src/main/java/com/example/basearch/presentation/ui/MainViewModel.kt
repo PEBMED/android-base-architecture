@@ -26,7 +26,7 @@ class MainViewModel(
         val params = GetReposUseCase.Params(true)
         getReposUseCase.invoke(viewModelScope, params) {
             run {
-                val viewStateResource = when(it) {
+                val viewStateResource = when (it) {
                     is ResultWrapper.Success -> {
                         if (it.data != null && it.data!!.isNotEmpty())
                             ViewStateResource.Success(it.data!!)
@@ -35,7 +35,7 @@ class MainViewModel(
                     }
 
                     is ResultWrapper.Error -> {
-                        ViewStateResource.Error(it.data)
+                        ViewStateResource.Error(it.data?.errorMessage)
                     }
                 }
 
