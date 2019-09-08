@@ -1,15 +1,15 @@
 package com.example.basearch.presentation.ui
 
-sealed class ViewStateResource<SUCCESS> {
-    class Success<SUCCESS>(
+sealed class ViewStateResource<SUCCESS, ERROR> {
+    class Success<SUCCESS, ERROR>(
         val data: SUCCESS
-    ) : ViewStateResource<SUCCESS>()
+    ) : ViewStateResource<SUCCESS, ERROR>()
 
-    class Error<SUCCESS>(
-        val message: String?
-    ) : ViewStateResource<SUCCESS>()
+    class Error<SUCCESS, ERROR>(
+        val error: ERROR? = null
+    ) : ViewStateResource<SUCCESS, ERROR>()
 
-    class Empty<SUCCESS> : ViewStateResource<SUCCESS>()
+    class Empty<SUCCESS, ERROR>: ViewStateResource<SUCCESS, ERROR>()
 
-    class Loading<SUCCESS> : ViewStateResource<SUCCESS>()
+    class Loading<SUCCESS, ERROR>: ViewStateResource<SUCCESS, ERROR>()
 }
