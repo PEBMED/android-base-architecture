@@ -10,8 +10,8 @@ sealed class ResultWrapper<out SUCCESS, out ERROR>(
         statusCode: StatusType? = StatusType.OK
     ) : ResultWrapper<SUCCESS, ERROR>(keyValueMap, statusCode)
 
-    class Error<out SUCCESS, out ERROR>(
-        val data: ERROR? = null,
+    class Error<out SUCCESS, ERROR>(
+        val error: ERROR? = null,
         keyValueMap: MutableMap<String, String>? = null,
         statusCode: StatusType? = StatusType.DEFAULT_EXCEPTION
     ) : ResultWrapper<SUCCESS, ERROR>(keyValueMap = keyValueMap, statusCode = statusCode)
@@ -38,7 +38,7 @@ sealed class ResultWrapper<out SUCCESS, out ERROR>(
             }
 
             is Error -> {
-                val newError = mapperErrorFunction.invoke(this.data)
+                val newError = mapperErrorFunction.invoke(this.error)
                 Error(newError)
             }
         }
@@ -54,7 +54,7 @@ sealed class ResultWrapper<out SUCCESS, out ERROR>(
             }
 
             is Error -> {
-                Error(this.data)
+                Error(this.error)
             }
         }
     }
@@ -68,7 +68,7 @@ sealed class ResultWrapper<out SUCCESS, out ERROR>(
             }
 
             is Error -> {
-                val newError = mapperFunction.invoke(this.data)
+                val newError = mapperFunction.invoke(this.error)
                 Error(newError)
             }
         }
