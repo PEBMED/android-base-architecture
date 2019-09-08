@@ -65,5 +65,5 @@ class ApiResponseHandler {
     }
 
     inline fun <reified T> Gson.fromJsonGeneric(json: String): T =
-        this.fromJson<T>(json, object : TypeToken<T>() {}.type)
+        this.fromJson(json, object : TypeToken<T>() {}.type)
 }
