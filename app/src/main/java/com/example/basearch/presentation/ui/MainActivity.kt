@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity() {
 
                 is ViewStateResource.Error -> {
                     val baseErrorData = it.error
-                    val message = baseErrorData?.errorBody?.customMessage ?: getString(R.string.error_message)
+                    val message = baseErrorData?.errorMessage ?: getString(R.string.error_message)
 
                     if(reposAdapter.isEmpty()) {
                         showErrorView(message)
