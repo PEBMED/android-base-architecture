@@ -5,6 +5,7 @@ import br.com.pebmed.data.remote.api.RepoApi
 import br.com.pebmed.data.remote.source.RepoRemoteDataSouce
 import br.com.pebmed.data.remote.source.RepoRemoteDataSourceImpl
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.bind
 import org.koin.dsl.module
@@ -13,7 +14,20 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 val remoteDataSourceModule = module {
-    factory { providesOkHttpClient() }
+    single<OkHttpClient> {
+        providesOkHttpClient(
+            get() as HttpLoggingInterceptor
+        )
+    }
+
+    single<HttpLoggingInterceptor> {
+        val interceptor = HttpLoggingInterceptor()
+
+        interceptor.level = HttpLoggingInterceptor.Level.BODY
+
+        interceptor
+    }
+
     single {
         createWebService<RepoApi>(
             okHttpClient = get(),
@@ -24,8 +38,9 @@ val remoteDataSourceModule = module {
     factory { RepoRemoteDataSourceImpl(repoApi = get()) } bind RepoRemoteDataSouce::class
 }
 
-fun providesOkHttpClient(): OkHttpClient {
+fun providesOkHttpClient(loggingInterceptor: HttpLoggingInterceptor): OkHttpClient {
     return OkHttpClient.Builder()
+        .addInterceptor(loggingInterceptor)
         .connectTimeout(30, TimeUnit.SECONDS)
         .readTimeout(30, TimeUnit.SECONDS)
         .writeTimeout(30, TimeUnit.SECONDS)
