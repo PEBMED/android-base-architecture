@@ -1,4 +1,4 @@
-package com.example.basearch.data.remote.source
+package br.com.pebmed.data.remote.source
 
 import br.com.pebmed.domain.base.ResultWrapper
 import br.com.pebmed.domain.base.BaseErrorData

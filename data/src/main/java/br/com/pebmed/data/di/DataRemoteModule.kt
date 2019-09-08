@@ -2,8 +2,8 @@ package br.com.pebmed.data.di
 
 import br.com.pebmed.data.R
 import br.com.pebmed.data.remote.api.RepoApi
-import com.example.basearch.data.remote.source.RepoRemoteDataSouce
-import com.example.basearch.data.remote.source.RepoRemoteDataSourceImpl
+import br.com.pebmed.data.remote.source.RepoRemoteDataSouce
+import br.com.pebmed.data.remote.source.RepoRemoteDataSourceImpl
 import okhttp3.OkHttpClient
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.bind
