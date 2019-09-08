@@ -1,5 +1,6 @@
 package br.com.pebmed.data.remote.model
 
+import br.com.pebmed.domain.entities.Owner
 import com.google.gson.annotations.SerializedName
 
 data class OwnerPayload(
@@ -21,4 +22,18 @@ data class OwnerPayload(
     @SerializedName("subscriptions_url") val subscriptionsUrl: String?,
     @SerializedName("type") val type: String?,
     @SerializedName("url") val url: String?
+)
+
+fun OwnerPayload.mapToOwner() = Owner(
+    id = this.id,
+    avatarUrl = this.avatarUrl,
+    gravatarId = this.gravatarId,
+    htmlUrl = this.htmlUrl,
+    login = this.login,
+    nodeId = this.nodeId,
+    siteAdmin = this.siteAdmin,
+    starredUrl = this.starredUrl,
+    subscriptionsUrl = this.subscriptionsUrl,
+    type = this.type,
+    url = this.url
 )
