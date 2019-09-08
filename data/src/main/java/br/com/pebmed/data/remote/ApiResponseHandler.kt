@@ -7,8 +7,8 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import retrofit2.Response
 
-class ApiResponseHandler {
-    inline fun <SUCCESS, reified ERROR> handleApiResponse(response: Response<SUCCESS>): ResultWrapper<SUCCESS, BaseErrorData<ERROR>> {
+object ApiResponseHandler {
+    inline fun <SUCCESS, reified ERROR> build(response: Response<SUCCESS>): ResultWrapper<SUCCESS, BaseErrorData<ERROR>> {
         val headers = response.headers()
 
         val getHeadersHashMap = {
