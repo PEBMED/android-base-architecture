@@ -4,17 +4,17 @@ sealed class ResultWrapper<out SUCCESS, out ERROR>(
     var keyValueMap: MutableMap<String, String>? = null,
     var statusCode: StatusType? = StatusType.DEFAULT_EXCEPTION
 ) {
-    class Success<out SUCCESS, out ERROR>(
+    class Success<out SUCCESS>(
         val data: SUCCESS,
         keyValueMap: MutableMap<String, String>? = null,
         statusCode: StatusType? = StatusType.OK
-    ) : ResultWrapper<SUCCESS, ERROR>(keyValueMap, statusCode)
+    ) : ResultWrapper<SUCCESS, Nothing>(keyValueMap, statusCode)
 
-    class Error<out SUCCESS, ERROR>(
+    class Error<ERROR>(
         val error: ERROR? = null,
         keyValueMap: MutableMap<String, String>? = null,
         statusCode: StatusType? = StatusType.DEFAULT_EXCEPTION
-    ) : ResultWrapper<SUCCESS, ERROR>(keyValueMap = keyValueMap, statusCode = statusCode)
+    ) : ResultWrapper<Nothing, ERROR>(keyValueMap = keyValueMap, statusCode = statusCode)
 
     fun getValue(key: String): String? {
         var result: String? = null
