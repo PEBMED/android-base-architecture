@@ -10,8 +10,8 @@ sealed class ResultWrapper<out SUCCESS, out ERROR>(
         statusCode: StatusType? = StatusType.OK
     ) : ResultWrapper<SUCCESS, ERROR>(keyValueMap, statusCode)
 
-    class Error<out SUCCESS, out ERROR>(
-        val data: ERROR? = null,
+    class Error<out SUCCESS, ERROR>(
+        val error: ERROR? = null,
         keyValueMap: MutableMap<String, String>? = null,
         statusCode: StatusType? = StatusType.DEFAULT_EXCEPTION
     ) : ResultWrapper<SUCCESS, ERROR>(keyValueMap = keyValueMap, statusCode = statusCode)
@@ -34,12 +34,20 @@ sealed class ResultWrapper<out SUCCESS, out ERROR>(
         return when (this) {
             is Success -> {
                 val newSuccess = mapperSuccessFunction.invoke(this.data)
-                Success(newSuccess)
+                Success(
+                    data = newSuccess,
+                    keyValueMap = this.keyValueMap,
+                    statusCode = this.statusCode
+                )
             }
 
             is Error -> {
-                val newError = mapperErrorFunction.invoke(this.data)
-                Error(newError)
+                val newError = mapperErrorFunction.invoke(this.error)
+                Error(
+                    error = newError,
+                    keyValueMap = this.keyValueMap,
+                    statusCode = this.statusCode
+                )
             }
         }
     }
@@ -50,11 +58,19 @@ sealed class ResultWrapper<out SUCCESS, out ERROR>(
         return when (this) {
             is Success -> {
                 val newSuccess = mapperFunction.invoke(this.data)
-                Success(newSuccess)
+                Success(
+                    data = newSuccess,
+                    keyValueMap = this.keyValueMap,
+                    statusCode = this.statusCode
+                )
             }
 
             is Error -> {
-                Error(this.data)
+                Error(
+                    error = this.error,
+                    keyValueMap = this.keyValueMap,
+                    statusCode = this.statusCode
+                )
             }
         }
     }
@@ -64,12 +80,20 @@ sealed class ResultWrapper<out SUCCESS, out ERROR>(
     ): ResultWrapper<SUCCESS, NEW_ERROR> {
         return when (this) {
             is Success -> {
-                Success(this.data)
+                Success(
+                    data = this.data,
+                    keyValueMap = this.keyValueMap,
+                    statusCode = this.statusCode
+                )
             }
 
             is Error -> {
-                val newError = mapperFunction.invoke(this.data)
-                Error(newError)
+                val newError = mapperFunction.invoke(this.error)
+                Error(
+                    error = newError,
+                    keyValueMap = this.keyValueMap,
+                    statusCode = this.statusCode
+                )
             }
         }
     }

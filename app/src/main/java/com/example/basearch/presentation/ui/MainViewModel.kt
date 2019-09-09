@@ -4,16 +4,18 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import br.com.pebmed.domain.base.ResultWrapper
+import br.com.pebmed.domain.base.BaseErrorData
+import br.com.pebmed.domain.entities.GetReposErrorData
 import br.com.pebmed.domain.entities.Repo
 import br.com.pebmed.domain.usecases.GetReposUseCase
+import com.example.basearch.presentation.extensions.loadViewStateResourceList
 
 class MainViewModel(
     private val getReposUseCase: GetReposUseCase
-) : ViewModel() {
+) :ViewModel() {
 
-    private val _reposState = MutableLiveData<ViewStateResource<List<Repo>>>()
-    val reposState: LiveData<ViewStateResource<List<Repo>>>
+    private val _reposState = MutableLiveData<ViewStateResource<List<Repo>?, BaseErrorData<GetReposErrorData>?>>()
+    val reposState: LiveData<ViewStateResource<List<Repo>?, BaseErrorData<GetReposErrorData>?>>
         get() = _reposState
 
     init {
@@ -24,22 +26,9 @@ class MainViewModel(
         _reposState.postValue(ViewStateResource.Loading())
 
         val params = GetReposUseCase.Params(true)
-        getReposUseCase.invoke(viewModelScope, params) {
+        getReposUseCase.invoke(viewModelScope, params) { resultWrapper ->
             run {
-                val viewStateResource = when (it) {
-                    is ResultWrapper.Success -> {
-                        if (it.data != null && it.data!!.isNotEmpty())
-                            ViewStateResource.Success(it.data!!)
-                        else
-                            ViewStateResource.Empty<List<Repo>>()
-                    }
-
-                    is ResultWrapper.Error -> {
-                        ViewStateResource.Error(it.data?.errorMessage)
-                    }
-                }
-
-                _reposState.postValue(viewStateResource)
+                _reposState.postValue(this.loadViewStateResourceList(resultWrapper))
             }
         }
     }

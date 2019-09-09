@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 is ViewStateResource.Success -> {
-                    showReposList(it.data)
+                    showReposList(it.data!!)
                 }
 
                 is ViewStateResource.Empty -> {
@@ -49,7 +49,8 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 is ViewStateResource.Error -> {
-                    val message = it.message ?: getString(R.string.error_message)
+                    val baseErrorData = it.error
+                    val message = baseErrorData?.errorMessage ?: getString(R.string.error_message)
 
                     if(reposAdapter.isEmpty()) {
                         showErrorView(message)

@@ -3,6 +3,7 @@ package br.com.pebmed.data.repository
 import br.com.pebmed.data.local.model.mapToRepo
 import br.com.pebmed.data.local.source.RepoCacheDataSourceImpl
 import br.com.pebmed.data.remote.model.mapToRepo
+import br.com.pebmed.data.remote.model.response.GetReposResponse
 import br.com.pebmed.data.remote.source.RepoRemoteDataSourceImpl
 import br.com.pebmed.domain.base.BaseErrorData
 import br.com.pebmed.domain.base.ResultWrapper
@@ -31,10 +32,26 @@ class RepoRepositoryImpl(
     ): ResultWrapper<List<Repo>, BaseErrorData<GetReposErrorData>> {
         val remoteResult = remoteRepository.getRepos(page, language)
 
-        return remoteResult.transformSuccess { obj ->
-            obj.repoPayloads.map {
-                it.mapToRepo()
+        return remoteResult.transform(
+            handleGetAllRemoteReposSuccess(),
+            handleGetAllRemoteReposError()
+        )
+    }
+
+    private fun handleGetAllRemoteReposSuccess(): (GetReposResponse) -> List<Repo> {
+        return { getReposResponse ->
+            getReposResponse.repoPayloads.map { repoPayload ->
+                repoPayload.mapToRepo()
             }
+        }
+    }
+
+    private fun handleGetAllRemoteReposError(): (BaseErrorData<GetReposErrorData>?) -> BaseErrorData<GetReposErrorData> {
+        return { baseErrorData ->
+            BaseErrorData(
+                null,
+                baseErrorData?.errorMessage
+            )
         }
     }
 
