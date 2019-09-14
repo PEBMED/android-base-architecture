@@ -8,5 +8,5 @@ interface PullRequestRepository {
     suspend fun listPullRequests(
         owner: String,
         repoName: String
-    ) : ResultWrapper<List<PullRequest>, BaseErrorData<Void>>
+    ) : ResultWrapper<List<PullRequest>?, BaseErrorData<String>?>
 }

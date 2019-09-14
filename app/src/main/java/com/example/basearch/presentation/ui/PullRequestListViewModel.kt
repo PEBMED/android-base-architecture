@@ -4,17 +4,19 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import br.com.pebmed.domain.base.BaseErrorData
 import br.com.pebmed.domain.base.ResultWrapper
 import br.com.pebmed.domain.entities.PullRequest
 import br.com.pebmed.domain.usecases.ListPullRequestsUseCase
+import com.example.basearch.presentation.extensions.loadViewStateResourceList
 
 class PullRequestListViewModel(
     private val listPullRequestsUseCase: ListPullRequestsUseCase
 ) : ViewModel() {
 
-    private val _pullRequestListState = MutableLiveData<ViewStateResource<List<PullRequest>>>()
+    private val _pullRequestListState = MutableLiveData<ViewStateResource<List<PullRequest>?, BaseErrorData<String>?>>()
 
-    val pullRequestlistState: LiveData<ViewStateResource<List<PullRequest>>>
+    val pullRequestlistState: LiveData<ViewStateResource<List<PullRequest>?, BaseErrorData<String>?>>
         get() = _pullRequestListState
 
     fun loadPullRequestList(
@@ -24,23 +26,9 @@ class PullRequestListViewModel(
         _pullRequestListState.postValue(ViewStateResource.Loading())
 
         val params = this.loadParams(owner, repoName)
-
-        listPullRequestsUseCase.invoke(viewModelScope, params) {
+        listPullRequestsUseCase.invoke(viewModelScope, params) { resultWrapper ->
             run {
-                val viewStateResource = when (it) {
-                    is ResultWrapper.Success -> {
-                        if (it.data != null && it.data!!.isNotEmpty())
-                            ViewStateResource.Success(it.data!!)
-                        else
-                            ViewStateResource.Empty<List<PullRequest>>()
-                    }
-
-                    is ResultWrapper.Error -> {
-                        ViewStateResource.Error(it.data)
-                    }
-                }
-
-                _pullRequestListState.postValue(viewStateResource)
+                _pullRequestListState.postValue(this.loadViewStateResourceList(resultWrapper))
             }
         }
     }

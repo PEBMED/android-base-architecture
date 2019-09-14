@@ -1,9 +1,10 @@
 package br.com.pebmed.data.repository
 
-import br.com.pebmed.data.remote.mapper.PullRequestRemoteMapper
+import br.com.pebmed.data.remote.model.response.PullRequestResponse
 import br.com.pebmed.data.remote.source.PullRequestRemoteDataSource
 import br.com.pebmed.domain.base.BaseErrorData
 import br.com.pebmed.domain.base.ResultWrapper
+import br.com.pebmed.domain.entities.GetReposErrorData
 import br.com.pebmed.domain.entities.PullRequest
 import br.com.pebmed.domain.repository.PullRequestRepository
 
@@ -13,15 +14,29 @@ class PullRequestRepositoryImpl(
     override suspend fun listPullRequests(
         owner: String,
         repoName: String
-    ): ResultWrapper<List<PullRequest>, BaseErrorData<Void>> {
-        return when (val remoteResult = pullRequestRemoteDataSource.listPullRequests(owner, repoName)) {
-            is ResultWrapper.Success -> {
-                ResultWrapper.Success(remoteResult.data.map { PullRequestRemoteMapper.map(it) })
-            }
+    ): ResultWrapper<List<PullRequest>?, BaseErrorData<String>?> {
+        val listPullRequests = pullRequestRemoteDataSource.listPullRequests(owner, repoName)
 
-            is ResultWrapper.Error -> {
-                remoteResult.transformError()
+        return listPullRequests.transform(
+            functionSuccess(),
+            function()
+        )
+    }
+
+    private fun functionSuccess(): (List<PullRequestResponse>) -> List<PullRequest> {
+        return {
+            it.map { pullRequestResponse ->
+                pullRequestResponse.mapTo()
             }
+        }
+    }
+
+    private fun function(): (BaseErrorData<GetReposErrorData>?) -> BaseErrorData<String>? {
+        return { baseErrorData ->
+            BaseErrorData(
+                errorBody = null,
+                errorMessage = baseErrorData?.errorMessage
+            )
         }
     }
 }
