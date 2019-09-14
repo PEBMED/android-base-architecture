@@ -44,14 +44,6 @@ val networkModule = module {
             url = androidContext().getString(R.string.base_url)
         )
     }
-
-    factory { RepoRemoteDataSourceImpl(repoApi = get()) } bind RepoRemoteDataSouce::class
-
-    factory {
-        PullRequestRemoteDataSourceImpl(
-            pullRequestApi = get()
-        )
-    } bind PullRequestRemoteDataSource::class
 }
 
 fun providesOkHttpClient(loggingInterceptor: HttpLoggingInterceptor): OkHttpClient {
