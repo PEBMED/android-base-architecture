@@ -5,6 +5,7 @@ import br.com.pebmed.data.remote.source.PullRequestRemoteDataSource
 import br.com.pebmed.domain.base.BaseErrorData
 import br.com.pebmed.domain.base.ResultWrapper
 import br.com.pebmed.domain.entities.GetReposErrorData
+import br.com.pebmed.domain.entities.GitHubErrorData
 import br.com.pebmed.domain.entities.PullRequest
 import br.com.pebmed.domain.repository.PullRequestRepository
 
@@ -31,10 +32,10 @@ class PullRequestRepositoryImpl(
         }
     }
 
-    private fun function(): (BaseErrorData<GetReposErrorData>?) -> BaseErrorData<String>? {
+    private fun function(): (BaseErrorData<GitHubErrorData>?) -> BaseErrorData<String>? {
         return { baseErrorData ->
             BaseErrorData(
-                errorBody = null,
+                errorBody = baseErrorData?.errorBody?.message,
                 errorMessage = baseErrorData?.errorMessage
             )
         }

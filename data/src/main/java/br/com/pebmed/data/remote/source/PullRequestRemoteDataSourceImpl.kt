@@ -6,6 +6,7 @@ import br.com.pebmed.data.repository.BaseDataSourceImpl
 import br.com.pebmed.domain.base.BaseErrorData
 import br.com.pebmed.domain.base.ResultWrapper
 import br.com.pebmed.domain.entities.GetReposErrorData
+import br.com.pebmed.domain.entities.GitHubErrorData
 
 class PullRequestRemoteDataSourceImpl(
     private val pullRequestApi: PullRequestApi
@@ -14,7 +15,7 @@ class PullRequestRemoteDataSourceImpl(
     override suspend fun listPullRequests(
         owner: String,
         repoName: String
-    ): ResultWrapper<List<PullRequestResponse>, BaseErrorData<GetReposErrorData>> {
+    ): ResultWrapper<List<PullRequestResponse>, BaseErrorData<GitHubErrorData>> {
         return safeApiCall { pullRequestApi.listPullRequestsAsync(owner, repoName) }
 
     }
