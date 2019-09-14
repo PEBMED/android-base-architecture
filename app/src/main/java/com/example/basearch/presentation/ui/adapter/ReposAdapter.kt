@@ -1,4 +1,4 @@
-package com.example.basearch.presentation.ui
+package com.example.basearch.presentation.ui.adapter
 
 import android.content.Intent
 import android.view.LayoutInflater

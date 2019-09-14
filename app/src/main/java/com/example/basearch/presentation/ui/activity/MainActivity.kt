@@ -10,7 +10,7 @@ import br.com.pebmed.domain.entities.Repo
 import com.example.basearch.presentation.extensions.setGone
 import com.example.basearch.presentation.extensions.setVisible
 import com.example.basearch.presentation.extensions.showToast
-import com.example.basearch.presentation.ui.ReposAdapter
+import com.example.basearch.presentation.ui.adapter.ReposAdapter
 import com.example.basearch.presentation.ui.ViewStateResource
 import com.example.basearch.presentation.ui.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.activity_main.*
@@ -73,7 +73,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun initReposRecyclerView() {
         reposAdapter =
-            ReposAdapter(mutableListOf(), Glide.with(this))
+            ReposAdapter(
+                mutableListOf(),
+                Glide.with(this)
+            )
 
         recyclerViewRepos.layoutManager = LinearLayoutManager(this)
         recyclerViewRepos.adapter = reposAdapter
