@@ -30,7 +30,7 @@ class SuperResultWrapperV2<SUCCESS, ERROR>(
             )
         } else {
             SuperResultWrapperV2(
-                error = mapperErrorFunction.invoke(this.success),
+                error = mapperErrorFunction.invoke(this.error),
                 statusCode = this.statusCode,
                 keyValueMap = this.keyValueMap
             )
@@ -66,7 +66,7 @@ class SuperResultWrapperV2<SUCCESS, ERROR>(
             )
         } else {
             SuperResultWrapperV2(
-                error = mapperFunction.invoke(this.success),
+                error = mapperFunction.invoke(this.error),
                 statusCode = this.statusCode,
                 keyValueMap = this.keyValueMap
             )
