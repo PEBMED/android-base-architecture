@@ -13,7 +13,7 @@ class GetReposUseCase(
 ) : BaseUseCase<ResultWrapper<List<Repo>?, BaseErrorData<GetReposErrorData>?>, GetReposUseCase.Params>() {
 
     override suspend fun run(params: Params): ResultWrapper<List<Repo>?, BaseErrorData<GetReposErrorData>?> {
-        val result = repoRepository.getAllRepos(params.forceSync, 1, "kotlin")
+        val result = repoRepository.getAllRepos(params.forceSync, 1, "java")
 
         if (result.success != null && params.forceSync) {
             repoRepository.saveLastSyncDate(getCurrentDateTime().toCacheFormat())
