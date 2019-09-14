@@ -1,7 +1,10 @@
 package br.com.pebmed.data.di
 
 import br.com.pebmed.data.R
+import br.com.pebmed.data.remote.api.PullRequestApi
 import br.com.pebmed.data.remote.api.RepoApi
+import br.com.pebmed.data.remote.source.PullRequestRemoteDataSource
+import br.com.pebmed.data.remote.source.PullRequestRemoteDataSourceImpl
 import br.com.pebmed.data.remote.source.RepoRemoteDataSouce
 import br.com.pebmed.data.remote.source.RepoRemoteDataSourceImpl
 import okhttp3.OkHttpClient
@@ -35,7 +38,20 @@ val remoteDataSourceModule = module {
         )
     }
 
+    single {
+        createWebService<PullRequestApi>(
+            okHttpClient = get(),
+            url = androidContext().getString(R.string.base_url)
+        )
+    }
+
     factory { RepoRemoteDataSourceImpl(repoApi = get()) } bind RepoRemoteDataSouce::class
+
+    factory {
+        PullRequestRemoteDataSourceImpl(
+            pullRequestApi = get()
+        )
+    } bind PullRequestRemoteDataSource::class
 }
 
 fun providesOkHttpClient(loggingInterceptor: HttpLoggingInterceptor): OkHttpClient {
