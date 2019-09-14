@@ -15,6 +15,4 @@ val cacheDataModule = module {
     single { get<WBDatabase>().repoDao() }
 
     factory { RepoCacheDataSourceImpl(repoDao = get()) } bind RepoCacheDataSource::class
-//    factory { RepoCacheDataSourceImpl(repoDao = get()) }
-//    factory<RepoCacheDataSource> { RepoCacheDataSourceImpl(repoDao = get()) }
 }
