@@ -38,7 +38,7 @@ class PullRequestListActivity : AppCompatActivity() {
     }
 
     private fun initObservers() {
-        viewModel.pullRequestlistState.observe(this, Observer {
+        viewModel.pullRequestListState.observe(this, Observer {
             when (it) {
                 is ViewStateResource.Loading -> {
                     showLoadingView()

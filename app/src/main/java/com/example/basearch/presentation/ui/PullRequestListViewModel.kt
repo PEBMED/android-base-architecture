@@ -15,7 +15,7 @@ class PullRequestListViewModel(
 
     private val _pullRequestListState = MutableLiveData<ViewStateResource<List<PullRequest>?, BaseErrorData<String>?>>()
 
-    val pullRequestlistState: LiveData<ViewStateResource<List<PullRequest>?, BaseErrorData<String>?>>
+    val pullRequestListState: LiveData<ViewStateResource<List<PullRequest>?, BaseErrorData<String>?>>
         get() = _pullRequestListState
 
     fun loadPullRequestList(
