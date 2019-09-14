@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import br.com.pebmed.domain.base.BaseErrorData
-import br.com.pebmed.domain.base.ResultWrapper
 import br.com.pebmed.domain.entities.PullRequest
 import br.com.pebmed.domain.usecases.ListPullRequestsUseCase
 import com.example.basearch.presentation.extensions.loadViewStateResourceList
