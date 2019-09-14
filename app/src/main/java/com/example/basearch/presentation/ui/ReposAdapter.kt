@@ -1,5 +1,6 @@
 package com.example.basearch.presentation.ui
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
 import com.example.basearch.R
 import br.com.pebmed.domain.entities.Repo
+import com.example.basearch.presentation.ui.activity.PullRequestListActivity
 import kotlinx.android.synthetic.main.item_repo_list.view.*
 
 class ReposAdapter(private val reposList: MutableList<Repo>, private val requestManager: RequestManager) : RecyclerView.Adapter<ReposAdapter.ReposViewHolder>() {
@@ -24,6 +26,20 @@ class ReposAdapter(private val reposList: MutableList<Repo>, private val request
                     .placeholder(R.drawable.ic_person)
                     .error(R.drawable.ic_person)
                     .into(itemView.imageRepoAuthor)
+
+            itemView.setOnClickListener {
+                val intent = Intent(
+                    itemView.context,
+                    PullRequestListActivity::class.java
+                )
+
+                intent.putExtra("owner", repo.owner.login)
+                intent.putExtra("repoName", repo.name)
+
+                itemView.context.startActivity(
+                    intent
+                )
+            }
         }
     }
 
