@@ -11,6 +11,9 @@ dependencies {
 
     //Coroutines
     implementation dependencies.kotlinxCoroutines
+
+    //GSON
+    implementation dependencies.gson
 }
 
 sourceCompatibility = "8"

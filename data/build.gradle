@@ -39,9 +39,6 @@ dependencies {
     implementation dependencies.retrofitGsonConverter
     implementation dependencies.okHttpLogInterceptor
 
-    //GSON
-    implementation dependencies.gson
-
     //Koin
     implementation dependencies.koin
 
