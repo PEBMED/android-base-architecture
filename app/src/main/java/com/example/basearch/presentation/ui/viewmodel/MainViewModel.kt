@@ -1,4 +1,4 @@
-package com.example.basearch.presentation.ui
+package com.example.basearch.presentation.ui.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -9,6 +9,7 @@ import br.com.pebmed.domain.entities.GetReposErrorData
 import br.com.pebmed.domain.entities.Repo
 import br.com.pebmed.domain.usecases.GetReposUseCase
 import com.example.basearch.presentation.extensions.loadViewStateResourceList
+import com.example.basearch.presentation.ui.ViewStateResource
 
 class MainViewModel(
     private val getReposUseCase: GetReposUseCase

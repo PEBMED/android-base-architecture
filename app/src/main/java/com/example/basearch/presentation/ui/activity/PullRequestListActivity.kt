@@ -8,7 +8,7 @@ import br.com.pebmed.domain.entities.PullRequest
 import com.example.basearch.R
 import com.example.basearch.presentation.extensions.setGone
 import com.example.basearch.presentation.extensions.setVisible
-import com.example.basearch.presentation.ui.PullRequestListViewModel
+import com.example.basearch.presentation.ui.viewmodel.PullRequestListViewModel
 import com.example.basearch.presentation.ui.ViewStateResource
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.androidx.viewmodel.ext.android.viewModel

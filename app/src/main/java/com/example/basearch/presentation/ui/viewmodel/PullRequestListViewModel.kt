@@ -1,4 +1,4 @@
-package com.example.basearch.presentation.ui
+package com.example.basearch.presentation.ui.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -8,6 +8,7 @@ import br.com.pebmed.domain.base.BaseErrorData
 import br.com.pebmed.domain.entities.PullRequest
 import br.com.pebmed.domain.usecases.ListPullRequestsUseCase
 import com.example.basearch.presentation.extensions.loadViewStateResourceList
+import com.example.basearch.presentation.ui.ViewStateResource
 
 class PullRequestListViewModel(
     private val listPullRequestsUseCase: ListPullRequestsUseCase

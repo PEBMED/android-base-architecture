@@ -10,6 +10,7 @@ import br.com.pebmed.domain.entities.Repo
 import com.example.basearch.presentation.extensions.setGone
 import com.example.basearch.presentation.extensions.setVisible
 import com.example.basearch.presentation.extensions.showToast
+import com.example.basearch.presentation.ui.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
