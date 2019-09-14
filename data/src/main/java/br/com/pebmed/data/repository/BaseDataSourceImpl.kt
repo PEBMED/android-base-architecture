@@ -4,6 +4,7 @@ import br.com.pebmed.data.remote.ApiResponseHandler
 import br.com.pebmed.domain.base.BaseErrorData
 import br.com.pebmed.domain.base.ResultWrapper
 import br.com.pebmed.domain.base.StatusType
+import br.com.pebmed.domain.base.SuperResultWrapperV2
 import retrofit2.Response
 import java.io.IOException
 import java.net.ConnectException
@@ -43,18 +44,21 @@ open class BaseDataSourceImpl {
                 }
             }
 
-            ResultWrapper.Error(baseErrorData, statusCode = statusCode)
+            SuperResultWrapperV2(
+                error = baseErrorData,
+                statusCode = statusCode
+            )
         }
     }
 
     inline fun <SUCCESS, reified ERROR> safeCall(executeAsync: () -> SUCCESS): ResultWrapper<SUCCESS, BaseErrorData<ERROR>> {
         return try {
             val response = executeAsync.invoke()
-            ResultWrapper.Success(data = response)
+            SuperResultWrapperV2(success = response)
         } catch (exception: Exception) {
             val baseErrorData =
                 BaseErrorData<ERROR>(errorMessage = exception.message)
-            ResultWrapper.Error(baseErrorData)
+            SuperResultWrapperV2(error = baseErrorData)
         }
     }
 }

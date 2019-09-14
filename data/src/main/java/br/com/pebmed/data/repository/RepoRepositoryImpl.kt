@@ -29,7 +29,7 @@ class RepoRepositoryImpl(
     override suspend fun getAllRemoteRepos(
         page: Int,
         language: String
-    ): ResultWrapper<List<Repo>, BaseErrorData<GetReposErrorData>> {
+    ): ResultWrapper<List<Repo>?, BaseErrorData<GetReposErrorData>?> {
         val remoteResult = remoteRepository.getRepos(page, language)
 
         return remoteResult.transform(
@@ -65,7 +65,7 @@ class RepoRepositoryImpl(
         fromRemote: Boolean,
         page: Int,
         language: String
-    ): ResultWrapper<List<Repo>?, BaseErrorData<GetReposErrorData>> {
+    ): ResultWrapper<List<Repo>?, BaseErrorData<GetReposErrorData>?> {
         return if (fromRemote) {
             getAllRemoteRepos(page, language)
         } else {

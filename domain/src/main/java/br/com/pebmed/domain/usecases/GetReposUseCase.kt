@@ -10,12 +10,12 @@ import br.com.pebmed.domain.repository.RepoRepository
 
 class GetReposUseCase(
     private val repoRepository: RepoRepository
-) : BaseUseCase<ResultWrapper<List<Repo>?, BaseErrorData<GetReposErrorData>>, GetReposUseCase.Params>() {
+) : BaseUseCase<ResultWrapper<List<Repo>?, BaseErrorData<GetReposErrorData>?>, GetReposUseCase.Params>() {
 
-    override suspend fun run(params: Params): ResultWrapper<List<Repo>?, BaseErrorData<GetReposErrorData>> {
+    override suspend fun run(params: Params): ResultWrapper<List<Repo>?, BaseErrorData<GetReposErrorData>?> {
         val result = repoRepository.getAllRepos(params.forceSync, 1, "kotlin")
 
-        if (result is ResultWrapper.Success && params.forceSync) {
+        if (result.success != null && params.forceSync) {
             repoRepository.saveLastSyncDate(getCurrentDateTime().toCacheFormat())
         }
 

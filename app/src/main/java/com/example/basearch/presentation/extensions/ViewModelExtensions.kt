@@ -2,13 +2,15 @@ package com.example.basearch.presentation.extensions
 
 import androidx.lifecycle.ViewModel
 import br.com.pebmed.domain.base.ResultWrapper
+import br.com.pebmed.domain.base.SuperResultWrapperV2
 import com.example.basearch.presentation.ui.ViewStateResource
 
 fun <SUCCESS, ERROR> ViewModel.loadViewStateResourceList(resultWrapper: ResultWrapper<SUCCESS, ERROR>): ViewStateResource<SUCCESS, ERROR> {
 
-    return when (resultWrapper) {
-        is ResultWrapper.Success -> {
-            val data = resultWrapper.data
+    return if (resultWrapper is SuperResultWrapperV2) {
+
+        if (resultWrapper.isSuccess()) {
+            val data = resultWrapper.success
 
             if (data != null) {
                 val list = data as List<*>
@@ -21,29 +23,50 @@ fun <SUCCESS, ERROR> ViewModel.loadViewStateResourceList(resultWrapper: ResultWr
             } else {
                 ViewStateResource.Empty()
             }
-        }
-
-        is ResultWrapper.Error -> {
+        } else {
             ViewStateResource.Error(error = resultWrapper.error)
         }
+
+    } else {
+        ViewStateResource.Error(error = resultWrapper.error)
     }
 }
 
 fun <SUCCESS, ERROR> ViewModel.loadViewStateResource(resultWrapper: ResultWrapper<SUCCESS, ERROR>): ViewStateResource<SUCCESS, ERROR> {
 
-    return when (resultWrapper) {
-        is ResultWrapper.Success -> {
-            val data = resultWrapper.data
+    return if (resultWrapper is SuperResultWrapperV2) {
+
+        if (resultWrapper.isSuccess()) {
+            val data = resultWrapper.success
 
             if (data != null) {
                 ViewStateResource.Success(data)
+
             } else {
                 ViewStateResource.Empty()
             }
-        }
-
-        is ResultWrapper.Error -> {
+        } else {
             ViewStateResource.Error(error = resultWrapper.error)
         }
+
+    } else {
+        ViewStateResource.Error(error = resultWrapper.error)
     }
+
+
+//    return when (resultWrapper) {
+//        is ResultWrapper.Success -> {
+//            val data = resultWrapper.data
+//
+//            if (data != null) {
+//                ViewStateResource.Success(data)
+//            } else {
+//                ViewStateResource.Empty()
+//            }
+//        }
+//
+//        is ResultWrapper.Error -> {
+//            ViewStateResource.Error(error = resultWrapper.error)
+//        }
+//    }
 }
