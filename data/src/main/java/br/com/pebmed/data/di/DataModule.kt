@@ -1,3 +1,3 @@
 package br.com.pebmed.data.di
 
-val dataModules = listOf(remoteDataSourceModule, cacheDataSourceModule, repositoryModule)
+val dataModules = listOf(networkModule, cacheDataSourceModule, repositoryModule)
