@@ -9,7 +9,7 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
-val cacheDataModule = module {
+val cacheDataSourceModule = module {
     single { SharedPreferencesUtil(androidContext()) }
     single { Room.databaseBuilder(androidContext(), WBDatabase::class.java, "basearch.db").build() }
     single { get<WBDatabase>().repoDao() }
