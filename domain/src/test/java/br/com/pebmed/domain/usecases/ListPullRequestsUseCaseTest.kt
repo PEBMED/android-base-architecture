@@ -5,6 +5,7 @@ import br.com.pebmed.domain.entities.PullRequest
 import br.com.pebmed.domain.entities.User
 import br.com.pebmed.domain.repository.PullRequestRepository
 import io.mockk.*
+import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -13,7 +14,8 @@ import org.junit.Test
 
 class ListPullRequestsUseCaseTest {
 
-    private val pullRequestRepository = mockk<PullRequestRepository>()
+    @MockK
+    private lateinit var pullRequestRepository: PullRequestRepository
 
     private lateinit var user: User
     private lateinit var pullRequest: PullRequest
@@ -21,6 +23,8 @@ class ListPullRequestsUseCaseTest {
 
     @Before
     fun setUp() {
+        MockKAnnotations.init(this)
+
         user = UsefulObjects.loadUser()
         pullRequest = UsefulObjects.loadPullRequest(user)
         params = UsefulObjects.loadListPullRequestsUseCaseParams()

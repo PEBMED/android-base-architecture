@@ -5,6 +5,7 @@ import br.com.pebmed.data.remote.model.response.UserResponse
 import br.com.pebmed.data.remote.source.PullRequestRemoteDataSource
 import br.com.pebmed.domain.base.ResultWrapper
 import io.mockk.*
+import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
@@ -12,13 +13,15 @@ import org.junit.Test
 
 class PullRequestRepositoryImplTest {
 
+    @MockK
     private lateinit var pullRequestRemoteDataSource: PullRequestRemoteDataSource
+
     private lateinit var user: UserResponse
     private lateinit var pullRequest: PullRequestResponse
 
     @Before
     fun setUp() {
-        pullRequestRemoteDataSource = mockk()
+        MockKAnnotations.init(this)
 
         user = DataUsefulObjects.loadUserResponse()
         pullRequest = DataUsefulObjects.loadPullRequestResponse(user)
@@ -26,6 +29,7 @@ class PullRequestRepositoryImplTest {
 
     @Test
     fun listPullRequests() {
+
         coEvery {
             pullRequestRemoteDataSource.listPullRequests(any(), any())
         } returns ResultWrapper(
