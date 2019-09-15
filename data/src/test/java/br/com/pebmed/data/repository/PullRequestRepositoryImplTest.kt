@@ -46,7 +46,6 @@ class PullRequestRepositoryImplTest {
 
     @Test
     fun testPrivate() {
-        //val pullRequestRemoteDataSource = spyk<PullRequestRemoteDataSource>(recordPrivateCalls = true)
 
         coEvery {
             pullRequestRemoteDataSource.listPullRequests(any(), any())
