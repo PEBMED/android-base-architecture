@@ -45,4 +45,7 @@ dependencies {
     //Room
     implementation dependencies.room
     kapt dependencies.roomCompiler
+
+    testImplementation "io.mockk:mockk:1.9.3"
+    testImplementation testDependecies.junit
 }
