@@ -9,6 +9,7 @@ import br.com.pebmed.domain.repository.PullRequestRepository
 class PullRequestRepositoryImpl(
     private val pullRequestRemoteDataSource: PullRequestRemoteDataSource
 ) : PullRequestRepository {
+
     override suspend fun listPullRequests(
         owner: String,
         repoName: String
