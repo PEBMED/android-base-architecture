@@ -3,7 +3,7 @@ package br.com.pebmed.data.remote
 import br.com.pebmed.domain.base.BaseErrorData
 import br.com.pebmed.domain.base.ResultWrapper
 import br.com.pebmed.domain.base.StatusType
-import br.com.pebmed.domain.base.SuperResultWrapperV2
+import br.com.pebmed.domain.base.CompleteResultWrapper
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import retrofit2.Response
@@ -27,13 +27,13 @@ object ApiResponseHandler {
             //TODO force to crash if body is null?
             val body = response.body()
             return if (body != null)
-                SuperResultWrapperV2(
+                CompleteResultWrapper(
                     success = body,
                     keyValueMap = getHeadersHashMap(),
                     statusCode = StatusType.getByCode(response.code())
                 )
             else
-                SuperResultWrapperV2(
+                CompleteResultWrapper(
                     keyValueMap = getHeadersHashMap(),
                     statusCode = StatusType.NULL_BODY_EXCEPTION
                 )
@@ -57,7 +57,7 @@ object ApiResponseHandler {
                 response.message()
             )
 
-            return SuperResultWrapperV2(
+            return CompleteResultWrapper(
                 error = remoteErrorData,
                 keyValueMap = getHeadersHashMap(),
                 statusCode = StatusType.getByCode(response.code())

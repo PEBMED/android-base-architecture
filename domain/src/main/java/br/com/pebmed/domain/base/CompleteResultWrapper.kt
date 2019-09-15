@@ -1,6 +1,6 @@
 package br.com.pebmed.domain.base
 
-class SuperResultWrapperV2<SUCCESS, ERROR>(
+class CompleteResultWrapper<SUCCESS, ERROR>(
     success: SUCCESS? = null,
     error: ERROR? = null,
     val keyValueMap: MutableMap<String, String>? = null,
@@ -20,16 +20,16 @@ class SuperResultWrapperV2<SUCCESS, ERROR>(
     override fun <NEW_SUCCESS, NEW_ERROR> transform(
         mapperSuccessFunction: (obj: SUCCESS) -> NEW_SUCCESS,
         mapperErrorFunction: (obj: ERROR?) -> NEW_ERROR
-    ): SuperResultWrapperV2<NEW_SUCCESS, NEW_ERROR> {
+    ): CompleteResultWrapper<NEW_SUCCESS, NEW_ERROR> {
 
         return if (this.success != null) {
-            SuperResultWrapperV2(
+            CompleteResultWrapper(
                 success = mapperSuccessFunction.invoke(this.success),
                 statusCode = this.statusCode,
                 keyValueMap = this.keyValueMap
             )
         } else {
-            SuperResultWrapperV2(
+            CompleteResultWrapper(
                 error = mapperErrorFunction.invoke(this.error),
                 statusCode = this.statusCode,
                 keyValueMap = this.keyValueMap
@@ -39,15 +39,15 @@ class SuperResultWrapperV2<SUCCESS, ERROR>(
 
     override fun <NEW_SUCCESS> transformSuccess(
         mapperFunction: (obj: SUCCESS) -> NEW_SUCCESS
-    ): SuperResultWrapperV2<NEW_SUCCESS, ERROR> {
+    ): CompleteResultWrapper<NEW_SUCCESS, ERROR> {
         return if (this.success != null) {
-            SuperResultWrapperV2(
+            CompleteResultWrapper(
                 success = mapperFunction.invoke(this.success),
                 statusCode = this.statusCode,
                 keyValueMap = this.keyValueMap
             )
         } else {
-            SuperResultWrapperV2(
+            CompleteResultWrapper(
                 error = this.error,
                 statusCode = this.statusCode,
                 keyValueMap = this.keyValueMap
@@ -57,15 +57,15 @@ class SuperResultWrapperV2<SUCCESS, ERROR>(
 
     override fun <NEW_ERROR> transformError(
         mapperFunction: (obj: ERROR?) -> NEW_ERROR
-    ): SuperResultWrapperV2<SUCCESS, NEW_ERROR> {
+    ): CompleteResultWrapper<SUCCESS, NEW_ERROR> {
         return if (this.success != null) {
-            SuperResultWrapperV2(
+            CompleteResultWrapper(
                 success = this.success,
                 statusCode = this.statusCode,
                 keyValueMap = this.keyValueMap
             )
         } else {
-            SuperResultWrapperV2(
+            CompleteResultWrapper(
                 error = mapperFunction.invoke(this.error),
                 statusCode = this.statusCode,
                 keyValueMap = this.keyValueMap

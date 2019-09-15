@@ -2,12 +2,12 @@ package com.example.basearch.presentation.extensions
 
 import androidx.lifecycle.ViewModel
 import br.com.pebmed.domain.base.ResultWrapper
-import br.com.pebmed.domain.base.SuperResultWrapperV2
+import br.com.pebmed.domain.base.CompleteResultWrapper
 import com.example.basearch.presentation.ui.ViewStateResource
 
 fun <SUCCESS, ERROR> ViewModel.loadViewStateResourceList(resultWrapper: ResultWrapper<SUCCESS, ERROR>): ViewStateResource<SUCCESS, ERROR> {
 
-    return if (resultWrapper is SuperResultWrapperV2) {
+    return if (resultWrapper is CompleteResultWrapper) {
 
         if (resultWrapper.isSuccess()) {
             val data = resultWrapper.success
@@ -34,7 +34,7 @@ fun <SUCCESS, ERROR> ViewModel.loadViewStateResourceList(resultWrapper: ResultWr
 
 fun <SUCCESS, ERROR> ViewModel.loadViewStateResource(resultWrapper: ResultWrapper<SUCCESS, ERROR>): ViewStateResource<SUCCESS, ERROR> {
 
-    return if (resultWrapper is SuperResultWrapperV2) {
+    return if (resultWrapper is CompleteResultWrapper) {
 
         if (resultWrapper.isSuccess()) {
             val data = resultWrapper.success
