@@ -56,7 +56,11 @@ class RepoRepositoryImpl(
     override suspend fun getAllLocalRepos(): ResultWrapper<List<Repo>?, BaseErrorData<Unit>> {
         val localResponse = localRepository.getRepos()
 
-        return localResponse.transformSuccess { obj -> obj?.map { it.mapTo() } }
+        return localResponse.transformSuccess { originalSuccess ->
+            originalSuccess?.map { repoCache ->
+                repoCache.mapTo()
+            }
+        }
     }
 
     override suspend fun getAllRepos(
@@ -69,10 +73,10 @@ class RepoRepositoryImpl(
         } else {
             val localResult = getAllLocalRepos()
 
-            localResult.transformError { obj ->
+            localResult.transformError { originalError ->
                 BaseErrorData<GetReposErrorData>(
                     null,
-                    obj?.errorMessage
+                    originalError?.errorMessage
                 )
             }
         }
