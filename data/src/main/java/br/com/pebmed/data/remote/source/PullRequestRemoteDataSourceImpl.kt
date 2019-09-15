@@ -5,7 +5,6 @@ import br.com.pebmed.data.remote.model.response.PullRequestResponse
 import br.com.pebmed.data.repository.BaseDataSourceImpl
 import br.com.pebmed.domain.base.BaseErrorData
 import br.com.pebmed.domain.base.ResultWrapper
-import br.com.pebmed.domain.entities.GetReposErrorData
 import br.com.pebmed.domain.entities.GitHubErrorData
 
 class PullRequestRemoteDataSourceImpl(
