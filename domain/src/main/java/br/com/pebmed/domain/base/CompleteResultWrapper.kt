@@ -17,10 +17,10 @@ class CompleteResultWrapper<SUCCESS, ERROR>(
         return result
     }
 
-    override fun <NEW_SUCCESS, NEW_ERROR> transform(
-        mapperSuccessFunction: (obj: SUCCESS) -> NEW_SUCCESS,
-        mapperErrorFunction: (obj: ERROR?) -> NEW_ERROR
-    ): CompleteResultWrapper<NEW_SUCCESS, NEW_ERROR> {
+    override fun <TO_SUCCESS, TO_ERROR> transform(
+        mapperSuccessFunction: (originalSuccess: SUCCESS) -> TO_SUCCESS,
+        mapperErrorFunction: (originalError: ERROR?) -> TO_ERROR
+    ): CompleteResultWrapper<TO_SUCCESS, TO_ERROR> {
 
         return if (this.success != null) {
             CompleteResultWrapper(
@@ -37,9 +37,9 @@ class CompleteResultWrapper<SUCCESS, ERROR>(
         }
     }
 
-    override fun <NEW_SUCCESS> transformSuccess(
-        mapperFunction: (obj: SUCCESS) -> NEW_SUCCESS
-    ): CompleteResultWrapper<NEW_SUCCESS, ERROR> {
+    override fun <TO_SUCCESS> transformSuccess(
+        mapperFunction: (originalSuccess: SUCCESS) -> TO_SUCCESS
+    ): CompleteResultWrapper<TO_SUCCESS, ERROR> {
         return if (this.success != null) {
             CompleteResultWrapper(
                 success = mapperFunction.invoke(this.success),
@@ -55,9 +55,9 @@ class CompleteResultWrapper<SUCCESS, ERROR>(
         }
     }
 
-    override fun <NEW_ERROR> transformError(
-        mapperFunction: (obj: ERROR?) -> NEW_ERROR
-    ): CompleteResultWrapper<SUCCESS, NEW_ERROR> {
+    override fun <TO_ERROR> transformError(
+        mapperFunction: (originalError: ERROR?) -> TO_ERROR
+    ): CompleteResultWrapper<SUCCESS, TO_ERROR> {
         return if (this.success != null) {
             CompleteResultWrapper(
                 success = this.success,
