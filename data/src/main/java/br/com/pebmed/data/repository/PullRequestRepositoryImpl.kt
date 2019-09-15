@@ -17,12 +17,12 @@ class PullRequestRepositoryImpl(
         val listPullRequests = pullRequestRemoteDataSource.listPullRequests(owner, repoName)
 
         return listPullRequests.transform(
-            {
+            mapperSuccessFunction = {
                 it.map { pullRequestResponse ->
                     pullRequestResponse.mapTo()
                 }
             },
-            { baseErrorData ->
+            mapperErrorFunction = { baseErrorData ->
                 BaseErrorData(
                     errorBody = baseErrorData?.errorBody?.message,
                     errorMessage = baseErrorData?.errorMessage
