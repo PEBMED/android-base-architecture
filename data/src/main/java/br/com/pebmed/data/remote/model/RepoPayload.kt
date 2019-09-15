@@ -76,26 +76,27 @@ data class RepoPayload(
     @SerializedName("url") val url: String?,
     @SerializedName("watchers") val watchers: Int?,
     @SerializedName("watchers_count") val watchersCount: Int?
-)
+) {
 
-fun RepoPayload.mapToRepo() = Repo(
-    id = this.id,
-    description = this.description,
-    disabled = this.disabled,
-    fork = this.fork,
-    forks = this.forks,
-    forksCount = this.forksCount,
-    forksUrl = this.forksUrl,
-    fullName = this.fullName,
-    language = this.language,
-    name = this.name,
-    openIssues = this.openIssues,
-    openIssuesCount = this.openIssuesCount,
-    owner = this.owner.mapToOwner(),
-    score = this.score,
-    updatedAt = this.updatedAt,
-    url = this.url,
-    watchers = this.watchers,
-    watchersCount = this.watchersCount,
-    stargazersCount = this.stargazersCount
-)
+    fun mapTo() = Repo(
+        id = this.id,
+        description = this.description,
+        disabled = this.disabled,
+        fork = this.fork,
+        forks = this.forks,
+        forksCount = this.forksCount,
+        forksUrl = this.forksUrl,
+        fullName = this.fullName,
+        language = this.language,
+        name = this.name,
+        openIssues = this.openIssues,
+        openIssuesCount = this.openIssuesCount,
+        owner = this.owner.mapTo(),
+        score = this.score,
+        updatedAt = this.updatedAt,
+        url = this.url,
+        watchers = this.watchers,
+        watchersCount = this.watchersCount,
+        stargazersCount = this.stargazersCount
+    )
+}

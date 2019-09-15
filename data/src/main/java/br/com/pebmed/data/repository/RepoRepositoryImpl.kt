@@ -1,8 +1,6 @@
 package br.com.pebmed.data.repository
 
-import br.com.pebmed.data.local.model.mapToRepo
 import br.com.pebmed.data.local.source.RepoCacheDataSourceImpl
-import br.com.pebmed.data.remote.model.mapToRepo
 import br.com.pebmed.data.remote.model.response.GetReposResponse
 import br.com.pebmed.data.remote.source.RepoRemoteDataSourceImpl
 import br.com.pebmed.domain.base.BaseErrorData
@@ -41,7 +39,7 @@ class RepoRepositoryImpl(
     private fun handleGetAllRemoteReposSuccess(): (GetReposResponse) -> List<Repo> {
         return { getReposResponse ->
             getReposResponse.repoPayloads.map { repoPayload ->
-                repoPayload.mapToRepo()
+                repoPayload.mapTo()
             }
         }
     }
@@ -58,7 +56,7 @@ class RepoRepositoryImpl(
     override suspend fun getAllLocalRepos(): ResultWrapper<List<Repo>?, BaseErrorData<Unit>> {
         val localResponse = localRepository.getRepos()
 
-        return localResponse.transformSuccess { obj -> obj?.map { it.mapToRepo() } }
+        return localResponse.transformSuccess { obj -> obj?.map { it.mapTo() } }
     }
 
     override suspend fun getAllRepos(

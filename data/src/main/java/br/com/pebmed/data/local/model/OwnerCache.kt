@@ -22,33 +22,19 @@ data class OwnerCache(
     val login: String?,
     val type: String?,
     val url: String?
-)
+) {
 
-fun OwnerCache.mapToOwner() = Owner(
-    id = this.id,
-    avatarUrl = this.avatarUrl,
-    gravatarId = this.gravatarId,
-    htmlUrl = this.htmlUrl,
-    login = this.login,
-    nodeId = this.nodeId,
-    siteAdmin = this.siteAdmin,
-    starredUrl = this.starredUrl,
-    subscriptionsUrl = this.subscriptionsUrl,
-    type = this.type,
-    url = this.url
-)
-
-fun OwnerCache.mapToOwnerPayload() = Owner(
-    id = this.id,
-    avatarUrl = this.avatarUrl,
-    gravatarId = this.gravatarId,
-    htmlUrl = this.htmlUrl,
-    login = this.login,
-    nodeId = this.nodeId,
-    siteAdmin = this.siteAdmin,
-    starredUrl = this.starredUrl,
-    subscriptionsUrl = this.subscriptionsUrl,
-    type = this.type,
-    url = this.url
-)
-
+    fun mapTo() = Owner(
+        id = this.id,
+        avatarUrl = this.avatarUrl,
+        gravatarId = this.gravatarId,
+        htmlUrl = this.htmlUrl,
+        login = this.login,
+        nodeId = this.nodeId,
+        siteAdmin = this.siteAdmin,
+        starredUrl = this.starredUrl,
+        subscriptionsUrl = this.subscriptionsUrl,
+        type = this.type,
+        url = this.url
+    )
+}

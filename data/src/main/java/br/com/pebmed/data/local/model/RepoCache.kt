@@ -5,7 +5,6 @@ import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import br.com.pebmed.data.local.model.OwnerCache
 import br.com.pebmed.domain.entities.Repo
 
 @Entity(tableName = "Repo")
@@ -37,26 +36,27 @@ data class RepoCache(
     val size: Int?,
     val url: String?,
     val watchers: Int?
-)
+) {
 
-fun RepoCache.mapToRepo() = Repo(
-    id = this.id,
-    description = this.description,
-    disabled = this.disabled,
-    fork = this.fork,
-    forks = this.forks,
-    forksCount = this.forksCount,
-    forksUrl = this.forksUrl,
-    fullName = this.fullName,
-    language = this.language,
-    name = this.name,
-    openIssues = this.openIssues,
-    openIssuesCount = this.openIssuesCount,
-    owner = this.owner.mapToOwner(),
-    score = this.score,
-    updatedAt = this.updatedAt,
-    url = this.url,
-    watchers = this.watchers,
-    watchersCount = this.watchersCount,
-    stargazersCount = this.stargazersCount
-)
+    fun mapTo() = Repo(
+        id = this.id,
+        description = this.description,
+        disabled = this.disabled,
+        fork = this.fork,
+        forks = this.forks,
+        forksCount = this.forksCount,
+        forksUrl = this.forksUrl,
+        fullName = this.fullName,
+        language = this.language,
+        name = this.name,
+        openIssues = this.openIssues,
+        openIssuesCount = this.openIssuesCount,
+        owner = this.owner.mapTo(),
+        score = this.score,
+        updatedAt = this.updatedAt,
+        url = this.url,
+        watchers = this.watchers,
+        watchersCount = this.watchersCount,
+        stargazersCount = this.stargazersCount
+    )
+}
