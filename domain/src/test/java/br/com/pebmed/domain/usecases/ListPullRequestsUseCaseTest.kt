@@ -1,6 +1,5 @@
 package br.com.pebmed.domain.usecases
 
-import br.com.pebmed.domain.base.BaseErrorData
 import br.com.pebmed.domain.base.ResultWrapper
 import br.com.pebmed.domain.entities.PullRequest
 import br.com.pebmed.domain.entities.User
@@ -8,11 +7,9 @@ import br.com.pebmed.domain.repository.PullRequestRepository
 import io.mockk.*
 import kotlinx.coroutines.runBlocking
 import org.junit.After
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
-
-import org.junit.Assert.*
-import java.util.*
 
 class ListPullRequestsUseCaseTest {
 
