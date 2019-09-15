@@ -56,7 +56,8 @@ class PullRequestRepositoryImplTest {
             success = listOf(pullRequest)
         )
 
-        val pullRequestRepositoryImpl = spyk(PullRequestRepositoryImpl(pullRequestRemoteDataSource), recordPrivateCalls = true)
+        val pullRequestRepositoryImpl =
+            spyk(PullRequestRepositoryImpl(pullRequestRemoteDataSource), recordPrivateCalls = true)
         runBlocking {
             pullRequestRepositoryImpl.listPullRequests("", "")
         }
@@ -68,7 +69,7 @@ class PullRequestRepositoryImplTest {
         }
 
         coVerifySequence {
-            pullRequestRepositoryImpl.listPullRequests(any(),any())
+            pullRequestRepositoryImpl.listPullRequests(any(), any())
             pullRequestRepositoryImpl["handleListPullRequestsSuccess"]()
             pullRequestRepositoryImpl["handleListPullRequestsError"]()
         }
