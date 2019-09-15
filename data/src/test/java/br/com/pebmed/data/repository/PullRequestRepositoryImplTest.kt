@@ -68,13 +68,13 @@ class PullRequestRepositoryImplTest {
 
         coVerify {
             pullRequestRepositoryImpl.listPullRequests(any(), any())
-            pullRequestRepositoryImpl["handleListPullRequestsSuccess"]()
+            pullRequestRepositoryImpl.handleListPullRequestsSuccess()
             pullRequestRepositoryImpl["handleListPullRequestsError"]()
         }
 
         coVerifySequence {
             pullRequestRepositoryImpl.listPullRequests(any(), any())
-            pullRequestRepositoryImpl["handleListPullRequestsSuccess"]()
+            pullRequestRepositoryImpl.handleListPullRequestsSuccess()
             pullRequestRepositoryImpl["handleListPullRequestsError"]()
         }
     }

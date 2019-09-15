@@ -24,7 +24,7 @@ class PullRequestRepositoryImpl(
         )
     }
 
-    private fun handleListPullRequestsSuccess(): (List<PullRequestResponse>) -> List<PullRequest> {
+    internal fun handleListPullRequestsSuccess(): (List<PullRequestResponse>) -> List<PullRequest> {
         return {
             it.map { pullRequestResponse ->
                 pullRequestResponse.mapTo()
