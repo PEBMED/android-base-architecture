@@ -48,7 +48,7 @@ class PullRequestRepositoryImplTest {
     }
 
     @Test
-    fun testPrivate() {
+    fun `SHOULD call functions in the correct order`() {
 
         coEvery {
             pullRequestRemoteDataSource.listPullRequests(any(), any())
