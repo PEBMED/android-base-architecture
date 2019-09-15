@@ -33,7 +33,10 @@ class PullRequestRepositoryImplTest {
         )
 
         runBlocking {
-            PullRequestRepositoryImpl(pullRequestRemoteDataSource).listPullRequests("", "")
+            PullRequestRepositoryImpl(pullRequestRemoteDataSource).listPullRequests(
+                owner = "",
+                repoName = ""
+            )
         }
 
 
