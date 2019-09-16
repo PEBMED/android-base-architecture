@@ -2,6 +2,7 @@ package com.example.basearch.presentation.ui.viewmodel
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import br.com.pebmed.domain.entities.PullRequest
+import br.com.pebmed.domain.entities.User
 import br.com.pebmed.domain.usecases.ListPullRequestsUseCase
 import com.example.basearch.presentation.extensions.loadViewStateResourceList
 import com.example.basearch.presentation.ui.ViewStateResource
@@ -44,6 +45,9 @@ class PullRequestListViewModelTest {
 
         val testObserver = viewModel.pullRequestListState.test()
         testObserver.assertNoValue()
+
+
+
 
         val resultWrapper = UsefulObjects.loadSuccessResultWrapper()
 

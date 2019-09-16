@@ -34,7 +34,7 @@ class ListPullRequestsUseCaseTest {
      * This test was added just for reference purposes
      */
     @Test
-    fun `SHOLD return the correct success object`() = runBlocking {
+    fun `SHOULD return the correct success object`() = runBlocking {
         coEvery {
             pullRequestRepository.listPullRequests(any(), any())
         } returns ResultWrapper(
