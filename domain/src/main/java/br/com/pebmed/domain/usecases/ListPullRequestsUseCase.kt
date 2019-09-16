@@ -7,9 +7,9 @@ import br.com.pebmed.domain.repository.PullRequestRepository
 
 class ListPullRequestsUseCase (
     private val pullRequestRepository: PullRequestRepository
-) : BaseUseCase<ResultWrapper<List<PullRequest>?, BaseErrorData<String>?>, ListPullRequestsUseCase.Params>() {
+) {
 
-    override suspend fun run(params: Params): ResultWrapper<List<PullRequest>?, BaseErrorData<String>?> {
+    suspend fun run(params: Params): ResultWrapper<List<PullRequest>?, BaseErrorData<String>?> {
         return pullRequestRepository.listPullRequests(
             owner = params.owner,
             repoName = params.repoName

@@ -5,7 +5,9 @@ open class ResultWrapper<SUCCESS, ERROR>(
     val error: ERROR? = null
 ) {
 
-    fun isSuccess() = success != null
+    fun isSuccess() : Boolean {
+        return success != null
+    }
 
     open fun <TO_SUCCESS, TO_ERROR> transform(
         mapperSuccessFunction: (originalSuccess: SUCCESS) -> TO_SUCCESS,

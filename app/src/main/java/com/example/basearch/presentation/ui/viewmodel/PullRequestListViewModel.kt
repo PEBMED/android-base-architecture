@@ -9,6 +9,8 @@ import br.com.pebmed.domain.entities.PullRequest
 import br.com.pebmed.domain.usecases.ListPullRequestsUseCase
 import com.example.basearch.presentation.extensions.loadViewStateResourceList
 import com.example.basearch.presentation.ui.ViewStateResource
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class PullRequestListViewModel(
     private val listPullRequestsUseCase: ListPullRequestsUseCase
@@ -26,14 +28,15 @@ class PullRequestListViewModel(
         _pullRequestListState.postValue(ViewStateResource.Loading())
 
         val params = this.loadParams(owner, repoName)
-        listPullRequestsUseCase.invoke(viewModelScope, params) { resultWrapper ->
-            run {
-                _pullRequestListState.postValue(this.loadViewStateResourceList(resultWrapper))
-            }
+
+        viewModelScope.launch(Dispatchers.IO) {
+            val resultWrapper = listPullRequestsUseCase.run(params)
+            val loadViewStateResourceList = loadViewStateResourceList(resultWrapper)
+            _pullRequestListState.postValue(loadViewStateResourceList)
         }
     }
 
-    private fun loadParams(
+    internal fun loadParams(
         owner: String,
         repoName: String
     ) = ListPullRequestsUseCase.Params(

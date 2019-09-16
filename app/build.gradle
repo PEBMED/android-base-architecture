@@ -27,6 +27,9 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
 }
 
 dependencies {
@@ -65,6 +68,9 @@ dependencies {
     implementation dependencies.circleImageView
 
     testImplementation testDependencies.junit
+    testImplementation 'com.jraska.livedata:testing-ktx:1.1.0'
+    testImplementation "io.mockk:mockk:1.9.3"
+    testImplementation 'androidx.arch.core:core-testing:2.1.0'
 
     androidTestImplementation testDependencies.runner
     androidTestImplementation testDependencies.espresso

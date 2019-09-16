@@ -77,6 +77,10 @@ class PullRequestRepositoryImplTest {
             pullRequestRepositoryImpl.handleListPullRequestsSuccess()
             pullRequestRepositoryImpl["handleListPullRequestsError"]()
         }
+
+        confirmVerified(
+            pullRequestRepositoryImpl
+        )
     }
 
     @After
