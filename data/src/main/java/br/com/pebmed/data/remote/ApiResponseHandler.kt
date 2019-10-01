@@ -9,7 +9,7 @@ import com.google.gson.reflect.TypeToken
 import retrofit2.Response
 
 object ApiResponseHandler {
-    inline fun <SUCCESS, reified ERROR> build(response: Response<SUCCESS>): ResultWrapper<SUCCESS, BaseErrorData<ERROR>> {
+    inline fun <SUCCESS, reified ERROR> build(response: Response<SUCCESS>): CompleteResultWrapper<SUCCESS, BaseErrorData<ERROR>> {
         val headers = response.headers()
 
         val getHeadersHashMap = {

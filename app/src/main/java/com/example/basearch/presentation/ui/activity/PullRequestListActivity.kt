@@ -45,7 +45,7 @@ class PullRequestListActivity : AppCompatActivity() {
                 }
 
                 is ViewStateResource.Success -> {
-                    showContent(it.data!!)
+                    showContent(it.data)
                 }
 
                 is ViewStateResource.Empty -> {

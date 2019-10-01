@@ -3,7 +3,7 @@ package br.com.pebmed.data.repository
 import br.com.pebmed.data.remote.model.response.PullRequestResponse
 import br.com.pebmed.data.remote.source.PullRequestRemoteDataSource
 import br.com.pebmed.domain.base.BaseErrorData
-import br.com.pebmed.domain.base.ResultWrapper
+import br.com.pebmed.domain.base.CompleteResultWrapper
 import br.com.pebmed.domain.entities.GitHubErrorData
 import br.com.pebmed.domain.entities.PullRequest
 import br.com.pebmed.domain.repository.PullRequestRepository
@@ -15,7 +15,7 @@ class PullRequestRepositoryImpl(
     override suspend fun listPullRequests(
         owner: String,
         repoName: String
-    ): ResultWrapper<List<PullRequest>?, BaseErrorData<String>?> {
+    ): CompleteResultWrapper<List<PullRequest>, BaseErrorData<String>?> {
         val listPullRequests = pullRequestRemoteDataSource.listPullRequests(owner, repoName)
 
         return listPullRequests.transform(
@@ -23,6 +23,7 @@ class PullRequestRepositoryImpl(
             mapperErrorFunction = this.handleListPullRequestsError()
         )
     }
+
 
     internal fun handleListPullRequestsSuccess(): (List<PullRequestResponse>) -> List<PullRequest> {
         return {

@@ -3,6 +3,7 @@ package br.com.pebmed.data.repository
 import br.com.pebmed.data.remote.model.response.PullRequestResponse
 import br.com.pebmed.data.remote.model.response.UserResponse
 import br.com.pebmed.data.remote.source.PullRequestRemoteDataSource
+import br.com.pebmed.domain.base.CompleteResultWrapper
 import br.com.pebmed.domain.base.ResultWrapper
 import io.mockk.*
 import io.mockk.impl.annotations.MockK
@@ -32,7 +33,7 @@ class PullRequestRepositoryImplTest {
 
         coEvery {
             pullRequestRemoteDataSource.listPullRequests(any(), any())
-        } returns ResultWrapper(
+        } returns CompleteResultWrapper(
             success = listOf(pullRequest)
         )
 
@@ -56,7 +57,7 @@ class PullRequestRepositoryImplTest {
 
         coEvery {
             pullRequestRemoteDataSource.listPullRequests(any(), any())
-        } returns ResultWrapper(
+        } returns CompleteResultWrapper(
             success = listOf(pullRequest)
         )
 

@@ -1,6 +1,7 @@
 package com.example.basearch.presentation.ui.viewmodel
 
 import br.com.pebmed.domain.base.BaseErrorData
+import br.com.pebmed.domain.base.CompleteResultWrapper
 import br.com.pebmed.domain.base.ResultWrapper
 import br.com.pebmed.domain.entities.PullRequest
 import br.com.pebmed.domain.entities.User
@@ -26,17 +27,17 @@ object UsefulObjects {
         repoName = "RepoName"
     )
 
-    fun loadSuccessResultWrapper() =  ResultWrapper<List<PullRequest>?, BaseErrorData<String>?>(
+    fun loadSuccessResultWrapper() =  CompleteResultWrapper<List<PullRequest>, BaseErrorData<String>?>(
         success = listOf(
             this.loadPullRequest()
         )
     )
 
-    fun loadEmptyResultWrapper() =  ResultWrapper<List<PullRequest>?, BaseErrorData<String>?>(
+    fun loadEmptyResultWrapper() =  CompleteResultWrapper<List<PullRequest>, BaseErrorData<String>?>(
         success = listOf()
     )
 
-    fun loadErrorResultWrapper() =  ResultWrapper<List<PullRequest>?, BaseErrorData<String>?>(
+    fun loadErrorResultWrapper() =  CompleteResultWrapper<List<PullRequest>, BaseErrorData<String>?>(
         error = BaseErrorData(
             errorMessage = "Test Error"
         )

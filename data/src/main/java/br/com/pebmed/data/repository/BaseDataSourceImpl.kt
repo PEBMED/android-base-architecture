@@ -13,7 +13,7 @@ import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
 open class BaseDataSourceImpl {
-    inline fun <SUCCESS, reified ERROR> safeApiCall(executeApiAsync: () -> Response<SUCCESS>): ResultWrapper<SUCCESS, BaseErrorData<ERROR>> {
+    inline fun <SUCCESS, reified ERROR> safeApiCall(executeApiAsync: () -> Response<SUCCESS>): CompleteResultWrapper<SUCCESS, BaseErrorData<ERROR>> {
         return try {
             val response = executeApiAsync.invoke()
 
