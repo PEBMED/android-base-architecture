@@ -1,5 +1,6 @@
 package br.com.pebmed.domain.usecases
 
+import br.com.pebmed.domain.base.CompleteResultWrapper
 import br.com.pebmed.domain.base.ResultWrapper
 import br.com.pebmed.domain.entities.PullRequest
 import br.com.pebmed.domain.entities.User
@@ -37,7 +38,7 @@ class ListPullRequestsUseCaseTest {
     fun `SHOULD return the correct success object`() = runBlocking {
         coEvery {
             pullRequestRepository.listPullRequests(any(), any())
-        } returns ResultWrapper(
+        } returns CompleteResultWrapper(
             success = listOf(pullRequest)
         )
 
@@ -51,7 +52,7 @@ class ListPullRequestsUseCaseTest {
     fun `SHOULD call correct dependency function WHEN run`() = runBlocking {
         coEvery {
             pullRequestRepository.listPullRequests(any(), any())
-        } returns ResultWrapper(
+        } returns CompleteResultWrapper(
             success = listOf(pullRequest)
         )
 
