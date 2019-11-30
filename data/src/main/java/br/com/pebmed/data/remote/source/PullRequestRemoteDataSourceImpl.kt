@@ -17,6 +17,13 @@ class PullRequestRemoteDataSourceImpl(
         repoName: String
     ): CompleteResultWrapper<List<PullRequestResponse>, BaseErrorData<GitHubErrorData>> {
         return safeApiCall { pullRequestApi.listPullRequestsAsync(owner, repoName) }
+    }
 
+    override suspend fun getPullRequest(
+        owner: String,
+        repoName: String,
+        pullRequestId: Int
+    ): CompleteResultWrapper<PullRequestResponse, BaseErrorData<GitHubErrorData>> {
+        return safeApiCall { pullRequestApi.getPullRequestAsync(owner, repoName, pullRequestId) }
     }
 }

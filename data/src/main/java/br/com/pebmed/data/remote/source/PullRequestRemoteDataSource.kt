@@ -11,4 +11,10 @@ interface PullRequestRemoteDataSource {
         owner: String,
         repoName: String
     ): CompleteResultWrapper<List<PullRequestResponse>, BaseErrorData<GitHubErrorData>>
+
+    suspend fun getPullRequest(
+        owner: String,
+        repoName: String,
+        pullRequestId: Int
+    ): CompleteResultWrapper<PullRequestResponse, BaseErrorData<GitHubErrorData>>
 }
