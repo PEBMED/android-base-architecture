@@ -5,6 +5,7 @@ import com.google.gson.annotations.SerializedName
 import java.util.*
 
 data class PullRequestResponse(
+    @SerializedName("id") val id: Long,
     @SerializedName("html_url") val htmlUrl: String,
     @SerializedName("title") val title: String,
     @SerializedName("user") val user: UserResponse,
@@ -17,6 +18,7 @@ data class PullRequestResponse(
     @SerializedName("changed_files") val changedFiles: Int
 ) {
     fun mapTo() = PullRequest (
+        id = this.id,
         htmlUrl = this.htmlUrl,
         title = this.title,
         user = this.user.mapTo(),
