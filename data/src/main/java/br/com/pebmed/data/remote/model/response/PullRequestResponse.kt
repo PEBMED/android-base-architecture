@@ -18,7 +18,7 @@ data class PullRequestResponse(
     @SerializedName("changed_files") val changedFiles: Int
 ) {
     fun mapTo() = PullRequest (
-        id = this.number,
+        number = this.number,
         htmlUrl = this.htmlUrl,
         title = this.title,
         user = this.user.mapTo(),

@@ -26,11 +26,11 @@ class PullRequestViewModel(
     fun getPullRequest(
         owner: String,
         repoName: String,
-        pullRequestId: Int
+        pullRequestNumber: Long
     ) {
         _pullRequestState.postValue(ViewStateResource.Loading())
 
-        val params = this.loadParams(owner, repoName, pullRequestId)
+        val params = this.loadParams(owner, repoName, pullRequestNumber)
 
         viewModelScope.launch(Dispatchers.IO) {
             val resultWrapper = getPullRequestUseCase.run(params)
@@ -42,10 +42,10 @@ class PullRequestViewModel(
     internal fun loadParams(
         owner: String,
         repoName: String,
-        pullRequestId: Int
+        pullRequestNumber: Long
     ) = GetPullRequestUseCase.Params(
         owner = owner,
         repoName = repoName,
-        pullRequestId = pullRequestId
+        pullRequestNumber = pullRequestNumber
     )
 }

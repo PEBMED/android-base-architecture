@@ -34,7 +34,7 @@ class PullRequestListAdapter(
 
             itemView.setOnClickListener {
                 onItemClickListener.onItemClick(
-                    pullRequestId = pullRequest.id
+                    pullRequestNumber = pullRequest.number
                 )
             }
         }
@@ -69,6 +69,6 @@ class PullRequestListAdapter(
     fun isEmpty() = pullRequestList.isEmpty()
 
     interface OnItemClickListener {
-        fun onItemClick(pullRequestId: Long)
+        fun onItemClick(pullRequestNumber: Long)
     }
 }

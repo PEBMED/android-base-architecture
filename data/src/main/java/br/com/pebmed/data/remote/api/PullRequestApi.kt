@@ -13,10 +13,10 @@ interface PullRequestApi {
         @Path("repoName") repoName: String
     ): Response<List<PullRequestResponse>>
 
-    @GET("/repos/{owner}/{repoName}/pulls/{pullRequestId}")
+    @GET("/repos/{owner}/{repoName}/pulls/{pullRequestNumber}")
     suspend fun getPullRequestAsync(
         @Path("owner") owner: String,
         @Path("repoName") repoName: String,
-        @Path("pullRequestId") pullRequestId: Int
+        @Path("pullRequestNumber") pullRequestNumber: Long
     ): Response<PullRequestResponse>
 }

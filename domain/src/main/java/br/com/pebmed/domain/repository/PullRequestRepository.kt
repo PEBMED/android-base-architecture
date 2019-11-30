@@ -14,6 +14,6 @@ interface PullRequestRepository {
     suspend fun getPullRequest(
         owner: String,
         repoName: String,
-        pullRequestId: Int
+        pullRequestNumber: Long
     ) : CompleteResultWrapper<PullRequest, BaseErrorData<String>?>
 }

@@ -123,12 +123,12 @@ class PullRequestListActivity : AppCompatActivity(), PullRequestListAdapter.OnIt
     }
     //endregion
 
-    override fun onItemClick(pullRequestId: Long) {
+    override fun onItemClick(pullRequestNumber: Long) {
         val intent = Intent(this, PullRequestActivity::class.java)
 
         intent.putExtra("owner", owner)
         intent.putExtra("repoName", repoName)
-        intent.putExtra("pullRequestId", pullRequestId)
+        intent.putExtra("pullRequestNumber", pullRequestNumber)
 
         startActivity(intent)
     }

@@ -13,13 +13,13 @@ class GetPullRequestUseCase (
         return pullRequestRepository.getPullRequest(
             owner = params.owner,
             repoName = params.repoName,
-            pullRequestId = params.pullRequestId
+            pullRequestNumber = params.pullRequestNumber
         )
     }
 
     data class Params(
         val owner: String,
         val repoName: String,
-        val pullRequestId: Int
+        val pullRequestNumber: Long
     )
 }

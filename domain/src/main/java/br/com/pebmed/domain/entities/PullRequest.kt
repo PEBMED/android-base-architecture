@@ -3,7 +3,7 @@ package br.com.pebmed.domain.entities
 import java.util.*
 
 data class PullRequest(
-    val id: Long,
+    val number: Long,
     val htmlUrl: String,
     val title: String,
     val user: User,

@@ -5,7 +5,6 @@ import br.com.pebmed.data.remote.model.response.PullRequestResponse
 import br.com.pebmed.data.repository.BaseDataSourceImpl
 import br.com.pebmed.domain.base.BaseErrorData
 import br.com.pebmed.domain.base.CompleteResultWrapper
-import br.com.pebmed.domain.base.ResultWrapper
 import br.com.pebmed.domain.entities.GitHubErrorData
 
 class PullRequestRemoteDataSourceImpl(
@@ -22,8 +21,8 @@ class PullRequestRemoteDataSourceImpl(
     override suspend fun getPullRequest(
         owner: String,
         repoName: String,
-        pullRequestId: Int
+        pullRequestNumber: Long
     ): CompleteResultWrapper<PullRequestResponse, BaseErrorData<GitHubErrorData>> {
-        return safeApiCall { pullRequestApi.getPullRequestAsync(owner, repoName, pullRequestId) }
+        return safeApiCall { pullRequestApi.getPullRequestAsync(owner, repoName, pullRequestNumber) }
     }
 }

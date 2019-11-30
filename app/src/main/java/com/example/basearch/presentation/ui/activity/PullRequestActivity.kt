@@ -23,7 +23,7 @@ class PullRequestActivity : AppCompatActivity() {
 
     private lateinit var owner: String
     private lateinit var repoName: String
-    private var pullRequestId: Long = 0
+    private var pullRequestNumber: Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,10 +33,10 @@ class PullRequestActivity : AppCompatActivity() {
 
         owner = intent.extras?.getString("owner").toString()
         repoName = intent.extras?.getString("repoName").toString()
-        pullRequestId = intent.extras?.getLong("pullRequestId")!!
+        pullRequestNumber = intent.extras?.getLong("pullRequestNumber")!!
 
 
-        viewModel.getPullRequest(owner, repoName, pullRequestId.toInt())
+        viewModel.getPullRequest(owner, repoName, pullRequestNumber)
     }
 
     private fun initObservers() {
