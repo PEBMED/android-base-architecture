@@ -8,6 +8,8 @@ import br.com.pebmed.domain.entities.PullRequest
 import com.bumptech.glide.RequestManager
 import com.example.basearch.R
 import kotlinx.android.synthetic.main.item_pull_request_list.view.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 class PullRequestListAdapter(private val pullRequestList: MutableList<PullRequest>, private val requestManager: RequestManager) : RecyclerView.Adapter<PullRequestListAdapter.PullRequestViewHolder>() {
 
@@ -16,7 +18,7 @@ class PullRequestListAdapter(private val pullRequestList: MutableList<PullReques
             itemView.textAuthorName.text = pullRequest.user.login
             itemView.textTitle.text = pullRequest.title
             itemView.textDescription.text = pullRequest.body
-            itemView.textDate.text = pullRequest.createdAt.time.toString()
+            itemView.textDate.text = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault()).format(pullRequest.createdAt)
 
             requestManager.load(pullRequest.user.avatarUrl)
                 .placeholder(R.drawable.ic_person)
