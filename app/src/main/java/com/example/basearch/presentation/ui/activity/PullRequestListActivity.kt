@@ -121,6 +121,7 @@ class PullRequestListActivity : AppCompatActivity(), PullRequestListAdapter.OnIt
     private fun hideContent() {
         recyclerViewRepos.setGone()
     }
+    //endregion
 
     override fun onItemClick(pullRequestId: Long) {
         val intent = Intent(this, PullRequestActivity::class.java)
@@ -131,5 +132,4 @@ class PullRequestListActivity : AppCompatActivity(), PullRequestListAdapter.OnIt
 
         startActivity(intent)
     }
-    //endregion
 }
