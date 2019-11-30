@@ -9,13 +9,23 @@ data class PullRequestResponse(
     @SerializedName("title") val title: String,
     @SerializedName("user") val user: UserResponse,
     @SerializedName("body") val body: String,
-    @SerializedName("created_at") val createdAt: Date
+    @SerializedName("created_at") val createdAt: Date,
+    @SerializedName("comments") val comments: Int,
+    @SerializedName("commits") val commits: Int,
+    @SerializedName("additions") val additions: Int,
+    @SerializedName("deletions") val deletions: Int,
+    @SerializedName("changed_files") val changedFiles: Int
 ) {
     fun mapTo() = PullRequest (
         htmlUrl = this.htmlUrl,
         title = this.title,
         user = this.user.mapTo(),
         body = this.body,
-        createdAt = this.createdAt
+        createdAt = this.createdAt,
+        comments = this.comments,
+        commits = this.commits,
+        additions = this.additions,
+        deletions = this.deletions,
+        changedFiles = this.changedFiles
     )
 }

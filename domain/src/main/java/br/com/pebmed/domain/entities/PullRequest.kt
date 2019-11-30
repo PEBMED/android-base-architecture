@@ -7,5 +7,10 @@ data class PullRequest(
     val title: String,
     val user: User,
     val body: String,
-    val createdAt: Date
+    val createdAt: Date,
+    val comments: Int,
+    val commits: Int,
+    val additions: Int,
+    val deletions: Int,
+    val changedFiles: Int
 )
