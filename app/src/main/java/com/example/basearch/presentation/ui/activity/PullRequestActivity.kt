@@ -1,5 +1,6 @@
 package com.example.basearch.presentation.ui.activity
 
+import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -86,6 +87,7 @@ class PullRequestActivity : AppCompatActivity() {
         textReposError.text = ""
     }
 
+    @SuppressLint("SetTextI18n")
     private fun showContent(pullRequest: PullRequest) {
         hideLoadingView()
         hideErrorView()
@@ -93,12 +95,11 @@ class PullRequestActivity : AppCompatActivity() {
         textAuthorName.text = pullRequest.user.login
         textTitle.text = pullRequest.title
         textDescription.text = pullRequest.body
-        textComments.text = pullRequest.comments.toString()
-        textCommits.text = pullRequest.commits.toString()
-        textAdditions.text = pullRequest.additions.toString()
-        textDeletions.text = pullRequest.deletions.toString()
-        textChangedFiles.text = pullRequest.changedFiles.toString()
-
+        textComments.text = "Comments: ${pullRequest.comments}"
+        textCommits.text = "Commits: ${pullRequest.commits}"
+        textAdditions.text = "Additions: ${pullRequest.additions}"
+        textDeletions.text = "Deletions: ${pullRequest.deletions}"
+        textChangedFiles.text = "Changed Files: ${pullRequest.changedFiles}"
 
         textDate.text = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault()).format(pullRequest.createdAt)
 

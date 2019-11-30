@@ -110,8 +110,7 @@
             tools:text="2017/05/02" />
 
         <LinearLayout
-            android:background="#FFF000"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
