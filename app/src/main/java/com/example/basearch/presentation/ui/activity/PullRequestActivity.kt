@@ -36,7 +36,7 @@ class PullRequestActivity : AppCompatActivity() {
         pullRequestId = intent.extras?.getLong("pullRequestId")!!
 
 
-        viewModel.getPullRequest(owner,  repoName, pullRequestId.toInt())
+        viewModel.getPullRequest(owner, repoName, pullRequestId.toInt())
     }
 
     private fun initObservers() {
@@ -72,6 +72,7 @@ class PullRequestActivity : AppCompatActivity() {
     private fun hideLoadingView() {
         layoutLoading.setGone()
     }
+
     private fun showErrorView(message: String) {
         hideLoadingView()
         hideContent()
@@ -99,7 +100,8 @@ class PullRequestActivity : AppCompatActivity() {
         textDeletions.text = "Deletions: ${pullRequest.deletions}"
         textChangedFiles.text = "Changed Files: ${pullRequest.changedFiles}"
 
-        textDate.text = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault()).format(pullRequest.createdAt)
+        textDate.text =
+            SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault()).format(pullRequest.createdAt)
 
         Glide.with(this).load(pullRequest.user.avatarUrl)
             .placeholder(R.drawable.ic_person)
