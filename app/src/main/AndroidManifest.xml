@@ -25,6 +25,9 @@
         </activity>
 
         <activity android:name=".presentation.ui.activity.PullRequestListActivity" />
+
+        <activity android:name=".presentation.ui.activity.PullRequestActivity"/>
+
     </application>
 
 </manifest>
