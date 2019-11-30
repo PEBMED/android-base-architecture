@@ -11,9 +11,16 @@ import kotlinx.android.synthetic.main.item_pull_request_list.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-class PullRequestListAdapter(private val pullRequestList: MutableList<PullRequest>, private val requestManager: RequestManager) : RecyclerView.Adapter<PullRequestListAdapter.PullRequestViewHolder>() {
+class PullRequestListAdapter(
+    private val pullRequestList: MutableList<PullRequest>,
+    private val requestManager: RequestManager,
+    private val onItemClickListener: OnItemClickListener
+) : RecyclerView.Adapter<PullRequestListAdapter.PullRequestViewHolder>() {
 
-    class PullRequestViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class PullRequestViewHolder(
+        itemView: View,
+        private val onItemClickListener: OnItemClickListener
+    ) : RecyclerView.ViewHolder(itemView) {
         fun bindView(pullRequest: PullRequest, requestManager: RequestManager) {
             itemView.textAuthorName.text = pullRequest.user.login
             itemView.textTitle.text = pullRequest.title
@@ -24,12 +31,18 @@ class PullRequestListAdapter(private val pullRequestList: MutableList<PullReques
                 .placeholder(R.drawable.ic_person)
                 .error(R.drawable.ic_person)
                 .into(itemView.imagePullRequestAuthor)
+
+            itemView.setOnClickListener {
+                onItemClickListener.onItemClick(
+                    pullRequestId = pullRequest.id
+                )
+            }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PullRequestViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_pull_request_list, parent, false)
-        return PullRequestViewHolder(view)
+        return PullRequestViewHolder(view, onItemClickListener)
     }
 
     override fun getItemCount(): Int {
@@ -55,4 +68,7 @@ class PullRequestListAdapter(private val pullRequestList: MutableList<PullReques
 
     fun isEmpty() = pullRequestList.isEmpty()
 
+    interface OnItemClickListener {
+        fun onItemClick(pullRequestId: Long)
+    }
 }

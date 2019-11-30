@@ -1,5 +1,6 @@
 package com.example.basearch.presentation.ui.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -17,7 +18,7 @@ import com.example.basearch.presentation.ui.adapter.ReposAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class PullRequestListActivity : AppCompatActivity() {
+class PullRequestListActivity : AppCompatActivity(), PullRequestListAdapter.OnItemClickListener {
 
     private val viewModel by viewModel<PullRequestListViewModel>()
     private lateinit var adapter: PullRequestListAdapter
@@ -76,7 +77,8 @@ class PullRequestListActivity : AppCompatActivity() {
     private fun initRecyclerView() {
         adapter = PullRequestListAdapter(
             mutableListOf(),
-            Glide.with(this)
+            Glide.with(this),
+            this
         )
 
         recyclerViewRepos.layoutManager = LinearLayoutManager(this)
@@ -118,6 +120,16 @@ class PullRequestListActivity : AppCompatActivity() {
 
     private fun hideContent() {
         recyclerViewRepos.setGone()
+    }
+
+    override fun onItemClick(pullRequestId: Long) {
+        val intent = Intent(this, PullRequestActivity::class.java)
+
+        intent.putExtra("owner", owner)
+        intent.putExtra("repoName", repoName)
+        intent.putExtra("pullRequestId", pullRequestId)
+
+        startActivity(intent)
     }
     //endregion
 }
