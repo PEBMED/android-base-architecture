@@ -1,9 +1,9 @@
 package com.example.basearch.presentation.ui.activity
 
 import android.annotation.SuppressLint
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import br.com.pebmed.domain.entities.PullRequest
 import com.bumptech.glide.Glide
@@ -13,8 +13,6 @@ import com.example.basearch.presentation.extensions.setVisible
 import com.example.basearch.presentation.ui.ViewStateResource
 import com.example.basearch.presentation.ui.viewmodel.PullRequestViewModel
 import kotlinx.android.synthetic.main.activity_pull_request.*
-import kotlinx.android.synthetic.main.item_pull_request_list.view.*
-import kotlinx.android.synthetic.main.item_repo_list.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.SimpleDateFormat
 import java.util.*
