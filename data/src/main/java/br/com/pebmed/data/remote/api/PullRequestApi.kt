@@ -7,7 +7,7 @@ import retrofit2.http.Path
 
 interface PullRequestApi {
 
-    @GET("/repos/{owner}/{repoName}/pulls")
+    @GET("/repos/{owner}/{repoName}/pulls?state=all")
     suspend fun listPullRequestsAsync(
         @Path("owner") owner: String,
         @Path("repoName") repoName: String
