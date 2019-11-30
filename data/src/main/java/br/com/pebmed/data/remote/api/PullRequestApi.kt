@@ -17,6 +17,6 @@ interface PullRequestApi {
     suspend fun getPullRequestAsync(
         @Path("owner") owner: String,
         @Path("repoName") repoName: String,
-        @Path("repoName") pullRequestId: Int
+        @Path("pullRequestId") pullRequestId: Int
     ): Response<PullRequestResponse>
 }
