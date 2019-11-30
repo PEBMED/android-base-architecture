@@ -4,18 +4,23 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.pebmed.domain.entities.PullRequest
+import com.bumptech.glide.Glide
 import com.example.basearch.R
 import com.example.basearch.presentation.extensions.setGone
 import com.example.basearch.presentation.extensions.setVisible
 import com.example.basearch.presentation.ui.viewmodel.PullRequestListViewModel
 import com.example.basearch.presentation.ui.ViewStateResource
+import com.example.basearch.presentation.ui.adapter.PullRequestListAdapter
+import com.example.basearch.presentation.ui.adapter.ReposAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PullRequestListActivity : AppCompatActivity() {
 
     private val viewModel by viewModel<PullRequestListViewModel>()
+    private lateinit var adapter: PullRequestListAdapter
 
     private lateinit var owner: String
     private lateinit var repoName: String
@@ -69,7 +74,13 @@ class PullRequestListActivity : AppCompatActivity() {
     }
 
     private fun initRecyclerView() {
-        // Nothing to do for now
+        adapter = PullRequestListAdapter(
+            mutableListOf(),
+            Glide.with(this)
+        )
+
+        recyclerViewRepos.layoutManager = LinearLayoutManager(this)
+        recyclerViewRepos.adapter = adapter
     }
 
     //region ViewStates
@@ -100,9 +111,7 @@ class PullRequestListActivity : AppCompatActivity() {
         hideLoadingView()
         hideErrorView()
 
-        pullRequestList.map {
-            Log.d(PullRequestListActivity::class.java.simpleName, it.toString())
-        }
+        adapter.addItems(pullRequestList)
 
         recyclerViewRepos.setVisible()
     }
