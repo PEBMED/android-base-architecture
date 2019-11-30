@@ -10,4 +10,10 @@ interface PullRequestRepository {
         owner: String,
         repoName: String
     ) : CompleteResultWrapper<List<PullRequest>, BaseErrorData<String>?>
+
+    suspend fun getPullRequest(
+        owner: String,
+        repoName: String,
+        pullRequestId: Int
+    ) : CompleteResultWrapper<PullRequest, BaseErrorData<String>?>
 }

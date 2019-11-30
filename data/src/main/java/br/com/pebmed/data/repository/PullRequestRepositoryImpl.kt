@@ -24,6 +24,21 @@ class PullRequestRepositoryImpl(
         )
     }
 
+    override suspend fun getPullRequest(
+        owner: String,
+        repoName: String,
+        pullRequestId: Int
+    ): CompleteResultWrapper<PullRequest, BaseErrorData<String>?> {
+        val pullRequest = pullRequestRemoteDataSource.getPullRequest(owner, repoName, pullRequestId)
+
+        return pullRequest.transform(
+            {
+                it.mapTo()
+            },
+            mapperErrorFunction = this.handleListPullRequestsError()
+        )
+    }
+
 
     internal fun handleListPullRequestsSuccess(): (List<PullRequestResponse>) -> List<PullRequest> {
         return {
