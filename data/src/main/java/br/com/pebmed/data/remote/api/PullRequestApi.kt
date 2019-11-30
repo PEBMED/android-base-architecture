@@ -12,4 +12,11 @@ interface PullRequestApi {
         @Path("owner") owner: String,
         @Path("repoName") repoName: String
     ): Response<List<PullRequestResponse>>
+
+    @GET("/repos/{owner}/{repoName}/pulls/{pullRequestId}")
+    suspend fun getPullRequestAsync(
+        @Path("owner") owner: String,
+        @Path("repoName") repoName: String,
+        @Path("repoName") pullRequestId: Int
+    ): Response<PullRequestResponse>
 }
