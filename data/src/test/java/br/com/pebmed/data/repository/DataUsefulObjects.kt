@@ -13,10 +13,16 @@ object DataUsefulObjects {
     )
 
     fun loadPullRequestResponse(userResponse: UserResponse) = PullRequestResponse(
+        number = 1,
         htmlUrl = "http://the.url",
-        createdAt = Date(),
-        body = "Body",
         title = "Title",
-        user = userResponse
+        user = userResponse,
+        body = "Body",
+        createdAt = Date(),
+        comments = 1,
+        commits = 1,
+        additions = 1,
+        deletions = 1,
+        changedFiles = 1
     )
 }
