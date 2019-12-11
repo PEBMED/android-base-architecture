@@ -16,9 +16,9 @@ class PullRequestViewModel(
     private val getPullRequestUseCase: GetPullRequestUseCase
 ) : ViewModel() {
 
-    private val _pullRequestState = MutableLiveData<ViewState<PullRequest, BaseErrorData<String>?>>()
+    private val _pullRequestState = MutableLiveData<ViewState<PullRequest, String?>>()
 
-    val pullRequestState: LiveData<ViewState<PullRequest, BaseErrorData<String>?>>
+    val pullRequestState: LiveData<ViewState<PullRequest, String?>>
         get() = _pullRequestState
 
     fun getPullRequest(

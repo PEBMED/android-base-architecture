@@ -1,20 +1,20 @@
 package br.com.pebmed.domain.usecases
 
-import br.com.pebmed.domain.base.BaseErrorData
-import br.com.pebmed.domain.base.CompleteResultWrapper
+import br.com.pebmed.domain.base.BaseUseCase
+import br.com.pebmed.domain.base.ResultWrapper
 import br.com.pebmed.domain.entities.PullRequest
 import br.com.pebmed.domain.repository.PullRequestRepository
 
-class GetPullRequestUseCase (
+class GetPullRequestUseCase(
     private val pullRequestRepository: PullRequestRepository
-) {
+) : BaseUseCase<ResultWrapper<PullRequest, String?>, GetPullRequestUseCase.Params>() {
 
-    suspend fun run(params: Params): CompleteResultWrapper<PullRequest, BaseErrorData<String>?> {
+    override suspend fun run(params: Params): ResultWrapper<PullRequest, String?> {
         return pullRequestRepository.getPullRequest(
             owner = params.owner,
             repoName = params.repoName,
             pullRequestNumber = params.pullRequestNumber
-        )
+        ).transformError { it?.errorMessage }
     }
 
     data class Params(

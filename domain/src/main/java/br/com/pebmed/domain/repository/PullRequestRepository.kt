@@ -9,11 +9,11 @@ interface PullRequestRepository {
     suspend fun listPullRequests(
         owner: String,
         repoName: String
-    ) : CompleteResultWrapper<List<PullRequest>, BaseErrorData<String>?>
+    ) : ResultWrapper<List<PullRequest>, BaseErrorData<String>?>
 
     suspend fun getPullRequest(
         owner: String,
         repoName: String,
         pullRequestNumber: Long
-    ) : CompleteResultWrapper<PullRequest, BaseErrorData<String>?>
+    ) : ResultWrapper<PullRequest, BaseErrorData<String>?>
 }
