@@ -2,15 +2,17 @@ package com.example.basearch.presentation.ui.viewmodel
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import br.com.pebmed.domain.entities.PullRequest
-import br.com.pebmed.domain.entities.User
 import br.com.pebmed.domain.usecases.ListPullRequestsUseCase
-import com.example.basearch.presentation.extensions.loadViewStateResourceList
-import com.example.basearch.presentation.ui.ViewStateResource
+import com.example.basearch.presentation.ui.base.ViewState
 import com.jraska.livedata.test
-import io.mockk.*
+import io.mockk.MockKAnnotations
+import io.mockk.coEvery
+import io.mockk.coVerifyOrder
 import io.mockk.impl.annotations.MockK
-import kotlinx.coroutines.runBlocking
-import org.junit.*
+import io.mockk.spyk
+import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
 
 /**
  * What to test?
@@ -46,9 +48,6 @@ class PullRequestListViewModelTest {
         val testObserver = viewModel.pullRequestListState.test()
         testObserver.assertNoValue()
 
-
-
-
         val resultWrapper = UsefulObjects.loadSuccessResultWrapper()
 
         coEvery {
@@ -59,17 +58,17 @@ class PullRequestListViewModelTest {
 
         testObserver
             .assertValue {
-                it is ViewStateResource.Loading
+                it is ViewState.Loading
             }
             .assertHistorySize(1)
             .awaitNextValue()
             .assertHistorySize(2)
             .assertValue {
-                it is ViewStateResource.Success
+                it is ViewState.Success
             }
             .assertValue {
-                if (it is ViewStateResource.Success) {
-                    it.data?.get(0)?.htmlUrl == pullRequest.htmlUrl
+                if (it is ViewState.Success) {
+                    it.data[0].htmlUrl == pullRequest.htmlUrl
                 } else {
                     false
                 }
@@ -93,13 +92,13 @@ class PullRequestListViewModelTest {
 
         testObserver
             .assertValue {
-                it is ViewStateResource.Loading
+                it is ViewState.Loading
             }
             .assertHistorySize(1)
             .awaitNextValue()
             .assertHistorySize(2)
             .assertValue {
-                it is ViewStateResource.Empty
+                it is ViewState.Empty
             }
     }
 
@@ -120,16 +119,16 @@ class PullRequestListViewModelTest {
 
         testObserver
             .assertValue {
-                it is ViewStateResource.Loading
+                it is ViewState.Loading
             }
             .assertHistorySize(1)
             .awaitNextValue()
             .assertHistorySize(2)
             .assertValue {
-                it is ViewStateResource.Error
+                it is ViewState.Error
             }
             .assertValue {
-                if (it is ViewStateResource.Error) {
+                if (it is ViewState.Error) {
                     it.error?.errorMessage == errorResultWrapper.error?.errorMessage
                 } else {
                     false
@@ -154,9 +153,5 @@ class PullRequestListViewModelTest {
             viewModel.loadParams("Owner", "RepoName")
             listPullRequestsUseCase.run(UsefulObjects.loadListPullRequestsUseCaseParams())
         }
-    }
-
-    @After
-    fun tearDown() {
     }
 }

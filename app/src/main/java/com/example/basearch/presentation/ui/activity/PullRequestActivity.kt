@@ -10,7 +10,7 @@ import com.bumptech.glide.Glide
 import com.example.basearch.R
 import com.example.basearch.presentation.extensions.setGone
 import com.example.basearch.presentation.extensions.setVisible
-import com.example.basearch.presentation.ui.ViewStateResource
+import com.example.basearch.presentation.ui.base.ViewState
 import com.example.basearch.presentation.ui.viewmodel.PullRequestViewModel
 import kotlinx.android.synthetic.main.activity_pull_request.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -42,19 +42,19 @@ class PullRequestActivity : AppCompatActivity() {
     private fun initObservers() {
         viewModel.pullRequestState.observe(this, Observer {
             when (it) {
-                is ViewStateResource.Loading -> {
+                is ViewState.Loading -> {
                     showLoadingView()
                 }
 
-                is ViewStateResource.Success -> {
+                is ViewState.Success -> {
                     showContent(it.data)
                 }
 
-                is ViewStateResource.Empty -> {
+                is ViewState.Empty -> {
                     val message = getString(R.string.empty_list)
                 }
 
-                is ViewStateResource.Error -> {
+                is ViewState.Error -> {
                     Log.e("", "Show error")
                 }
             }

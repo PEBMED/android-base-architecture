@@ -1,21 +1,15 @@
 package br.com.pebmed.domain.base
 
+/**
+ * @Descrição: CompleteResultWrapper é uma classe filha de ResultWrapper que adiciona
+ *  propriedades de uma requisição
+ */
 class CompleteResultWrapper<SUCCESS, ERROR>(
     success: SUCCESS? = null,
     error: ERROR? = null,
     val keyValueMap: MutableMap<String, String>? = null,
     val statusCode: StatusType = StatusType.DEFAULT_EXCEPTION
 ) : ResultWrapper<SUCCESS, ERROR>(success, error) {
-
-    fun getValue(key: String): String? {
-        var result: String? = null
-
-        if (keyValueMap != null) {
-            result = keyValueMap[key]
-        }
-
-        return result
-    }
 
     override fun <TO_SUCCESS, TO_ERROR> transform(
         mapperSuccessFunction: (originalSuccess: SUCCESS) -> TO_SUCCESS,

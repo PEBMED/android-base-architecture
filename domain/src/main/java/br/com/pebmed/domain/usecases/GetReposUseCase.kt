@@ -1,6 +1,7 @@
 package br.com.pebmed.domain.usecases
 
 import br.com.pebmed.domain.base.BaseErrorData
+import br.com.pebmed.domain.base.BaseUseCase
 import br.com.pebmed.domain.base.ResultWrapper
 import br.com.pebmed.domain.entities.GetReposErrorData
 import br.com.pebmed.domain.entities.Repo

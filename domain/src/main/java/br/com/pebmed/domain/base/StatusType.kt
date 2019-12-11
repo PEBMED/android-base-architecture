@@ -1,5 +1,8 @@
 package br.com.pebmed.domain.base
 
+/**
+ * @Descrição: representa os estados de requisição
+ */
 enum class StatusType(val code: Int) {
     OK(200),
     CREATED(201),

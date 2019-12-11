@@ -4,14 +4,14 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import br.com.pebmed.domain.entities.Repo
 import com.bumptech.glide.Glide
 import com.example.basearch.R
-import br.com.pebmed.domain.entities.Repo
 import com.example.basearch.presentation.extensions.setGone
 import com.example.basearch.presentation.extensions.setVisible
 import com.example.basearch.presentation.extensions.showToast
 import com.example.basearch.presentation.ui.adapter.ReposAdapter
-import com.example.basearch.presentation.ui.ViewStateResource
+import com.example.basearch.presentation.ui.base.ViewState
 import com.example.basearch.presentation.ui.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -33,29 +33,29 @@ class MainActivity : AppCompatActivity() {
     private fun initObservers() {
         viewModel.reposState.observe(this, Observer {
             when (it) {
-                is ViewStateResource.Loading -> {
+                is ViewState.Loading -> {
                     showLoadingView()
                 }
 
-                is ViewStateResource.Success -> {
+                is ViewState.Success -> {
                     showReposList(it.data!!)
                 }
 
-                is ViewStateResource.Empty -> {
+                is ViewState.Empty -> {
                     val message = getString(R.string.empty_list)
 
-                    if(reposAdapter.isEmpty()) {
+                    if (reposAdapter.isEmpty()) {
                         showErrorView(message)
                     } else {
                         showToast(message)
                     }
                 }
 
-                is ViewStateResource.Error -> {
+                is ViewState.Error -> {
                     val baseErrorData = it.error
                     val message = baseErrorData?.errorMessage ?: getString(R.string.error_message)
 
-                    if(reposAdapter.isEmpty()) {
+                    if (reposAdapter.isEmpty()) {
                         showErrorView(message)
                     } else {
                         showToast(message)
@@ -93,6 +93,7 @@ class MainActivity : AppCompatActivity() {
     private fun hideLoadingView() {
         layoutReposLoading.setGone()
     }
+
     private fun showErrorView(message: String) {
         hideLoadingView()
         hideReposList()

@@ -1,50 +1,30 @@
 package com.example.basearch.presentation.extensions
 
 import androidx.lifecycle.ViewModel
-import br.com.pebmed.domain.base.ResultWrapper
 import br.com.pebmed.domain.base.CompleteResultWrapper
-import com.example.basearch.presentation.ui.ViewStateResource
+import br.com.pebmed.domain.base.ResultWrapper
+import com.example.basearch.presentation.ui.base.ViewState
 
-fun <SUCCESS, ERROR> ViewModel.loadViewStateResourceList(resultWrapper: ResultWrapper<SUCCESS, ERROR>): ViewStateResource<SUCCESS, ERROR> {
-
-    return if (resultWrapper.isSuccess()) {
-        val data = resultWrapper.success
-
-        if (data != null) {
-            val list = data as List<*>
-
-            return if (list.isNullOrEmpty()) {
-                ViewStateResource.Empty()
-            } else {
-                ViewStateResource.Success(data)
-            }
-        } else {
-            ViewStateResource.Empty()
-        }
+/**
+ * Retorna um ViewState de acordo com o resultado do ResultWrapper passado
+ *
+ * @param SUCCESS modelo de sucesso
+ */
+fun <SUCCESS, ERROR> ViewModel.loadViewState(resultWrapper: ResultWrapper<SUCCESS, ERROR>): ViewState<SUCCESS, ERROR> {
+    return if (resultWrapper is CompleteResultWrapper && resultWrapper.success != null) {
+        handleSuccessfullViewState(resultWrapper.success!!)
     } else {
-        ViewStateResource.Error(error = resultWrapper.error)
+        ViewState.Error(error = resultWrapper.error)
     }
-
 }
 
-fun <SUCCESS, ERROR> ViewModel.loadViewStateResource(resultWrapper: ResultWrapper<SUCCESS, ERROR>): ViewStateResource<SUCCESS, ERROR> {
-
-    return if (resultWrapper is CompleteResultWrapper) {
-
-        if (resultWrapper.isSuccess()) {
-            val data = resultWrapper.success
-
-            if (data != null) {
-                ViewStateResource.Success(data)
-
-            } else {
-                ViewStateResource.Empty()
-            }
-        } else {
-            ViewStateResource.Error(error = resultWrapper.error)
-        }
-
+/**
+ * Retorna estados de sucesso, incluindo o caso de modelo de sucesso ser uma lista
+ */
+private fun <SUCCESS, ERROR> handleSuccessfullViewState(data: SUCCESS): ViewState<SUCCESS, ERROR> {
+    return if (data is List<*> && data.isNullOrEmpty()) {
+        ViewState.Empty()
     } else {
-        ViewStateResource.Error(error = resultWrapper.error)
+        ViewState.Success(data)
     }
 }
