@@ -4,6 +4,7 @@ import br.com.pebmed.domain.base.BaseErrorData
 import br.com.pebmed.domain.base.ResultWrapper
 import br.com.pebmed.domain.base.StatusType
 import br.com.pebmed.domain.base.CompleteResultWrapper
+import br.com.pebmed.domain.extensions.fromJsonGeneric
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import retrofit2.Response
@@ -64,7 +65,4 @@ object ApiResponseHandler {
             )
         }
     }
-
-    inline fun <reified T> Gson.fromJsonGeneric(json: String): T =
-        this.fromJson(json, object : TypeToken<T>() {}.type)
 }
