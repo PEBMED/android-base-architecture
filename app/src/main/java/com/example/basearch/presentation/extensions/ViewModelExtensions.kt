@@ -11,7 +11,7 @@ import com.example.basearch.presentation.ui.base.ViewState
  * @param SUCCESS modelo de sucesso
  */
 fun <SUCCESS, ERROR> ViewModel.loadViewState(resultWrapper: ResultWrapper<SUCCESS, ERROR>): ViewState<SUCCESS, ERROR> {
-    return if (resultWrapper is CompleteResultWrapper && resultWrapper.success != null) {
+    return if (resultWrapper.success != null) {
         handleSuccessfullViewState(resultWrapper.success!!)
     } else {
         ViewState.Error(error = resultWrapper.error)
