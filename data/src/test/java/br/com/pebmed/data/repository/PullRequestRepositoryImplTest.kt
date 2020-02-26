@@ -1,10 +1,10 @@
 package br.com.pebmed.data.repository
 
-import br.com.pebmed.data.remote.model.response.PullRequestResponse
-import br.com.pebmed.data.remote.model.response.UserResponse
-import br.com.pebmed.data.remote.source.PullRequestRemoteDataSource
+import br.com.pebmed.data.pullRequest.PullRequestRemoteDataSource
+import br.com.pebmed.data.pullRequest.PullRequestRepositoryImpl
+import br.com.pebmed.data.pullRequest.model.PullRequestResponseModel
+import br.com.pebmed.data.pullRequest.model.UserResponseModel
 import br.com.pebmed.domain.base.CompleteResultWrapper
-import br.com.pebmed.domain.base.ResultWrapper
 import io.mockk.*
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.runBlocking
@@ -17,28 +17,28 @@ class PullRequestRepositoryImplTest {
     @MockK
     private lateinit var pullRequestRemoteDataSource: PullRequestRemoteDataSource
 
-    private lateinit var user: UserResponse
-    private lateinit var pullRequest: PullRequestResponse
+    private lateinit var userModel: UserResponseModel
+    private lateinit var pullRequestModel: PullRequestResponseModel
 
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
 
-        user = DataUsefulObjects.loadUserResponse()
-        pullRequest = DataUsefulObjects.loadPullRequestResponse(user)
+        userModel = DataUsefulObjects.loadUserResponse()
+        pullRequestModel = DataUsefulObjects.loadPullRequestResponse(userModel)
     }
 
     @Test
     fun listPullRequests() {
 
         coEvery {
-            pullRequestRemoteDataSource.listPullRequests(any(), any())
+            pullRequestRemoteDataSource.getPullRequests(any(), any())
         } returns CompleteResultWrapper(
-            success = listOf(pullRequest)
+            success = listOf(pullRequestModel)
         )
 
         runBlocking {
-            PullRequestRepositoryImpl(pullRequestRemoteDataSource).listPullRequests(
+            PullRequestRepositoryImpl(pullRequestRemoteDataSource).getPullRequests(
                 owner = "",
                 repoName = ""
             )
@@ -46,7 +46,7 @@ class PullRequestRepositoryImplTest {
 
 
         coVerify {
-            pullRequestRemoteDataSource.listPullRequests(any(), any())
+            pullRequestRemoteDataSource.getPullRequests(any(), any())
         }
 
         confirmVerified(pullRequestRemoteDataSource)
@@ -56,26 +56,29 @@ class PullRequestRepositoryImplTest {
     fun `SHOULD call functions in the correct order`() {
 
         coEvery {
-            pullRequestRemoteDataSource.listPullRequests(any(), any())
+            pullRequestRemoteDataSource.getPullRequests(any(), any())
         } returns CompleteResultWrapper(
-            success = listOf(pullRequest)
+            success = listOf(pullRequestModel)
         )
 
         val pullRequestRepositoryImpl =
-            spyk(PullRequestRepositoryImpl(pullRequestRemoteDataSource), recordPrivateCalls = true)
+            spyk(
+                PullRequestRepositoryImpl(
+                    pullRequestRemoteDataSource
+                ), recordPrivateCalls = true)
         runBlocking {
-            pullRequestRepositoryImpl.listPullRequests("", "")
+            pullRequestRepositoryImpl.getPullRequests("", "")
         }
 
         coVerify {
-            pullRequestRepositoryImpl.listPullRequests(any(), any())
-            pullRequestRepositoryImpl.handleListPullRequestsSuccess()
+            pullRequestRepositoryImpl.getPullRequests(any(), any())
+            pullRequestRepositoryImpl["handleListPullRequestsSuccess"]()
             pullRequestRepositoryImpl["handleListPullRequestsError"]()
         }
 
         coVerifySequence {
-            pullRequestRepositoryImpl.listPullRequests(any(), any())
-            pullRequestRepositoryImpl.handleListPullRequestsSuccess()
+            pullRequestRepositoryImpl.getPullRequests(any(), any())
+            pullRequestRepositoryImpl["handleListPullRequestsSuccess"]()
             pullRequestRepositoryImpl["handleListPullRequestsError"]()
         }
 

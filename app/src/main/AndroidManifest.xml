@@ -16,7 +16,7 @@
             android:theme="@style/AppTheme"
             tools:ignore="GoogleAppIndexingWarning"
             tools:targetApi="n">
-        <activity android:name=".presentation.ui.activity.MainActivity">
+        <activity android:name=".presentation.ui.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -24,9 +24,17 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".presentation.ui.activity.PullRequestListActivity" />
+        <activity
+            android:name=".presentation.ui.pullRequest.list.PullRequestListActivity"
+            android:label="@string/pull_requests_screen_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
 
-        <activity android:name=".presentation.ui.activity.PullRequestActivity"/>
+        <activity
+            android:name=".presentation.ui.pullRequest.details.PullRequestActivity"
+            android:label="@string/pull_request_screen_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
 
     </application>
 

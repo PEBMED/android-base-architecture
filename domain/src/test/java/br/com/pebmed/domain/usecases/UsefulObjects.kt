@@ -1,11 +1,10 @@
 package br.com.pebmed.domain.usecases
 
-import br.com.pebmed.domain.entities.PullRequest
-import br.com.pebmed.domain.entities.Repo
-import br.com.pebmed.domain.entities.User
+import br.com.pebmed.domain.entities.PullRequestModel
+import br.com.pebmed.domain.entities.RepoModel
+import br.com.pebmed.domain.entities.UserModel
 import br.com.pebmed.domain.extensions.fromJsonGeneric
 import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.Paths
@@ -13,12 +12,12 @@ import java.util.*
 import java.util.stream.Collectors
 
 object UsefulObjects {
-    fun loadUser() = User(
+    fun loadUser() = UserModel(
         login = "luis.fernandez",
         avatarUrl = "http://avatar.url"
     )
 
-    fun loadPullRequest(user: User) = PullRequest(
+    fun loadPullRequest(user: UserModel) = PullRequestModel(
         number = 1,
         htmlUrl = "http://the.url",
         title = "Title",
@@ -33,11 +32,11 @@ object UsefulObjects {
     )
 
     fun loadListPullRequestsUseCaseParams() = ListPullRequestsUseCase.Params(
-        owner = "Owner",
+        owner = "OwnerModel",
         repoName = "RepoName"
     )
 
-    fun loadRepos(): List<Repo> {
+    fun loadRepos(): List<RepoModel> {
         return Gson().fromJsonGeneric(readJsonFile("repos.json"))
     }
 

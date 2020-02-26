@@ -2,8 +2,7 @@ package br.com.pebmed.domain.repository
 
 import br.com.pebmed.domain.base.BaseErrorData
 import br.com.pebmed.domain.base.ResultWrapper
-import br.com.pebmed.domain.entities.GetReposErrorData
-import br.com.pebmed.domain.entities.Repo
+import br.com.pebmed.domain.entities.RepoModel
 
 interface RepoRepository {
     fun getLastSyncDate(): String
@@ -13,18 +12,18 @@ interface RepoRepository {
     suspend fun getAllRemoteRepos(
         page: Int,
         language: String
-    ): ResultWrapper<List<Repo>?, BaseErrorData<GetReposErrorData>?>
+    ): ResultWrapper<List<RepoModel>, BaseErrorData<Unit>>
 
-    suspend fun getAllLocalRepos(): ResultWrapper<List<Repo>?, BaseErrorData<Unit>>
+    suspend fun getAllLocalRepos(): ResultWrapper<List<RepoModel>, BaseErrorData<Unit>>
 
     suspend fun getAllRepos(
         fromRemote: Boolean = false,
         page: Int,
         language: String
-    ): ResultWrapper<List<Repo>?, BaseErrorData<GetReposErrorData>?>
+    ): ResultWrapper<List<RepoModel>, BaseErrorData<Unit>>
 
     suspend fun getRepo(
         id: Int,
         fromRemote: Boolean = false
-    ): ResultWrapper<Repo?, BaseErrorData<GetReposErrorData>>
+    ): ResultWrapper<RepoModel, BaseErrorData<Unit>>
 }

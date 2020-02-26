@@ -1,9 +1,8 @@
 package br.com.pebmed.domain.usecases
 
 import br.com.pebmed.domain.base.CompleteResultWrapper
-import br.com.pebmed.domain.base.ResultWrapper
-import br.com.pebmed.domain.entities.PullRequest
-import br.com.pebmed.domain.entities.User
+import br.com.pebmed.domain.entities.PullRequestModel
+import br.com.pebmed.domain.entities.UserModel
 import br.com.pebmed.domain.repository.PullRequestRepository
 import io.mockk.*
 import io.mockk.impl.annotations.MockK
@@ -18,8 +17,8 @@ class ListPullRequestsUseCaseTest {
     @MockK
     private lateinit var pullRequestRepository: PullRequestRepository
 
-    private lateinit var user: User
-    private lateinit var pullRequest: PullRequest
+    private lateinit var user: UserModel
+    private lateinit var pullRequest: PullRequestModel
     private lateinit var params: ListPullRequestsUseCase.Params
 
     @Before

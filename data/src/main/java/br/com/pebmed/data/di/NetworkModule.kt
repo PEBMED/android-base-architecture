@@ -1,30 +1,28 @@
 package br.com.pebmed.data.di
 
 import br.com.pebmed.data.R
-import br.com.pebmed.data.remote.api.PullRequestApi
-import br.com.pebmed.data.remote.api.RepoApi
-import br.com.pebmed.data.remote.source.PullRequestRemoteDataSource
-import br.com.pebmed.data.remote.source.PullRequestRemoteDataSourceImpl
-import br.com.pebmed.data.remote.source.RepoRemoteDataSouce
-import br.com.pebmed.data.remote.source.RepoRemoteDataSourceImpl
+import br.com.pebmed.data.pullRequest.PullRequestApi
+import br.com.pebmed.data.repo.remote.RepoApi
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidContext
-import org.koin.dsl.bind
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
-@Suppress("RemoveExplicitTypeArguments")
+const val githubApiScopeName = "GITHUB_API"
+const val exampleApiScopeName = "EXAMPLE_API"
+
 val networkModule = module {
-    single<OkHttpClient> {
+    factory {
         providesOkHttpClient(
             get() as HttpLoggingInterceptor
         )
     }
 
-    single<HttpLoggingInterceptor> {
+    factory {
         val interceptor = HttpLoggingInterceptor()
 
         interceptor.level = HttpLoggingInterceptor.Level.BODY
@@ -32,18 +30,26 @@ val networkModule = module {
         interceptor
     }
 
-    single {
-        createWebService<RepoApi>(
+    single(named(githubApiScopeName)) {
+        provideRetrofit(
             okHttpClient = get(),
             url = androidContext().getString(R.string.base_url)
         )
     }
 
-    single {
-        createWebService<PullRequestApi>(
+    single(named(exampleApiScopeName)) {
+        provideRetrofit(
             okHttpClient = get(),
-            url = androidContext().getString(R.string.base_url)
+            url = "https://example.com"
         )
+    }
+
+    factory<RepoApi> {
+        provideApi(retrofit = get(named(githubApiScopeName)))
+    }
+
+    factory<PullRequestApi> {
+        provideApi(retrofit = get(named(githubApiScopeName)))
     }
 }
 
@@ -56,11 +62,12 @@ fun providesOkHttpClient(loggingInterceptor: HttpLoggingInterceptor): OkHttpClie
         .build()
 }
 
-inline fun <reified T> createWebService(okHttpClient: OkHttpClient, url: String): T {
+fun provideRetrofit(okHttpClient: OkHttpClient, url: String): Retrofit {
     return Retrofit.Builder()
         .addConverterFactory(GsonConverterFactory.create())
         .baseUrl(url)
         .client(okHttpClient)
         .build()
-        .create(T::class.java)
 }
+
+inline fun <reified T> provideApi(retrofit: Retrofit): T = retrofit.create(T::class.java)

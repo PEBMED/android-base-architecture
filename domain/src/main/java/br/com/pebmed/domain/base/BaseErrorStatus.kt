@@ -1,0 +1,11 @@
+package br.com.pebmed.domain.base
+
+enum class BaseErrorStatus(val code: Int) {
+    DEFAULT_ERROR(1000),
+    USER_NOT_LOGGED(1001),
+    FEATURE_FLAG_ENABLED_WITHOUT_DATA(1002),
+    NO_NETWORK_CONNECTION(1003),
+    USER_IS_NOT_IN_FEATURE_SEGMENT(1004),
+    DATA_NOT_FOUND(1005),
+    FEATURE_FLAG_DISABLED(1006);
+}

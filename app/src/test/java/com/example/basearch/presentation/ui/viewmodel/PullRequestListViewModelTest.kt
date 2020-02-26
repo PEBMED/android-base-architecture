@@ -1,9 +1,10 @@
 package com.example.basearch.presentation.ui.viewmodel
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import br.com.pebmed.domain.entities.PullRequest
+import br.com.pebmed.domain.entities.PullRequestModel
 import br.com.pebmed.domain.usecases.ListPullRequestsUseCase
 import com.example.basearch.presentation.ui.base.ViewState
+import com.example.basearch.presentation.ui.pullRequest.list.PullRequestListViewModel
 import com.jraska.livedata.test
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
@@ -29,7 +30,7 @@ class PullRequestListViewModelTest {
     @MockK(relaxUnitFun = true)
     private lateinit var listPullRequestsUseCase: ListPullRequestsUseCase
 
-    private lateinit var pullRequest: PullRequest
+    private lateinit var pullRequest: PullRequestModel
 
     private lateinit var params: ListPullRequestsUseCase.Params
 
@@ -43,7 +44,10 @@ class PullRequestListViewModelTest {
 
     @Test
     fun testPullRequestListSuccessState() {
-        val viewModel = PullRequestListViewModel(listPullRequestsUseCase)
+        val viewModel =
+            PullRequestListViewModel(
+                listPullRequestsUseCase
+            )
 
         val testObserver = viewModel.pullRequestListState.test()
         testObserver.assertNoValue()
@@ -54,7 +58,7 @@ class PullRequestListViewModelTest {
             listPullRequestsUseCase.run(params)
         } returns resultWrapper
 
-        viewModel.loadPullRequestList("Owner", "RepoName")
+        viewModel.loadPullRequestList("OwnerModel", "RepoName")
 
         testObserver
             .assertValue {
@@ -77,7 +81,10 @@ class PullRequestListViewModelTest {
 
     @Test
     fun testPullRequestListEmptyState() {
-        val viewModel = PullRequestListViewModel(listPullRequestsUseCase)
+        val viewModel =
+            PullRequestListViewModel(
+                listPullRequestsUseCase
+            )
 
         val testObserver = viewModel.pullRequestListState.test()
         testObserver.assertNoValue()
@@ -88,7 +95,7 @@ class PullRequestListViewModelTest {
             listPullRequestsUseCase.run(params)
         } returns emptyResultWrapper
 
-        viewModel.loadPullRequestList("Owner", "RepoName")
+        viewModel.loadPullRequestList("OwnerModel", "RepoName")
 
         testObserver
             .assertValue {
@@ -104,7 +111,10 @@ class PullRequestListViewModelTest {
 
     @Test
     fun testPullRequestListErrorState() {
-        val viewModel = PullRequestListViewModel(listPullRequestsUseCase)
+        val viewModel =
+            PullRequestListViewModel(
+                listPullRequestsUseCase
+            )
 
         val testObserver = viewModel.pullRequestListState.test()
         testObserver.assertNoValue()
@@ -115,7 +125,7 @@ class PullRequestListViewModelTest {
             listPullRequestsUseCase.run(params)
         } returns errorResultWrapper
 
-        viewModel.loadPullRequestList("Owner", "RepoName")
+        viewModel.loadPullRequestList("OwnerModel", "RepoName")
 
         testObserver
             .assertValue {
@@ -138,7 +148,11 @@ class PullRequestListViewModelTest {
 
     @Test
     fun test() {
-        val viewModel = spyk(PullRequestListViewModel(listPullRequestsUseCase))
+        val viewModel = spyk(
+            PullRequestListViewModel(
+                listPullRequestsUseCase
+            )
+        )
 
         val resultWrapper = UsefulObjects.loadSuccessResultWrapper()
 
@@ -146,11 +160,11 @@ class PullRequestListViewModelTest {
             listPullRequestsUseCase.run(params)
         } returns resultWrapper
 
-        viewModel.loadPullRequestList("Owner", "RepoName")
+        viewModel.loadPullRequestList("OwnerModel", "RepoName")
 
         coVerifyOrder {
-            viewModel.loadPullRequestList("Owner", "RepoName")
-            viewModel.loadParams("Owner", "RepoName")
+            viewModel.loadPullRequestList("OwnerModel", "RepoName")
+            viewModel.loadParams("OwnerModel", "RepoName")
             listPullRequestsUseCase.run(UsefulObjects.loadListPullRequestsUseCaseParams())
         }
     }

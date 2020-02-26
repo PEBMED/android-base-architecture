@@ -1,19 +1,18 @@
 package br.com.pebmed.domain.repository
 
 import br.com.pebmed.domain.base.BaseErrorData
-import br.com.pebmed.domain.base.CompleteResultWrapper
 import br.com.pebmed.domain.base.ResultWrapper
-import br.com.pebmed.domain.entities.PullRequest
+import br.com.pebmed.domain.entities.PullRequestModel
 
 interface PullRequestRepository {
-    suspend fun listPullRequests(
+    suspend fun getPullRequests(
         owner: String,
         repoName: String
-    ) : ResultWrapper<List<PullRequest>, BaseErrorData<String>?>
+    ): ResultWrapper<List<PullRequestModel>, BaseErrorData<Unit>>
 
     suspend fun getPullRequest(
         owner: String,
         repoName: String,
         pullRequestNumber: Long
-    ) : ResultWrapper<PullRequest, BaseErrorData<String>?>
+    ): ResultWrapper<PullRequestModel, BaseErrorData<Unit>>
 }

@@ -1,23 +1,19 @@
 package br.com.pebmed.data.di
 
-import br.com.pebmed.data.remote.source.PullRequestRemoteDataSource
-import br.com.pebmed.data.remote.source.PullRequestRemoteDataSourceImpl
-import br.com.pebmed.data.remote.source.RepoRemoteDataSouce
-import br.com.pebmed.data.remote.source.RepoRemoteDataSourceImpl
-import org.koin.dsl.bind
+import br.com.pebmed.data.pullRequest.PullRequestRemoteDataSource
+import br.com.pebmed.data.repo.remote.RepoRemoteDataSource
 import org.koin.dsl.module
 
 val remoteDataSourceModule = module {
-
     factory {
-        RepoRemoteDataSourceImpl(
+        RepoRemoteDataSource(
             repoApi = get()
         )
-    } bind RepoRemoteDataSouce::class
+    }
 
     factory {
-        PullRequestRemoteDataSourceImpl(
+        PullRequestRemoteDataSource(
             pullRequestApi = get()
         )
-    } bind PullRequestRemoteDataSource::class
+    }
 }
