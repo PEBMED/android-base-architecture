@@ -72,14 +72,14 @@ class PullRequestRepositoryImplTest {
 
         coVerify {
             pullRequestRepositoryImpl.getPullRequests(any(), any())
-            pullRequestRepositoryImpl["handleListPullRequestsSuccess"]()
-            pullRequestRepositoryImpl["handleListPullRequestsError"]()
+            pullRequestRepositoryImpl["handleGetPullRequestsSuccess"]()
+            //pullRequestRepositoryImpl["handleListPullRequestsError"]()
         }
 
         coVerifySequence {
             pullRequestRepositoryImpl.getPullRequests(any(), any())
-            pullRequestRepositoryImpl["handleListPullRequestsSuccess"]()
-            pullRequestRepositoryImpl["handleListPullRequestsError"]()
+            pullRequestRepositoryImpl["handleGetPullRequestsSuccess"]()
+            //pullRequestRepositoryImpl["handleListPullRequestsError"]()
         }
 
         confirmVerified(

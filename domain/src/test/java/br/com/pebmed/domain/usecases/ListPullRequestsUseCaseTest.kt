@@ -19,7 +19,7 @@ class ListPullRequestsUseCaseTest {
 
     private lateinit var user: UserModel
     private lateinit var pullRequest: PullRequestModel
-    private lateinit var params: ListPullRequestsUseCase.Params
+    private lateinit var params: GetPullRequestsUseCase.Params
 
     @Before
     fun setUp() {
@@ -36,13 +36,13 @@ class ListPullRequestsUseCaseTest {
     @Test
     fun `SHOULD return the correct success object`() = runBlocking {
         coEvery {
-            pullRequestRepository.listPullRequests(any(), any())
+            pullRequestRepository.getPullRequests(any(), any())
         } returns CompleteResultWrapper(
             success = listOf(pullRequest)
         )
 
         val resultWrapper =
-            ListPullRequestsUseCase(pullRequestRepository).run(params)
+            GetPullRequestsUseCase(pullRequestRepository).runAsync(params)
 
         assertEquals("luis.fernandez", resultWrapper.success?.get(0)?.user?.login)
     }
@@ -50,15 +50,15 @@ class ListPullRequestsUseCaseTest {
     @Test
     fun `SHOULD call correct dependency function WHEN run`() = runBlocking {
         coEvery {
-            pullRequestRepository.listPullRequests(any(), any())
+            pullRequestRepository.getPullRequests(any(), any())
         } returns CompleteResultWrapper(
             success = listOf(pullRequest)
         )
 
-        ListPullRequestsUseCase(pullRequestRepository).run(params)
+        GetPullRequestsUseCase(pullRequestRepository).runAsync(params)
 
         coVerify {
-            pullRequestRepository.listPullRequests(any(), any())
+            pullRequestRepository.getPullRequests(any(), any())
         }
 
         confirmVerified(pullRequestRepository)

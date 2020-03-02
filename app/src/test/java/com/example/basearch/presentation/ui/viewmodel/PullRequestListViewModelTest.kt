@@ -2,7 +2,7 @@ package com.example.basearch.presentation.ui.viewmodel
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import br.com.pebmed.domain.entities.PullRequestModel
-import br.com.pebmed.domain.usecases.ListPullRequestsUseCase
+import br.com.pebmed.domain.usecases.GetPullRequestsUseCase
 import com.example.basearch.presentation.ui.base.ViewState
 import com.example.basearch.presentation.ui.pullRequest.list.PullRequestListViewModel
 import com.jraska.livedata.test
@@ -28,11 +28,11 @@ class PullRequestListViewModelTest {
     val taskExecutorRule = InstantTaskExecutorRule()
 
     @MockK(relaxUnitFun = true)
-    private lateinit var listPullRequestsUseCase: ListPullRequestsUseCase
+    private lateinit var getPullRequestsUseCase: GetPullRequestsUseCase
 
     private lateinit var pullRequest: PullRequestModel
 
-    private lateinit var params: ListPullRequestsUseCase.Params
+    private lateinit var params: GetPullRequestsUseCase.Params
 
     @Before
     fun setUp() {
@@ -46,7 +46,7 @@ class PullRequestListViewModelTest {
     fun testPullRequestListSuccessState() {
         val viewModel =
             PullRequestListViewModel(
-                listPullRequestsUseCase
+                getPullRequestsUseCase
             )
 
         val testObserver = viewModel.pullRequestListState.test()
@@ -55,7 +55,7 @@ class PullRequestListViewModelTest {
         val resultWrapper = UsefulObjects.loadSuccessResultWrapper()
 
         coEvery {
-            listPullRequestsUseCase.run(params)
+            getPullRequestsUseCase.runAsync(params)
         } returns resultWrapper
 
         viewModel.loadPullRequestList("OwnerModel", "RepoName")
@@ -83,7 +83,7 @@ class PullRequestListViewModelTest {
     fun testPullRequestListEmptyState() {
         val viewModel =
             PullRequestListViewModel(
-                listPullRequestsUseCase
+                getPullRequestsUseCase
             )
 
         val testObserver = viewModel.pullRequestListState.test()
@@ -92,7 +92,7 @@ class PullRequestListViewModelTest {
         val emptyResultWrapper = UsefulObjects.loadEmptyResultWrapper()
 
         coEvery {
-            listPullRequestsUseCase.run(params)
+            getPullRequestsUseCase.runAsync(params)
         } returns emptyResultWrapper
 
         viewModel.loadPullRequestList("OwnerModel", "RepoName")
@@ -113,7 +113,7 @@ class PullRequestListViewModelTest {
     fun testPullRequestListErrorState() {
         val viewModel =
             PullRequestListViewModel(
-                listPullRequestsUseCase
+                getPullRequestsUseCase
             )
 
         val testObserver = viewModel.pullRequestListState.test()
@@ -122,7 +122,7 @@ class PullRequestListViewModelTest {
         val errorResultWrapper = UsefulObjects.loadErrorResultWrapper()
 
         coEvery {
-            listPullRequestsUseCase.run(params)
+            getPullRequestsUseCase.runAsync(params)
         } returns errorResultWrapper
 
         viewModel.loadPullRequestList("OwnerModel", "RepoName")
@@ -150,22 +150,22 @@ class PullRequestListViewModelTest {
     fun test() {
         val viewModel = spyk(
             PullRequestListViewModel(
-                listPullRequestsUseCase
+                getPullRequestsUseCase
             )
         )
 
         val resultWrapper = UsefulObjects.loadSuccessResultWrapper()
 
         coEvery {
-            listPullRequestsUseCase.run(params)
+            getPullRequestsUseCase.runAsync(params)
         } returns resultWrapper
 
         viewModel.loadPullRequestList("OwnerModel", "RepoName")
 
         coVerifyOrder {
             viewModel.loadPullRequestList("OwnerModel", "RepoName")
-            viewModel.loadParams("OwnerModel", "RepoName")
-            listPullRequestsUseCase.run(UsefulObjects.loadListPullRequestsUseCaseParams())
+//            viewModel.loadParams("OwnerModel", "RepoName")
+            getPullRequestsUseCase.runAsync(UsefulObjects.loadListPullRequestsUseCaseParams())
         }
     }
 }

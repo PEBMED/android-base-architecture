@@ -36,7 +36,7 @@ class GetReposUseCaseTest {
             success = UsefulObjects.loadRepos()
         )
 
-        GetReposUseCase(repoRepository).run(GetReposUseCase.Params(true))
+        GetReposUseCase(repoRepository).runAsync(GetReposUseCase.Params(true))
 
         coVerify {
             repoRepository.getAllRepos(

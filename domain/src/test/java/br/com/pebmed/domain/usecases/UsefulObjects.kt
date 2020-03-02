@@ -31,7 +31,7 @@ object UsefulObjects {
         changedFiles = 1
     )
 
-    fun loadListPullRequestsUseCaseParams() = ListPullRequestsUseCase.Params(
+    fun loadListPullRequestsUseCaseParams() = GetPullRequestsUseCase.Params(
         owner = "OwnerModel",
         repoName = "RepoName"
     )
