@@ -3,13 +3,14 @@ package com.example.basearch.presentation.ui.activity
 import android.content.Intent
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import androidx.test.rule.ActivityTestRule
-import androidx.test.runner.AndroidJUnit4
 import br.com.pebmed.domain.base.ResultWrapper
-import br.com.pebmed.domain.entities.PullRequest
-import br.com.pebmed.domain.entities.User
+import br.com.pebmed.domain.entities.PullRequestModel
+import br.com.pebmed.domain.entities.UserModel
+
 import br.com.pebmed.domain.usecases.GetPullRequestUseCase
 import com.example.basearch.R
-import com.example.basearch.presentation.ui.viewmodel.PullRequestViewModel
+import com.example.basearch.presentation.ui.pullRequest.details.PullRequestActivity
+import com.example.basearch.presentation.ui.pullRequest.details.PullRequestViewModel
 import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
 import com.schibsted.spain.barista.interaction.BaristaSleepInteractions.sleep
 import io.mockk.MockKAnnotations
@@ -39,7 +40,7 @@ class PullRequestActivityTest {
         MockKAnnotations.init(this)
 
         loadKoinModules(module {
-            viewModel<PullRequestViewModel> (override = true) {
+            viewModel(override = true) {
                 PullRequestViewModel(
                     getPullRequestUseCase
                 )
@@ -50,13 +51,13 @@ class PullRequestActivityTest {
     @Test
     fun openActivity() {
         coEvery {
-            getPullRequestUseCase.run(any())
-        } returns ResultWrapper<PullRequest, String?>(
-            success = PullRequest(
+            getPullRequestUseCase.runAsync(any())
+        } returns ResultWrapper(
+            success = PullRequestModel(
                 number = 100,
                 htmlUrl = "html",
                 title = "TITULO",
-                user = User(
+                user = UserModel(
                     login = "luisfernandezbr",
                     avatarUrl = "https://avatars2.githubusercontent.com/u/1694366?s=460&v=4"
                 ),
