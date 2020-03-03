@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">BaseArch</string>
+    <string name="pull_requests_screen_name">Pull Requests</string>
+    <string name="pull_request_screen_name">Pull Request</string>
     <string name="repo_loading_message">Buscando repositórios</string>
+    <string name="pull_requests_loading_message">Buscando pull requests</string>
+    <string name="pull_request_loading_message">Buscando pull request</string>
     <string name="error_message">Ocorreu um erro inesperado</string>
     <string name="empty_list">Lista vazia</string>
     <string name="try_again">Tente novamente</string>

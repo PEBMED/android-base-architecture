@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/actionBarSize"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:title="Pull Request Details"
+        android:background="@color/colorPrimary"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        android:elevation="8dp"/>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/layoutLoading"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/pull_request_loading_message" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layoutError"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/textPullRequestError"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="@string/error_message" />
+
+            <Button
+                android:id="@+id/buttonPullRequestTryAgain"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/try_again" />
+
+        </LinearLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layoutContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/margin_default"
+            tools:background="#FFF">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/imagePullRequestAuthor"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@drawable/temp_repo_owner_avatar" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/textAuthorName"
+                style="@style/AppText.Title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/imagePullRequestAuthor"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Glide (from Google)" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/textTitle"
+                style="@style/AppText.Subtitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/imagePullRequestAuthor"
+                app:layout_constraintTop_toBottomOf="@+id/textAuthorName"
+                tools:text="This is the description from Glide Repo" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/textDescription"
+                style="@style/AppText.Description"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/imagePullRequestAuthor"
+                app:layout_constraintTop_toBottomOf="@+id/textTitle"
+                tools:text="300" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/textDate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_default"
+                android:layout_marginTop="@dimen/margin_medium"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/imagePullRequestAuthor"
+                app:layout_constraintTop_toBottomOf="@+id/textDescription"
+                tools:text="2017/05/02" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/imagePullRequestAuthor"
+                app:layout_constraintTop_toBottomOf="@+id/textDate">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/textComments"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_default"
+                    android:layout_marginTop="@dimen/margin_medium"
+                    tools:text="202" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/textCommits"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_default"
+                    android:layout_marginTop="@dimen/margin_medium"
+                    tools:text="6004" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/textAdditions"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_default"
+                    android:layout_marginTop="@dimen/margin_medium"
+                    tools:text="64004" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/textDeletions"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_default"
+                    android:layout_marginTop="@dimen/margin_medium"
+                    tools:text="304" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/textChangedFiles"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_default"
+                    android:layout_marginTop="@dimen/margin_medium"
+                    tools:text="4" />
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </FrameLayout>
+</LinearLayout>

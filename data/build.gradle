@@ -39,13 +39,13 @@ dependencies {
     implementation dependencies.retrofitGsonConverter
     implementation dependencies.okHttpLogInterceptor
 
-    //GSON
-    implementation dependencies.gson
-
     //Koin
     implementation dependencies.koin
 
     //Room
     implementation dependencies.room
     kapt dependencies.roomCompiler
+
+    testImplementation "io.mockk:mockk:1.9.3"
+    testImplementation testDependecies.junit
 }

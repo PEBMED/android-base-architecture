@@ -27,6 +27,9 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
 }
 
 dependencies {
@@ -65,7 +68,16 @@ dependencies {
     implementation dependencies.circleImageView
 
     testImplementation testDependencies.junit
+    testImplementation 'com.jraska.livedata:testing-ktx:1.1.0'
+    testImplementation "io.mockk:mockk:1.9.3"
+    testImplementation 'androidx.arch.core:core-testing:2.1.0'
 
     androidTestImplementation testDependencies.runner
     androidTestImplementation testDependencies.espresso
+    androidTestImplementation "io.mockk:mockk-android:1.9.3"
+    androidTestImplementation 'androidx.test:rules:1.2.0'
+
+    androidTestImplementation('com.schibsted.spain:barista:3.2.0') {
+        exclude group: 'org.jetbrains.kotlin' // Only if you already use Kotlin in your project
+    }
 }
