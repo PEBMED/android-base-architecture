@@ -1,6 +1,17 @@
 apply plugin: 'java-library'
 apply plugin: 'kotlin'
 
+
+java {
+    sourceSets {
+
+        String sharedTestDir = 'src/sharedTest/java'
+        test {
+            java.srcDir sharedTestDir
+        }
+    }
+}
+
 dependencies {
     def dependencies = rootProject.ext.dependencies
 
