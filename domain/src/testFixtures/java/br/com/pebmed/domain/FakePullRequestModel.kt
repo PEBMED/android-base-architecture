@@ -7,7 +7,21 @@ import java.util.*
 class FakePullRequestModel {
 
     companion object {
-        fun loadPullRequest(user: UserModel) = PullRequestModel(
+        fun mockList(itemsOnList: Int) : List<PullRequestModel> {
+            val list = mutableListOf<PullRequestModel>()
+
+            for (index in 0 .. itemsOnList) {
+                list.add(
+                    mock(
+                        FakeUserModel.mock()
+                    )
+                )
+            }
+
+            return list
+        }
+
+        fun mock(user: UserModel) = PullRequestModel(
             number = 1,
             htmlUrl = "http://the.url",
             title = "Title",

@@ -34,7 +34,7 @@ class GetReposUseCaseTest {
                 language = fakeLanguage
             )
         } returns ResultWrapper(
-            success = FakeGitRepoModel.loadRepos()
+            success = FakeGitRepoModel.mock(1)
         )
 
         GetReposUseCase(repoRepository).runAsync(GetReposUseCase.Params(true))

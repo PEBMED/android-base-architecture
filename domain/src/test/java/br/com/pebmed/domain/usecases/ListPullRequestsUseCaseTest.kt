@@ -28,9 +28,9 @@ class ListPullRequestsUseCaseTest {
     fun setUp() {
         MockKAnnotations.init(this)
 
-        user = FakeUserModel.loadUser()
-        pullRequest = FakePullRequestModel.loadPullRequest(user)
-        params = FakeGetPullRequestsUseCase.Params.loadListPullRequestsUseCaseParams()
+        user = FakeUserModel.mock()
+        pullRequest = FakePullRequestModel.mock(user)
+        params = FakeGetPullRequestsUseCase.Params.mock()
     }
 
     /**

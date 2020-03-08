@@ -1,6 +1,9 @@
 package com.example.basearch.presentation.ui.viewmodel
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import br.com.pebmed.domain.*
+import br.com.pebmed.domain.base.BaseErrorData
+import br.com.pebmed.domain.base.BaseErrorStatus
 import br.com.pebmed.domain.entities.PullRequestModel
 import br.com.pebmed.domain.usecases.GetPullRequestsUseCase
 import com.example.basearch.presentation.ui.base.ViewState
@@ -38,12 +41,12 @@ class PullRequestListViewModelTest {
     fun setUp() {
         MockKAnnotations.init(this)
 
-        this.pullRequest = UsefulObjects.loadPullRequest()
-        this.params = UsefulObjects.loadListPullRequestsUseCaseParams()
+        this.pullRequest = FakePullRequestModel.mock(FakeUserModel.mock())
+        this.params = FakeGetPullRequestsUseCase.Params.mock()
     }
 
     @Test
-    fun testPullRequestListSuccessState() {
+    fun `SHOULD handle success state`() {
         val viewModel =
             PullRequestListViewModel(
                 getPullRequestsUseCase
@@ -52,7 +55,9 @@ class PullRequestListViewModelTest {
         val testObserver = viewModel.pullRequestListState.test()
         testObserver.assertNoValue()
 
-        val resultWrapper = UsefulObjects.loadSuccessResultWrapper()
+        val resultWrapper = FakeResultWrapper.mockSuccess<List<PullRequestModel>, BaseErrorData<BaseErrorStatus>>(
+            FakePullRequestModel.mockList(1)
+        )
 
         coEvery {
             getPullRequestsUseCase.runAsync(params)
@@ -72,7 +77,7 @@ class PullRequestListViewModelTest {
             }
             .assertValue {
                 if (it is ViewState.Success) {
-                    it.data[0].htmlUrl == pullRequest.htmlUrl
+                    it.data[0].htmlUrl == resultWrapper.success?.get(0)?.htmlUrl
                 } else {
                     false
                 }
@@ -80,16 +85,17 @@ class PullRequestListViewModelTest {
     }
 
     @Test
-    fun testPullRequestListEmptyState() {
-        val viewModel =
-            PullRequestListViewModel(
-                getPullRequestsUseCase
-            )
+    fun `SHOULD handle empty state`() {
+        val viewModel = PullRequestListViewModel(
+            getPullRequestsUseCase
+        )
 
         val testObserver = viewModel.pullRequestListState.test()
         testObserver.assertNoValue()
 
-        val emptyResultWrapper = UsefulObjects.loadEmptyResultWrapper()
+        val emptyResultWrapper = FakeResultWrapper.mockSuccess<List<PullRequestModel>, BaseErrorData<BaseErrorStatus>>(
+            success = listOf()
+        )
 
         coEvery {
             getPullRequestsUseCase.runAsync(params)
@@ -110,7 +116,7 @@ class PullRequestListViewModelTest {
     }
 
     @Test
-    fun testPullRequestListErrorState() {
+    fun `SHOULD handle error state`() {
         val viewModel =
             PullRequestListViewModel(
                 getPullRequestsUseCase
@@ -119,7 +125,10 @@ class PullRequestListViewModelTest {
         val testObserver = viewModel.pullRequestListState.test()
         testObserver.assertNoValue()
 
-        val errorResultWrapper = UsefulObjects.loadErrorResultWrapper()
+
+        val errorResultWrapper = FakeResultWrapper.mockError<List<PullRequestModel>, BaseErrorData<BaseErrorStatus>>(
+            FakeBaseErrorData.mockStatusError()
+        )
 
         coEvery {
             getPullRequestsUseCase.runAsync(params)
@@ -147,25 +156,24 @@ class PullRequestListViewModelTest {
     }
 
     @Test
-    fun test() {
+    fun `SHOULD call functions in correct order`() {
         val viewModel = spyk(
             PullRequestListViewModel(
                 getPullRequestsUseCase
             )
         )
 
-        val resultWrapper = UsefulObjects.loadSuccessResultWrapper()
-
         coEvery {
             getPullRequestsUseCase.runAsync(params)
-        } returns resultWrapper
+        } returns FakeResultWrapper.mockSuccess(
+            FakePullRequestModel.mockList(1)
+        )
 
         viewModel.loadPullRequestList("OwnerModel", "RepoName")
 
         coVerifyOrder {
             viewModel.loadPullRequestList("OwnerModel", "RepoName")
-//            viewModel.loadParams("OwnerModel", "RepoName")
-            getPullRequestsUseCase.runAsync(UsefulObjects.loadListPullRequestsUseCaseParams())
+            getPullRequestsUseCase.runAsync(FakeGetPullRequestsUseCase.Params.mock())
         }
     }
 }

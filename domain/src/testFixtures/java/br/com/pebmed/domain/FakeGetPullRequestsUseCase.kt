@@ -7,7 +7,7 @@ class FakeGetPullRequestsUseCase {
     class Params {
 
         companion object {
-            fun loadListPullRequestsUseCaseParams() = GetPullRequestsUseCase.Params(
+            fun mock() = GetPullRequestsUseCase.Params(
                 owner = "OwnerModel",
                 repoName = "RepoName"
             )
