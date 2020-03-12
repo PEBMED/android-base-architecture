@@ -1,0 +1,34 @@
+// Don't forget to apply java plugin first!
+apply plugin: 'java'
+
+
+configurations {
+    outputDirs
+
+    // This configuration holds dependencies to libraries or another projects
+    // and will be placend on sharedTest source set's classpath.
+    sharedTestCompile.extendsFrom compile
+    sharedTestRuntime.extendsFrom runtime, sharedTestCompile
+
+    // Following two configurations adds compiled sharedTest classes to the
+    // sharedTest* source sets so it can be used by other projects as a
+    // dependency target.
+    sharedTestUsageCompile.extendsFrom sharedTestCompile, outputDirs
+    sharedTestUsageRuntime.extendsFrom sharedTestRuntime, sharedTestUsageCompile
+
+    // Assume that the project wants to use the fixtures for its tests.
+    testCompile.extendsFrom sharedTestUsageCompile
+    testRuntime.extendsFrom sharedTestUsageRuntime
+}
+
+sourceSets {
+    sharedTest {
+        compileClasspath = sourceSets.main.output + configurations.sharedTestCompile
+        runtimeClasspath = output + compileClasspath + configurations.sharedTestRuntime
+    }
+}
+
+dependencies {
+    outputDirs sourceSets.sharedTest.output
+    sharedTestUsageCompile project(project.path)
+}

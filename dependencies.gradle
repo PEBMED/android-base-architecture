@@ -1,13 +1,13 @@
 ext {
     //Android Config
     minSDK = 21
-    targetSDK = 28
+    targetSDK = 29
     compileSDK = 29
 
-    buildTools = '3.5.0'
-    buildToolsVersion = '29.0.0'
+    buildTools = '4.1.0-alpha01'
+    buildToolsVersion = '29.0.3'
 
-    kotlinVersion = '1.3.50'
+    kotlinVersion = '1.3.61'
     kotlinxCoroutinesVersion = '1.3.0'
 
     lifeCycleVersion = '2.2.0-alpha02'
