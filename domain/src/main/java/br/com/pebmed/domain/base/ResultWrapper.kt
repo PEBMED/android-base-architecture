@@ -77,4 +77,18 @@ open class ResultWrapper<SUCCESS, ERROR>(
             )
         }
     }
+
+    /**
+     * Executa funções de sucesso ou erro a partir dos dados do ResultWrapper
+     *
+     * @param successBlock função que será chamada em caso de sucesso
+     * @param errorBlock função que será chamada em caso de erro
+     */
+    fun unwrap(successBlock: ((SUCCESS) -> Unit)? = null, errorBlock: ((ERROR) -> Unit)? = null) {
+        if (this.success != null) {
+            successBlock?.let { successBlock(this.success) }
+        } else {
+            errorBlock?.let { it(this.error!!) }
+        }
+    }
 }
