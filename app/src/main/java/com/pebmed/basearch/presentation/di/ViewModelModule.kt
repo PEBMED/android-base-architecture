@@ -1,5 +1,6 @@
 package com.pebmed.basearch.presentation.di
 
+import com.pebmed.basearch.presentation.ui.billing.BillingViewModel
 import com.pebmed.basearch.presentation.ui.main.MainViewModel
 import com.pebmed.basearch.presentation.ui.pullRequest.list.PullRequestListViewModel
 import com.pebmed.basearch.presentation.ui.pullRequest.details.PullRequestViewModel
@@ -22,6 +23,14 @@ val viewModelModule = module {
     viewModel {
         PullRequestViewModel(
             getPullRequestUseCase = get()
+        )
+    }
+
+    viewModel {
+        BillingViewModel(
+            googlePlayBillingClientWrapper = get(),
+            getPlansUseCase = get(),
+            validatePurchasedPlanUseCase = get()
         )
     }
 }
