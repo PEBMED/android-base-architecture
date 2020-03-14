@@ -13,7 +13,7 @@ android {
     buildToolsVersion globalConfiguration["buildToolsVersion"]
 
     defaultConfig {
-        applicationId "com.example.basearch"
+        applicationId "com.pebmed.basearch"
         minSdkVersion globalConfiguration["minSDK"]
         targetSdkVersion globalConfiguration["targetSDK"]
         versionCode 1
