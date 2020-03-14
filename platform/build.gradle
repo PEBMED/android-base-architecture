@@ -38,5 +38,5 @@ dependencies {
     implementation dependencies.liveData
 
     //Billing
-    implementation dependencies.googlePlayBilling
+    api dependencies.googlePlayBilling
 }
