@@ -38,7 +38,7 @@ class BillingViewModel(
         get() = _purchaseViewState
 
     private val tag = this.javaClass.simpleName
-    private val googlePlaySubsPlansCode = listOf("...")
+    private val googlePlaySubsPlansCode = listOf("pebmed_opensource_anual", "pebmed_opensource_mensal")
 
     fun loadActivePlans() {
         _plansViewState.postValue(ViewState.Loading())
