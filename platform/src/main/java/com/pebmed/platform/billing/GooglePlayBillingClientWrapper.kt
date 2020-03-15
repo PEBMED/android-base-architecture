@@ -12,6 +12,7 @@ import br.com.pebmed.domain.entities.PlanGateway
 import br.com.pebmed.domain.entities.PlanModel
 import br.com.pebmed.domain.entities.PurchasedPlanModel
 import com.android.billingclient.api.*
+import com.pebmed.platform.base.SingleLiveEvent
 import kotlinx.coroutines.isActive
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume

@@ -1,4 +1,4 @@
-package com.pebmed.platform.billing;
+package com.pebmed.platform.base;
 
 import android.util.Log;
 
