@@ -1,6 +1,9 @@
 package com.pebmed.basearch.presentation.ui.main
 
 import android.os.Bundle
+import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -9,16 +12,21 @@ import com.pebmed.basearch.R
 import com.pebmed.basearch.presentation.extensions.setGone
 import com.pebmed.basearch.presentation.extensions.setVisible
 import com.pebmed.basearch.presentation.extensions.showToast
+import com.pebmed.basearch.presentation.ui.base.Navigator
 import com.pebmed.basearch.presentation.ui.base.ViewState
+import com.pebmed.basearch.presentation.ui.billing.BillingActivity
 import com.pebmed.basearch.presentation.ui.main.adapter.ReposAdapter
 import com.pebmed.basearch.presentation.ui.main.adapter.ReposAdapterListener
 import com.pebmed.basearch.presentation.ui.pullRequest.list.PullRequestListActivity
+import com.pebmed.platform.network.NetworkConnectivityManager
 import kotlinx.android.synthetic.main.activity_main.*
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
     private val viewModel by viewModel<MainViewModel>()
     private lateinit var reposAdapter: ReposAdapter
+    private val networkConnectivityManager by inject<NetworkConnectivityManager>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,7 +37,27 @@ class MainActivity : AppCompatActivity() {
         initListeners()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_billing -> {
+                goToBillingActivity()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
     private fun initObservers() {
+        networkConnectivityManager.isConnectedEvent.observe(this, Observer {
+            Log.i("MainActivity","Network status changed: $it")
+        })
+
         viewModel.reposState.observe(this, Observer {
             when (it) {
                 is ViewState.Loading -> {
@@ -125,6 +153,14 @@ class MainActivity : AppCompatActivity() {
 
     private fun hideReposList() {
         recyclerViewRepos.setGone()
+    }
+
+    private fun goToBillingActivity() {
+        if (networkConnectivityManager.isConnectedEvent.value == true) {
+            Navigator.goToActivity(this@MainActivity, BillingActivity::class.java)
+        } else {
+            showToast("Você precisa estar conectado a internet para acessar essa funcionalidade.")
+        }
     }
     //endregion
 }

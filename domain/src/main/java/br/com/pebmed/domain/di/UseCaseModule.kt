@@ -4,7 +4,6 @@ import br.com.pebmed.domain.usecases.*
 import org.koin.dsl.module
 
 val useCaseModule = module {
-
     factory {
         GetReposUseCase(
             repoRepository = get()
@@ -24,10 +23,38 @@ val useCaseModule = module {
     }
 
     factory {
-        GetPlansUseCase()
+        GetPlansUseCase(
+            billingRepository = get()
+        )
     }
 
     factory {
-        ValidatePurchasedPlanUseCase()
+        ValidatePurchasedStorePlanUseCase(
+            billingRepository = get()
+        )
+    }
+
+    factory {
+        SetPendingSubscriptionValidationUseCase(
+            billingRepository = get()
+        )
+    }
+
+    factory {
+        GetPendingSubscriptionValidationUseCase(
+            billingRepository = get()
+        )
+    }
+
+    factory {
+        SavePurchasedPlanUseCase(
+            billingRepository = get()
+        )
+    }
+
+    factory {
+        GetPurchasedPlanUseCase(
+            billingRepository = get()
+        )
     }
 }

@@ -8,9 +8,9 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.OnLifecycleEvent
 import br.com.pebmed.domain.base.ResultWrapper
-import br.com.pebmed.domain.entities.PlanGateway
-import br.com.pebmed.domain.entities.PlanModel
-import br.com.pebmed.domain.entities.PurchasedPlanModel
+import br.com.pebmed.domain.entities.billing.GooglePlayPurchasedPlanModel
+import br.com.pebmed.domain.entities.billing.PlanGateway
+import br.com.pebmed.domain.entities.billing.PlanModel
 import com.android.billingclient.api.*
 import com.pebmed.platform.base.SingleLiveEvent
 import kotlinx.coroutines.isActive
@@ -27,8 +27,8 @@ class GooglePlayBillingClientWrapper(
         get() = _connectionStatusEvent
 
     private val _purchaseUpdateEvent =
-        SingleLiveEvent<ResultWrapper<List<PurchasedPlanModel>, GooglePlayBillingResponseCodeModel>>()
-    val purchaseUpdateEvent: LiveData<ResultWrapper<List<PurchasedPlanModel>, GooglePlayBillingResponseCodeModel>>
+        SingleLiveEvent<ResultWrapper<List<GooglePlayPurchasedPlanModel>, GooglePlayBillingResponseCodeModel>>()
+    val purchaseUpdateEvent: LiveData<ResultWrapper<List<GooglePlayPurchasedPlanModel>, GooglePlayBillingResponseCodeModel>>
         get() = _purchaseUpdateEvent
 
     private val _priceChangeEvent =
@@ -118,7 +118,7 @@ class GooglePlayBillingClientWrapper(
         }
     }
 
-    fun querySyncSubscriptionPurchases(): ResultWrapper<List<Purchase>, String> {
+    fun querySyncSubscriptionPurchases(): ResultWrapper<List<GooglePlayPurchasedPlanModel>, String> {
         if (!billingClient.isReady) {
             val errorMessage = "queryPurchases: BillingClient is not ready"
             Log.e(tag, errorMessage)
@@ -129,8 +129,10 @@ class GooglePlayBillingClientWrapper(
         Log.i(tag, "queryPurchases: SUBS")
         val result = billingClient.queryPurchases(BillingClient.SkuType.SUBS)
 
-        val purchasesList = result.purchasesList ?: emptyList()
-        Log.i(tag, "queryPurchases result szie: ${purchasesList.size}")
+        val purchasesList = result.purchasesList?.let { purchases ->
+            purchases.map { mapPurchaseToPurchasedPlanModel(it) }
+        } ?: emptyList()
+        Log.i(tag, "queryPurchases result size: ${purchasesList.size}")
 
         return ResultWrapper(success = purchasesList)
     }
@@ -150,7 +152,7 @@ class GooglePlayBillingClientWrapper(
                 when {
                     responseCode.isSuccess() -> {
                         val purchasesList = purchaseHistoryRecordList ?: emptyList()
-                        Log.i(tag, "queryPurchases result szie: ${purchasesList.size}")
+                        Log.i(tag, "queryPurchases result size: ${purchasesList.size}")
 
                         continuation.safeResume(ResultWrapper(success = purchasesList))
                     }
@@ -247,8 +249,8 @@ class GooglePlayBillingClientWrapper(
         )
     }
 
-    fun mapPurchaseToPurchasedPlanModel(purchase: Purchase) : PurchasedPlanModel {
-        return PurchasedPlanModel(
+    private fun mapPurchaseToPurchasedPlanModel(purchase: Purchase) : GooglePlayPurchasedPlanModel {
+        return GooglePlayPurchasedPlanModel(
             orderId = purchase.orderId,
             productId = purchase.sku,
             purchaseToken = purchase.purchaseToken

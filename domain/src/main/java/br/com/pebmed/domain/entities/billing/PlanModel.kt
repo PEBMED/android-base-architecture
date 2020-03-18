@@ -1,4 +1,4 @@
-package br.com.pebmed.domain.entities
+package br.com.pebmed.domain.entities.billing
 
 data class PlanModel(
     val id: String,
@@ -12,4 +12,9 @@ data class PlanModel(
 enum class PlanGateway {
     GOOGLE_PLAY,
     OTHER
+}
+
+object PlanCode {
+    const val ANNUAL = "..."
+    const val MONTHLY = "..."
 }

@@ -30,7 +30,11 @@ val viewModelModule = module {
         BillingViewModel(
             googlePlayBillingClientWrapper = get(),
             getPlansUseCase = get(),
-            validatePurchasedPlanUseCase = get()
+            validatePurchasedStorePlanUseCase = get(),
+            savePurchasedPlanUseCase = get(),
+            getPurchasedPlanUseCase = get(),
+            setPendingSubscriptionValidationUseCase = get(),
+            getPendingSubscriptionValidationUseCase = get()
         )
     }
 }
