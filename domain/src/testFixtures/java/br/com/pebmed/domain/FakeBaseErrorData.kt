@@ -16,7 +16,7 @@ class FakeBaseErrorData {
             errorBody = BaseErrorStatus.DEFAULT_ERROR
         )
 
-        fun mockBaseErrorStatus_Default() = BaseErrorStatus.DEFAULT_ERROR
+        fun mockBaseErrorStatusDefault() = BaseErrorStatus.DEFAULT_ERROR
     }
 
 }
