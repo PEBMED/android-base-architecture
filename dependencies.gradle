@@ -43,6 +43,8 @@ ext {
     espressoVersion = '3.2.0'
     runnerVersion = '1.2.0'
     mockkVersion = '1.9.3'
+    jraskaLiveDataVersion = '1.1.2'
+    archCoreVersion = '2.1.0'
 
     dependencies = [
             kotlin                : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion",
@@ -75,8 +77,11 @@ ext {
 
     testDependecies = [
             junit                 : "junit:junit:$junitVersion",
-            espresso              : "androidx.test.espresso:espresso-core:$espressoVersion",
             mockk                 : "io.mockk:mockk:$mockkVersion",
+            kotlinxCoroutines     : "org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlinxCoroutinesVersion",
+            jraskaLiveData        : "com.jraska.livedata:testing-ktx:$jraskaLiveDataVersion",
+            archCore              : "androidx.arch.core:core-testing:$archCoreVersion"
+    ]
             runner                : "androidx.test:runner:$runnerVersion",
             koin                  : "org.koin:koin-test:$koinVersion"
     ]

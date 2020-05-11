@@ -83,6 +83,9 @@ dependencies {
     testImplementation 'com.jraska.livedata:testing-ktx:1.1.1'
     testImplementation 'androidx.arch.core:core-testing:2.1.0'
     testImplementation testDependencies.mockk
+    testImplementation testDependencies.kotlinxCoroutines
+    testImplementation testDependencies.jraskaLiveData
+    testImplementation testDependencies.archCore
 
     androidTestImplementation(testFixtures(project(":domain")))
     androidTestImplementation testDependencies.koin
