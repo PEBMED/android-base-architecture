@@ -4,6 +4,7 @@ apply plugin: 'java-test-fixtures'
 
 dependencies {
     def dependencies = rootProject.ext.dependencies
+    def testDependecies = rootProject.ext.testDependecies
 
     implementation dependencies.kotlin
 
@@ -16,8 +17,8 @@ dependencies {
     //GSON
     implementation dependencies.gson
 
-    testImplementation "io.mockk:mockk:1.9.3"
     testImplementation testDependecies.junit
+    testImplementation testDependecies.mockk
 
     testFixturesImplementation('com.google.code.gson:gson:2.8.5')
     testFixturesImplementation('org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.61')

@@ -72,8 +72,8 @@ dependencies {
     testImplementation(testFixtures(project(":domain")))
     testImplementation testDependencies.junit
     testImplementation 'com.jraska.livedata:testing-ktx:1.1.1'
-    testImplementation "io.mockk:mockk:1.9.3"
     testImplementation 'androidx.arch.core:core-testing:2.1.0'
+    testImplementation testDependencies.mockk
 
     androidTestImplementation(testFixtures(project(":domain")))
     androidTestImplementation testDependencies.koin

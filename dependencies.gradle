@@ -42,6 +42,7 @@ ext {
     junitVersion = '4.12'
     espressoVersion = '3.2.0'
     runnerVersion = '1.2.0'
+    mockkVersion = '1.9.3'
 
     dependencies = [
             kotlin                : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion",
@@ -75,6 +76,7 @@ ext {
     testDependecies = [
             junit                 : "junit:junit:$junitVersion",
             espresso              : "androidx.test.espresso:espresso-core:$espressoVersion",
+            mockk                 : "io.mockk:mockk:$mockkVersion",
             runner                : "androidx.test:runner:$runnerVersion",
             koin                  : "org.koin:koin-test:$koinVersion"
     ]
