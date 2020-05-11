@@ -50,6 +50,7 @@ dependencies {
 
     def dependencies = rootProject.ext.dependencies
     def testDependencies = rootProject.ext.testDependecies
+    def androidTestDependecies = rootProject.ext.androidTestDependecies
 
     implementation dependencies.kotlin
 
@@ -91,12 +92,14 @@ dependencies {
     testImplementation testDependencies.archCore
 
     androidTestImplementation(testFixtures(project(":domain")))
-    androidTestImplementation testDependencies.koin
-    androidTestImplementation testDependencies.runner
-    androidTestImplementation testDependencies.espresso
-    androidTestImplementation "io.mockk:mockk-android:1.9.3"
-    androidTestImplementation 'androidx.test:rules:1.2.0'
-    androidTestImplementation('com.schibsted.spain:barista:3.2.0') {
+    androidTestImplementation androidTestDependecies.koin
+    androidTestImplementation androidTestDependecies.runner
+    androidTestImplementation androidTestDependecies.espresso
+    androidTestImplementation androidTestDependecies.mockk
+    androidTestImplementation androidTestDependecies.rules
+    androidTestImplementation androidTestDependecies.core
+    androidTestImplementation androidTestDependecies.junit
+    androidTestImplementation(androidTestDependecies.barista) {
         exclude group: 'org.jetbrains.kotlin' // Only if you already use Kotlin in your project
     }
 }

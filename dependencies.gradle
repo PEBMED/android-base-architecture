@@ -46,6 +46,10 @@ ext {
     espressoVersion = '3.2.0'
     runnerVersion = '1.2.0'
     mockkVersion = '1.9.3'
+    androidxTestRulesVersion = '1.2.0'
+    baristaVersion = '3.2.0'
+    androidxTestCoreVersion = '1.2.0'
+    androidxJunitVersion = '1.1.1'
     jraskaLiveDataVersion = '1.1.2'
     archCoreVersion = '2.1.0'
 
@@ -87,7 +91,15 @@ ext {
             jraskaLiveData        : "com.jraska.livedata:testing-ktx:$jraskaLiveDataVersion",
             archCore              : "androidx.arch.core:core-testing:$archCoreVersion"
     ]
+
+    androidTestDependecies = [
+            koin                  : "org.koin:koin-test:$koinVersion",
             runner                : "androidx.test:runner:$runnerVersion",
-            koin                  : "org.koin:koin-test:$koinVersion"
+            espresso              : "androidx.test.espresso:espresso-core:$espressoVersion",
+            mockk                 : "io.mockk:mockk-android:$mockkVersion",
+            rules                 : "androidx.test:rules:$androidxTestRulesVersion",
+            barista               : "com.schibsted.spain:barista:$baristaVersion",
+            core                  : "androidx.test:core-ktx:$androidxTestCoreVersion",
+            junit                 : "androidx.test.ext:junit-ktx:$androidxJunitVersion"
     ]
 }
