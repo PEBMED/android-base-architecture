@@ -20,9 +20,7 @@ dependencies {
     testImplementation testDependecies.junit
     testImplementation testDependecies.mockk
 
-    testFixturesImplementation('com.google.code.gson:gson:2.8.5')
-    testFixturesImplementation('org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.61')
-    testFixturesImplementation('junit:junit:4.12')
+    testFixturesImplementation(dependencies.kotlin)
 }
 
 sourceCompatibility = "8"
