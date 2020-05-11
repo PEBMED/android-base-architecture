@@ -78,6 +78,9 @@ dependencies {
     //CircleImageView
     implementation dependencies.circleImageView
 
+    //Espresso IdlingResource
+    implementation dependencies.idlingResource
+
     testImplementation(testFixtures(project(":domain")))
     testImplementation testDependencies.junit
     testImplementation 'com.jraska.livedata:testing-ktx:1.1.1'

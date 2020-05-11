@@ -38,6 +38,9 @@ ext {
     //CircleImageView
     circleImageViewVersion = '3.0.0'
 
+    //Espresso IdlingResourceVersion
+    idlingResourceVersion = '3.2.0'
+    
     //Test
     junitVersion = '4.12'
     espressoVersion = '3.2.0'
@@ -71,8 +74,10 @@ ext {
 
             room                  : "androidx.room:room-ktx:$roomVersion",
             roomCompiler          : "androidx.room:room-compiler:$roomVersion",
+            
+            circleImageView       : "de.hdodenhof:circleimageview:$circleImageViewVersion",
 
-            circleImageView       : "de.hdodenhof:circleimageview:$circleImageViewVersion"
+            idlingResource        : "androidx.test.espresso:espresso-idling-resource:$idlingResourceVersion"
     ]
 
     testDependecies = [
