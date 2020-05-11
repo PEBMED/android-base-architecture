@@ -8,9 +8,11 @@ import br.com.pebmed.domain.base.BaseErrorData
 import br.com.pebmed.domain.base.BaseErrorStatus
 import br.com.pebmed.domain.entities.PullRequestModel
 import br.com.pebmed.domain.usecases.GetPullRequestUseCase
+import com.pebmed.basearch.presentation.utils.GlobalEspressoIdlingResource
 import com.example.basearch.presentation.extensions.loadViewState
 import com.example.basearch.presentation.ui.base.ViewState
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class PullRequestViewModel(private val getPullRequestUseCase: GetPullRequestUseCase) : ViewModel() {
@@ -20,6 +22,8 @@ class PullRequestViewModel(private val getPullRequestUseCase: GetPullRequestUseC
         get() = _pullRequestState
 
     fun getPullRequest(owner: String, repoName: String, pullRequestNumber: Long) {
+        GlobalEspressoIdlingResource.increment()
+
         _pullRequestState.postValue(ViewState.Loading())
 
         viewModelScope.launch(Dispatchers.IO) {
@@ -32,6 +36,8 @@ class PullRequestViewModel(private val getPullRequestUseCase: GetPullRequestUseC
 
             val viewState = loadViewState(resultWrapper)
             _pullRequestState.postValue(viewState)
+
+            GlobalEspressoIdlingResource.decrement()
         }
     }
 }
