@@ -4,7 +4,7 @@ import br.com.pebmed.data.pullRequest.model.PullRequestResponseModel
 import br.com.pebmed.data.pullRequest.model.UserResponseModel
 import java.util.*
 
-class FakePullRequestResponseModel {
+class MockPullRequestResponseModel {
 
     companion object {
 
