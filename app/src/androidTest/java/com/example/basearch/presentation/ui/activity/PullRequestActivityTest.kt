@@ -5,7 +5,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.core.app.launchActivity
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
-import br.com.pebmed.domain.FakePullRequestModel
+import br.com.pebmed.domain.MockPullRequestModel
 import br.com.pebmed.domain.FakeResultWrapper
 import br.com.pebmed.domain.FakeUserModel
 import br.com.pebmed.domain.usecases.GetPullRequestUseCase
@@ -59,7 +59,7 @@ class PullRequestActivityTest {
 
     @Test
     fun openActivity_SuccessLoad() {
-        val pullRequestModel = FakePullRequestModel.mock(
+        val pullRequestModel = MockPullRequestModel.mock(
             FakeUserModel.mock()
         )
         coEvery {

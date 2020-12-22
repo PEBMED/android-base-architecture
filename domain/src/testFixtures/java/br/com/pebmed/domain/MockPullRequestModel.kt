@@ -4,7 +4,7 @@ import br.com.pebmed.domain.entities.PullRequestModel
 import br.com.pebmed.domain.entities.UserModel
 import java.util.*
 
-class FakePullRequestModel {
+class MockPullRequestModel {
 
     companion object {
         fun mockList(itemsOnList: Int) : List<PullRequestModel> {

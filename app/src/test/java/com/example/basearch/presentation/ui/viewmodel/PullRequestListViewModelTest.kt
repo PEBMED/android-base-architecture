@@ -49,7 +49,7 @@ class PullRequestListViewModelTest {
     fun before() {
         MockKAnnotations.init(this)
 
-        this.pullRequest = FakePullRequestModel.mock(FakeUserModel.mock())
+        this.pullRequest = MockPullRequestModel.mock(FakeUserModel.mock())
         this.params = FakeGetPullRequestsUseCase.Params.mock()
 
         Dispatchers.setMain(testDispatcher)
@@ -70,7 +70,7 @@ class PullRequestListViewModelTest {
             getPullRequestsUseCase
         )
 
-        val resultList = FakePullRequestModel.mockList(1)
+        val resultList = MockPullRequestModel.mockList(1)
         val resultWrapper =
             FakeResultWrapper.mockSuccess<List<PullRequestModel>, BaseErrorData<BaseErrorStatus>>(
                 resultList
