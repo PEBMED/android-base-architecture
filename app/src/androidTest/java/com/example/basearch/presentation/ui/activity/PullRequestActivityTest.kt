@@ -6,7 +6,7 @@ import androidx.test.core.app.launchActivity
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import br.com.pebmed.domain.MockPullRequestModel
-import br.com.pebmed.domain.FakeResultWrapper
+import br.com.pebmed.domain.MockResultWrapper
 import br.com.pebmed.domain.MockUserModel
 import br.com.pebmed.domain.usecases.GetPullRequestUseCase
 import com.example.basearch.R
@@ -64,7 +64,7 @@ class PullRequestActivityTest {
         )
         coEvery {
             getPullRequestUseCase.runAsync(any())
-        } returns FakeResultWrapper.mockSuccess(pullRequestModel)
+        } returns MockResultWrapper.mockSuccess(pullRequestModel)
 
         val intent =
             Intent(ApplicationProvider.getApplicationContext(), PullRequestActivity::class.java)

@@ -72,7 +72,7 @@ class PullRequestListViewModelTest {
 
         val resultList = MockPullRequestModel.mockList(1)
         val resultWrapper =
-            FakeResultWrapper.mockSuccess<List<PullRequestModel>, BaseErrorData<BaseErrorStatus>>(
+            MockResultWrapper.mockSuccess<List<PullRequestModel>, BaseErrorData<BaseErrorStatus>>(
                 resultList
             )
 
@@ -104,7 +104,7 @@ class PullRequestListViewModelTest {
         )
 
         val emptyResultWrapper =
-            FakeResultWrapper.mockSuccess<List<PullRequestModel>, BaseErrorData<BaseErrorStatus>>(
+            MockResultWrapper.mockSuccess<List<PullRequestModel>, BaseErrorData<BaseErrorStatus>>(
                 success = listOf()
             )
 
@@ -136,7 +136,7 @@ class PullRequestListViewModelTest {
 
         val errorData = FakeBaseErrorData.mockStatusError()
         val errorResultWrapper =
-            FakeResultWrapper.mockError<List<PullRequestModel>, BaseErrorData<BaseErrorStatus>>(
+            MockResultWrapper.mockError<List<PullRequestModel>, BaseErrorData<BaseErrorStatus>>(
                 errorData
             )
 

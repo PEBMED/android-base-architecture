@@ -3,7 +3,7 @@ package br.com.pebmed.domain
 import br.com.pebmed.domain.base.CompleteResultWrapper
 import br.com.pebmed.domain.base.ResultWrapper
 
-class FakeResultWrapper {
+class MockResultWrapper {
 
     companion object {
         fun <SUCCESS, ERROR> mockSuccess(success: SUCCESS): ResultWrapper<SUCCESS, ERROR> {
