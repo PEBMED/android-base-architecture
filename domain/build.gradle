@@ -21,6 +21,7 @@ dependencies {
     testImplementation testDependecies.mockk
 
     testFixturesImplementation(dependencies.kotlin)
+    testFixturesImplementation(testDependecies.mockk)
 }
 
 sourceCompatibility = "8"
