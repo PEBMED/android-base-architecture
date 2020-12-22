@@ -2,7 +2,7 @@ package br.com.pebmed.domain
 
 import br.com.pebmed.domain.entities.UserModel
 
-class FakeUserModel {
+class MockUserModel {
     
     companion object {
         fun mock() = UserModel(

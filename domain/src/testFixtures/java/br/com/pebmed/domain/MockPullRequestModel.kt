@@ -13,7 +13,7 @@ class MockPullRequestModel {
             for (index in 0 .. itemsOnList) {
                 list.add(
                     mock(
-                        FakeUserModel.mock()
+                        MockUserModel.mock()
                     )
                 )
             }

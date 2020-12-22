@@ -49,7 +49,7 @@ class PullRequestListViewModelTest {
     fun before() {
         MockKAnnotations.init(this)
 
-        this.pullRequest = MockPullRequestModel.mock(FakeUserModel.mock())
+        this.pullRequest = MockPullRequestModel.mock(MockUserModel.mock())
         this.params = FakeGetPullRequestsUseCase.Params.mock()
 
         Dispatchers.setMain(testDispatcher)

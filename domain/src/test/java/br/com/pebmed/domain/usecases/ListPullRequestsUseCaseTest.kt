@@ -2,7 +2,7 @@ package br.com.pebmed.domain.usecases
 
 import br.com.pebmed.domain.FakeGetPullRequestsUseCase
 import br.com.pebmed.domain.MockPullRequestModel
-import br.com.pebmed.domain.FakeUserModel
+import br.com.pebmed.domain.MockUserModel
 import br.com.pebmed.domain.base.CompleteResultWrapper
 import br.com.pebmed.domain.entities.PullRequestModel
 import br.com.pebmed.domain.entities.UserModel
@@ -28,7 +28,7 @@ class ListPullRequestsUseCaseTest {
     fun setUp() {
         MockKAnnotations.init(this)
 
-        user = FakeUserModel.mock()
+        user = MockUserModel.mock()
         pullRequest = MockPullRequestModel.mock(user)
         params = FakeGetPullRequestsUseCase.Params.mock()
     }
