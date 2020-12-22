@@ -7,7 +7,7 @@ import java.util.*
 class MockPullRequestModel {
 
     companion object {
-        fun mockList(itemsOnList: Int) : List<PullRequestModel> {
+        fun mockList(itemsOnList: Int = 2) : List<PullRequestModel> {
             val list = mutableListOf<PullRequestModel>()
 
             for (index in 0 .. itemsOnList) {
