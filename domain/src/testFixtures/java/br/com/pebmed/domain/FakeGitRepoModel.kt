@@ -19,7 +19,7 @@ class FakeGitRepoModel {
 
         fun mock() = RepoModel(
             id = 1,
-            ownerModel = FakeOwnerModel.mock()
+            ownerModel = MockOwnerModel.mock()
         )
     }
 }
