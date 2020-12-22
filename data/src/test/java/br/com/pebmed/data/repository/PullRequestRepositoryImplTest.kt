@@ -9,6 +9,7 @@ import br.com.pebmed.data.pullrequest.model.fake.MockUserResponseModel
 import br.com.pebmed.domain.base.CompleteResultWrapper
 import io.mockk.*
 import io.mockk.impl.annotations.MockK
+import junit.framework.Assert.assertNotNull
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
@@ -17,10 +18,12 @@ import org.junit.Test
 class PullRequestRepositoryImplTest {
 
     @MockK
-    private lateinit var pullRequestRemoteDataSource: PullRequestRemoteDataSource
+    private lateinit var mockPullRequestRemoteDataSource: PullRequestRemoteDataSource
 
     private lateinit var userModel: UserResponseModel
     private lateinit var pullRequestModel: PullRequestResponseModel
+
+    private lateinit var pullRequestRepositoryImpl: PullRequestRepositoryImpl
 
     @Before
     fun setUp() {
@@ -28,37 +31,39 @@ class PullRequestRepositoryImplTest {
 
         userModel = MockUserResponseModel.loadUserResponse()
         pullRequestModel = MockPullRequestResponseModel.loadPullRequestResponse(userModel)
+
+        pullRequestRepositoryImpl = PullRequestRepositoryImpl(mockPullRequestRemoteDataSource)
     }
 
     @Test
-    fun listPullRequests() {
+    fun `SHOULD list pull requests WHEN success fetched`() = runBlocking {
 
         coEvery {
-            pullRequestRemoteDataSource.getPullRequests(any(), any())
+            mockPullRequestRemoteDataSource.getPullRequests(any(), any())
         } returns CompleteResultWrapper(
             success = listOf(pullRequestModel)
         )
 
-        runBlocking {
-            PullRequestRepositoryImpl(pullRequestRemoteDataSource).getPullRequests(
+        val result = PullRequestRepositoryImpl(mockPullRequestRemoteDataSource).getPullRequests(
                 owner = "",
                 repoName = ""
             )
-        }
 
 
         coVerify {
-            pullRequestRemoteDataSource.getPullRequests(any(), any())
+            mockPullRequestRemoteDataSource.getPullRequests(any(), any())
         }
 
-        confirmVerified(pullRequestRemoteDataSource)
+        confirmVerified(mockPullRequestRemoteDataSource)
+
+        assertNotNull(result.success)
     }
 
     @Test
     fun `SHOULD call functions in the correct order`() {
 
         coEvery {
-            pullRequestRemoteDataSource.getPullRequests(any(), any())
+            mockPullRequestRemoteDataSource.getPullRequests(any(), any())
         } returns CompleteResultWrapper(
             success = listOf(pullRequestModel)
         )
@@ -66,7 +71,7 @@ class PullRequestRepositoryImplTest {
         val pullRequestRepositoryImpl =
             spyk(
                 PullRequestRepositoryImpl(
-                    pullRequestRemoteDataSource
+                    mockPullRequestRemoteDataSource
                 ), recordPrivateCalls = true)
         runBlocking {
             pullRequestRepositoryImpl.getPullRequests("", "")
