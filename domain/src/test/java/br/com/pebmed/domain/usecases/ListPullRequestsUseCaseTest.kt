@@ -1,6 +1,6 @@
 package br.com.pebmed.domain.usecases
 
-import br.com.pebmed.domain.FakeGetPullRequestsUseCase
+import br.com.pebmed.domain.MockGetPullRequestsUseCase
 import br.com.pebmed.domain.MockPullRequestModel
 import br.com.pebmed.domain.MockUserModel
 import br.com.pebmed.domain.base.CompleteResultWrapper
@@ -30,7 +30,7 @@ class ListPullRequestsUseCaseTest {
 
         user = MockUserModel.mock()
         pullRequest = MockPullRequestModel.mock(user)
-        params = FakeGetPullRequestsUseCase.Params.mock()
+        params = MockGetPullRequestsUseCase.Params.mock()
     }
 
     /**
