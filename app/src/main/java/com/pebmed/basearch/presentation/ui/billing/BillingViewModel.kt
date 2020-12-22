@@ -108,17 +108,15 @@ class BillingViewModel(
         }
     }
 
-    fun onGooglePlayPlanPurchaseSuccess(
-        purchasedPlan: GooglePlayPurchasedPlanModel,
-        forceError: Boolean
-    ) {
+    fun onGooglePlayPlanPurchaseSuccess(purchasedPlan: GooglePlayPurchasedPlanModel, forceError: Boolean) {
         _purchaseViewState.postValue(ViewState.Loading())
 
         viewModelScope.launch(Dispatchers.IO) {
-            validadePurchasedStorePlan(purchasedPlan, forceError, this)
+            validatePurchasedStorePlan(purchasedPlan, forceError, this)
         }
     }
 
+    //region VALIDATE PENDING ACKNOWLEDGE PURCHASE
     fun validatePendingAcknowledgePurchase(pendingSubscriptionValidationModel: PendingSubscriptionValidationModel) {
         val googlePlayPurchasedPlansResult =
             googlePlayBillingClientWrapper.querySyncSubscriptionPurchases()
@@ -169,6 +167,8 @@ class BillingViewModel(
             }
         )
     }
+    //endregion
+
 
     fun validatePendingServerSyncSubscription(pendingSubscriptionValidationModel: PendingSubscriptionValidationModel) {
         val googlePlayPurchasedPlansResult =
@@ -179,7 +179,7 @@ class BillingViewModel(
                 _purchaseViewState.postValue(ViewState.Loading())
 
                 viewModelScope.launch(Dispatchers.IO) {
-                    validadePurchasedStorePlan(it, false, this)
+                    validatePurchasedStorePlan(it, false, this)
                 }
             },
             errorBlock = {
@@ -188,11 +188,8 @@ class BillingViewModel(
         )
     }
 
-    private fun validadePurchasedStorePlan(
-        googlePlayPurchasedPlan: GooglePlayPurchasedPlanModel,
-        forceError: Boolean,
-        coroutineScope: CoroutineScope
-    ) {
+    //region VALIDATE PURCHASED STORE PLAN
+    private fun validatePurchasedStorePlan(googlePlayPurchasedPlan: GooglePlayPurchasedPlanModel, forceError: Boolean, coroutineScope: CoroutineScope) {
         coroutineScope.launch {
             val validationParams = ValidatePurchasedStorePlanUseCase.Params(
                 googlePlayPurchasedPlan,
@@ -201,31 +198,10 @@ class BillingViewModel(
             val validationResult = validatePurchasedStorePlanUseCase.runAsync(validationParams)
 
             var pendingSubscriptionValidationModel: PendingSubscriptionValidationModel? = null
-            lateinit var viewStateResult: ViewState<Unit, BaseErrorData<BaseErrorStatus>>
 
             validationResult.success?.let { purchasedPlan ->
                 savePurchasedPlanUseCase.runSync(purchasedPlan)
-
-                val acknowledgePurchaseResult = acknowledgePurchase(googlePlayPurchasedPlan)
-                when {
-                    acknowledgePurchaseResult.success != null -> {
-                        viewStateResult = ViewState.Success(Unit)
-                    }
-                    else -> {
-                        pendingSubscriptionValidationModel = PendingSubscriptionValidationModel(
-                            PendingSubscriptionValidationType.GOOGLE_PLAY_ACKNOWLEDGE,
-                            googlePlayPurchasedPlan.productId,
-                            Date().toSupportedDateFormat(SupportedDateFormat.SERVER)
-                        )
-
-                        viewStateResult = ViewState.Error(
-                            BaseErrorData(
-                                errorBody = BaseErrorStatus.DEFAULT_ERROR,
-                                errorMessage = "Não foi possível reconhecer a compra na Google Play"
-                            )
-                        )
-                    }
-                }
+                pendingSubscriptionValidationModel = acknowledgePurchasedStorePlan(googlePlayPurchasedPlan)
             } ?: run {
                 pendingSubscriptionValidationModel = PendingSubscriptionValidationModel(
                     PendingSubscriptionValidationType.BACKEND,
@@ -233,13 +209,38 @@ class BillingViewModel(
                     Date().toSupportedDateFormat(SupportedDateFormat.SERVER)
                 )
 
-                viewStateResult = ViewState.Error(validationResult.error)
+                _purchaseViewState.postValue(ViewState.Error(validationResult.error))
             }
 
             setPendingSubscriptionValidationUseCase.runSync(pendingSubscriptionValidationModel)
-            _purchaseViewState.postValue(viewStateResult)
         }
     }
+
+    private suspend fun acknowledgePurchasedStorePlan(purchasedPlan: GooglePlayPurchasedPlanModel): PendingSubscriptionValidationModel? {
+        val acknowledgePurchaseResult = acknowledgePurchase(purchasedPlan)
+        when {
+            acknowledgePurchaseResult.success != null -> {
+                _purchaseViewState.postValue(ViewState.Success(Unit))
+                return null
+            }
+            else -> {
+                _purchaseViewState.postValue(ViewState.Error(
+                    BaseErrorData(
+                        errorBody = BaseErrorStatus.DEFAULT_ERROR,
+                        errorMessage = "Não foi possível reconhecer a compra na Google Play"
+                    )
+                ))
+
+                return PendingSubscriptionValidationModel(
+                    PendingSubscriptionValidationType.GOOGLE_PLAY_ACKNOWLEDGE,
+                    purchasedPlan.productId,
+                    Date().toSupportedDateFormat(SupportedDateFormat.SERVER)
+                )
+
+            }
+        }
+    }
+    //endregion
 
     private fun getGooglePlayPurchasedPlans(
         pendingSubscriptionValidationModel: PendingSubscriptionValidationModel
