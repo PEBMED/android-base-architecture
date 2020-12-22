@@ -2,7 +2,7 @@ package br.com.pebmed.domain
 
 import br.com.pebmed.domain.entities.RepoModel
 
-class FakeGitRepoModel {
+class MockGitRepoModel {
     
     companion object {
         fun mock(itemsOnList: Int): List<RepoModel> {

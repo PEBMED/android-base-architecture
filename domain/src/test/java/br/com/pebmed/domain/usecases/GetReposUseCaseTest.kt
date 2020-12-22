@@ -1,6 +1,6 @@
 package br.com.pebmed.domain.usecases
 
-import br.com.pebmed.domain.FakeGitRepoModel
+import br.com.pebmed.domain.MockGitRepoModel
 import br.com.pebmed.domain.base.ResultWrapper
 import br.com.pebmed.domain.repository.RepoRepository
 import io.mockk.MockKAnnotations
@@ -34,7 +34,7 @@ class GetReposUseCaseTest {
                 language = fakeLanguage
             )
         } returns ResultWrapper(
-            success = FakeGitRepoModel.mock(1)
+            success = MockGitRepoModel.mock(1)
         )
 
         GetReposUseCase(repoRepository).runAsync(GetReposUseCase.Params(true))
