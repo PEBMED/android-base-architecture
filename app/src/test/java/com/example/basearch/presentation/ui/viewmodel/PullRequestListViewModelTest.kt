@@ -134,7 +134,7 @@ class PullRequestListViewModelTest {
             getPullRequestsUseCase
         )
 
-        val errorData = FakeBaseErrorData.mockStatusError()
+        val errorData = MockBaseErrorData.mockStatusError()
         val errorResultWrapper =
             MockResultWrapper.mockError<List<PullRequestModel>, BaseErrorData<BaseErrorStatus>>(
                 errorData

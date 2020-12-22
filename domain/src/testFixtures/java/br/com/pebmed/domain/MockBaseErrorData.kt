@@ -5,7 +5,7 @@ import br.com.pebmed.domain.base.BaseErrorStatus
 import br.com.pebmed.domain.base.ResultWrapper
 import br.com.pebmed.domain.entities.PullRequestModel
 
-class FakeBaseErrorData {
+class MockBaseErrorData {
 
     companion object {
         fun mockStringError() = BaseErrorData (
