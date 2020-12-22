@@ -1,6 +1,13 @@
 package br.com.pebmed.domain
 
 import br.com.pebmed.domain.entities.RepoModel
+/**
+ * https://issuetracker.google.com/issues/139438142
+ * Bug na IDE que não encontra dependências importadas
+ * O build continua funcionando normalmente mesmo com esse problema
+ * gerado ao utilizar o java-test-fixtures plugin
+ */
+import io.mockk.*
 
 class MockGitRepoModel {
     
@@ -17,9 +24,18 @@ class MockGitRepoModel {
             return list
         }
 
-        fun mock() = RepoModel(
-            id = 1,
-            ownerModel = MockOwnerModel.mock()
-        )
+        fun mock() : RepoModel {
+            val mockedRepoModel = mockk<RepoModel>()
+
+            every {
+                mockedRepoModel.id
+            } returns 1
+
+            every {
+                mockedRepoModel.ownerModel
+            } returns MockOwnerModel.mock()
+
+            return mockedRepoModel
+        }
     }
 }

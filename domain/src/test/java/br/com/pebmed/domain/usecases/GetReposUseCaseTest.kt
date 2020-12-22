@@ -17,37 +17,43 @@ class GetReposUseCaseTest {
     @MockK(relaxUnitFun = true)
     private lateinit var repoRepository: RepoRepository
 
+    private lateinit var getReposUseCase: GetReposUseCase
+
     private val fakePage = 1
     private val fakeLanguage = "java"
 
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
+
+        getReposUseCase = GetReposUseCase(repoRepository)
     }
 
     @Test
-    fun `SHOULD save last sync date WHEN force sync param is true`() = runBlocking {
-        coEvery {
-            repoRepository.getAllRepos(
-                fromRemote = true,
-                page = fakePage,
-                language = fakeLanguage
+    fun `SHOULD save last sync date WHEN force sync param is true`() {
+        runBlocking {
+            coEvery {
+                repoRepository.getAllRepos(
+                    fromRemote = true,
+                    page = fakePage,
+                    language = fakeLanguage
+                )
+            } returns ResultWrapper(
+                success = MockGitRepoModel.mock(1)
             )
-        } returns ResultWrapper(
-            success = MockGitRepoModel.mock(1)
-        )
 
-        GetReposUseCase(repoRepository).runAsync(GetReposUseCase.Params(true))
+            getReposUseCase.runAsync(GetReposUseCase.Params(true))
 
-        coVerify {
-            repoRepository.getAllRepos(
-                fromRemote = true,
-                page = fakePage,
-                language = fakeLanguage
-            )
-            repoRepository.saveLastSyncDate(any())
+            coVerify {
+                repoRepository.getAllRepos(
+                    fromRemote = true,
+                    page = fakePage,
+                    language = fakeLanguage
+                )
+                repoRepository.saveLastSyncDate(any())
+            }
+
+            confirmVerified(repoRepository)
         }
-
-        confirmVerified(repoRepository)
     }
 }
