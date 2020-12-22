@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Workspace-android-base-architecture.iml" filepath="$PROJECT_DIR$/.idea/modules/Workspace-android-base-architecture.iml" group="android-base-architecture" />
+      <module fileurl="file://$PROJECT_DIR$/android-base-architecture.iml" filepath="$PROJECT_DIR$/android-base-architecture.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/android-base-architecture-app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/android-base-architecture-app.iml" group="android-base-architecture/app" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/data/android-base-architecture-data.iml" filepath="$PROJECT_DIR$/.idea/modules/data/android-base-architecture-data.iml" group="android-base-architecture/data" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/domain/android-base-architecture-domain.iml" filepath="$PROJECT_DIR$/.idea/modules/domain/android-base-architecture-domain.iml" group="android-base-architecture/domain" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/platform/android-base-architecture-platform.iml" filepath="$PROJECT_DIR$/.idea/modules/platform/android-base-architecture-platform.iml" group="android-base-architecture/platform" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/data/data.iml" filepath="$PROJECT_DIR$/data/data.iml" />
+      <module fileurl="file://$PROJECT_DIR$/domain/domain.iml" filepath="$PROJECT_DIR$/domain/domain.iml" />
+      <module fileurl="file://$PROJECT_DIR$/platform/platform.iml" filepath="$PROJECT_DIR$/platform/platform.iml" />
+    </modules>
+  </component>
+</project>

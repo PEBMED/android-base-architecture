@@ -1,7 +1,9 @@
 package br.com.pebmed.data.di
 
+import br.com.pebmed.data.billing.BillingRepositoryImpl
 import br.com.pebmed.data.pullRequest.PullRequestRepositoryImpl
 import br.com.pebmed.data.repo.RepoRepositoryImpl
+import br.com.pebmed.domain.repository.BillingRepository
 import br.com.pebmed.domain.repository.PullRequestRepository
 import br.com.pebmed.domain.repository.RepoRepository
 import org.koin.dsl.module
@@ -18,6 +20,12 @@ val repositoryModule = module {
     factory<PullRequestRepository> {
         PullRequestRepositoryImpl(
             pullRequestRemoteDataSource = get()
+        )
+    }
+
+    factory<BillingRepository> {
+        BillingRepositoryImpl(
+            localDataSource = get()
         )
     }
 }
