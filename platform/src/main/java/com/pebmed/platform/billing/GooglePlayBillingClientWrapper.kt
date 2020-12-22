@@ -3,14 +3,10 @@ package com.pebmed.platform.billing
 import android.app.Activity
 import android.content.Context
 import android.util.Log
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.OnLifecycleEvent
 import br.com.pebmed.domain.base.ResultWrapper
 import br.com.pebmed.domain.entities.billing.GooglePlayPurchasedPlanModel
-import br.com.pebmed.domain.entities.billing.PlanGateway
-import br.com.pebmed.domain.entities.billing.PlanModel
 import com.android.billingclient.api.*
 import com.pebmed.platform.base.SingleLiveEvent
 import kotlinx.coroutines.isActive
@@ -20,96 +16,169 @@ import kotlin.coroutines.suspendCoroutine
 
 class GooglePlayBillingClientWrapper(
     private val context: Context
-) : LifecycleObserver, PurchasesUpdatedListener, BillingClientStateListener {
-    private val _connectionStatusEvent =
-        SingleLiveEvent<GooglePlayBillingResponseCodeModel>()
+) : LifecycleObserver, PurchasesUpdatedListener {
+    //region EVENTS
+    /**
+     * Event to notify when has some bolling connection status changes
+     */
+    private val _connectionStatusEvent = SingleLiveEvent<GooglePlayBillingResponseCodeModel>()
     val connectionStatusEvent: LiveData<GooglePlayBillingResponseCodeModel>
         get() = _connectionStatusEvent
 
-    private val _purchaseUpdateEvent =
-        SingleLiveEvent<ResultWrapper<List<GooglePlayPurchasedPlanModel>, GooglePlayBillingResponseCodeModel>>()
+    /**
+     * Event to notify when has some purchase update
+     */
+    private val _purchaseUpdateEvent = SingleLiveEvent<ResultWrapper<List<GooglePlayPurchasedPlanModel>, GooglePlayBillingResponseCodeModel>>()
     val purchaseUpdateEvent: LiveData<ResultWrapper<List<GooglePlayPurchasedPlanModel>, GooglePlayBillingResponseCodeModel>>
         get() = _purchaseUpdateEvent
 
-    private val _priceChangeEvent =
-        SingleLiveEvent<GooglePlayBillingResponseCodeModel>()
+    /**
+     * Event to notify when user finishes your iteration with price update
+     */
+    private val _priceChangeEvent = SingleLiveEvent<GooglePlayBillingResponseCodeModel>()
     val priceChangeEvent: LiveData<GooglePlayBillingResponseCodeModel>
         get() = _priceChangeEvent
+    //endregion
 
-    private val tag = "GooglePlayBillingClient"
-    private lateinit var billingClient: BillingClient
+    //region VARIABLES
+    private var billingClient: BillingClient? = null
     private var retryConnectionQty = 0
     private val maxReconnectionAttempts = 5
+    //endregion
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
-    fun create() {
-        Log.i(tag, "ON_CREATE")
-
-        billingClient = BillingClient.newBuilder(context)
-            .setListener(this)
-            .enablePendingPurchases() // Not used for subscriptions.
-            .build()
-        if (!billingClient.isReady) {
-            Log.i(tag, "BillingClient: Start connection...")
-            billingClient.startConnection(this)
+    //region BILLING INITIALIZATION
+    private fun initBillingClient() {
+        if (billingClient == null) {
+            billingClient = BillingClient.newBuilder(context)
+                .setListener(this@GooglePlayBillingClientWrapper)
+                .enablePendingPurchases() // Not used for subscriptions.
+                .build()
         }
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-    fun destroy() {
-        Log.i(tag, "ON_DESTROY")
-        if (billingClient.isReady) {
-            Log.i(tag, "BillingClient can only be used once -- closing connection")
-
-            endConnection()
+    private fun startBillingConnection(listener: BillingClientStateListener) {
+        initBillingClient()
+        if (!isReady()) {
+            logInfo("BillingClient: Start connection...")
+            logInfo("Previously on retryConnectionQty: $retryConnectionQty")
+            retryConnectionQty = 0
+            billingClient?.startConnection(listener)
         }
     }
 
-    fun endConnection() = billingClient.endConnection()
+    suspend fun startConnection(): GooglePlayBillingResponseCodeModel {
+        logInfo("[startConnection] called")
+        logInfo("[startConnection] BillingClient is ready: ${isReady()}")
+        return if (isReady()) {
+            _connectionStatusEvent.postValue(BillingClient.BillingResponseCode.OK.toGooglePlayBillingResponseCodeModel())
+            GooglePlayBillingResponseCodeModel.OK
+        } else {
+            suspendCoroutine { continuation ->
+                startConnectionWithContinuation(continuation)
+            }
+        }
+    }
 
-    fun isReady() = billingClient.isReady
+    private fun startConnectionWithContinuation(continuation: Continuation<GooglePlayBillingResponseCodeModel>) {
+        try {
+            startBillingConnection(createBillingClientStateListener(continuation))
+        } catch (e: Exception) {
+            logError(throwable = e)
+            _connectionStatusEvent.postValue(BillingClient.BillingResponseCode.ERROR.toGooglePlayBillingResponseCodeModel())
+            continuation.safeResume(BillingClient.BillingResponseCode.ERROR.toGooglePlayBillingResponseCodeModel())
+        }
+    }
+    //endregion
 
-    suspend fun querySkuDetails(plansCodes: List<String>, type: GooglePlayBillingType): ResultWrapper<Map<String, String>, GooglePlayBillingResponseCodeModel> {
+    //region BILLING CLIENT STATE LISTENERS
+    private fun createBillingClientStateListener(continuation: Continuation<GooglePlayBillingResponseCodeModel>): BillingClientStateListener {
+        val tag = "startConnectionWithListener"
+        return object : BillingClientStateListener {
+            override fun onBillingSetupFinished(billingResult: BillingResult) {
+                val responseCode = billingResult.responseCode.toGooglePlayBillingResponseCodeModel()
+                val debugMessage = billingResult.debugMessage
+                logInfo("[$tag] onBillingSetupFinished: $responseCode - $debugMessage")
+                logInfo("[$tag] Is billing client ready: ${isReady()}")
+
+                _connectionStatusEvent.postValue(responseCode)
+                continuation.safeResume(responseCode)
+            }
+
+            override fun onBillingServiceDisconnected() {
+                logInfo("onBillingServiceDisconnected")
+
+                tryToReconnect(
+                    retryBlock = {
+                        startConnectionWithContinuation(continuation)
+                    },
+                    allAttemptsFailedBlock = {
+                        val serviceDisconnected = BillingClient.BillingResponseCode.SERVICE_DISCONNECTED.toGooglePlayBillingResponseCodeModel()
+                        _connectionStatusEvent.postValue(serviceDisconnected)
+                        continuation.safeResume(serviceDisconnected)
+                    }
+                )
+            }
+        }
+    }
+    //endregion
+
+    /**
+     * Ends the connection. After finished, it's necessary to create a new BillingClient
+     */
+    fun endConnection() {
+        if (isReady()) {
+            logInfo("endConnection: Calling billingClient.endConnection().")
+            billingClient?.endConnection()
+        } else {
+            logInfo("endConnection: No billingClient initialized or ready available.")
+        }
+        billingClient = null
+    }
+
+    /**
+     * Verifies if billing lib is ready to be used
+     */
+    fun isReady() = billingClient?.isReady ?: false
+
+    /**
+     * Fetches [SkuDetails] for one or more items or subscriptions.
+     */
+    suspend fun querySkuDetails(plansCodes: List<String>, type: GooglePlayBillingType): ResultWrapper<Map<String, SkuDetails>, GooglePlayBillingResponseCodeModel> {
         return suspendCoroutine { continuation ->
-            Log.i(tag, "querySkuDetails")
+            logInfo("querySkuDetails")
             val skuDetailsParams = SkuDetailsParams.newBuilder()
                 .setType(type.value)
                 .setSkusList(plansCodes)
                 .build()
 
-            Log.i(tag, "querySkuDetailsAsync")
-            billingClient.querySkuDetailsAsync(skuDetailsParams) { billingResult, skuDetailsList ->
+            logInfo("querySkuDetailsAsync")
+            billingClient?.querySkuDetailsAsync(skuDetailsParams) { billingResult, skuDetailsList ->
                 val responseCode = billingResult.responseCode.toGooglePlayBillingResponseCodeModel()
                 val debugMessage = billingResult.debugMessage
 
                 when {
                     responseCode.isSuccess() -> {
-                        Log.i(tag, "onSkuDetailsResponse: $responseCode - $debugMessage")
+                        logInfo("onSkuDetailsResponse: $responseCode - $debugMessage")
                         if (skuDetailsList == null) {
-                            Log.i(tag, "onSkuDetailsResponse: null SkuDetails list")
+                            logInfo("onSkuDetailsResponse: null SkuDetails list")
 
-                            continuation.safeResume(
-                                ResultWrapper(
-                                    success = emptyMap()
-                                )
-                            )
+                            continuation.safeResume(ResultWrapper(success = emptyMap()))
                         } else {
-                            val hasMap = LinkedHashMap<String, String>().apply {
+                            val hasMap = LinkedHashMap<String, SkuDetails>().apply {
                                 for (details in skuDetailsList) {
-                                    put(details.sku, details.originalJson)
+                                    put(details.sku, details)
                                 }
                             }
-                            Log.i(tag, "onSkuDetailsResponse: count ${hasMap.size}")
+                            logInfo("onSkuDetailsResponse: count ${hasMap.size}")
 
-                            val result =
-                                ResultWrapper<Map<String, String>, GooglePlayBillingResponseCodeModel>(
-                                    success = hasMap
-                                )
+                            val result = ResultWrapper<Map<String, SkuDetails>, GooglePlayBillingResponseCodeModel>(success = hasMap)
                             continuation.safeResume(result)
                         }
                     }
                     else -> {
-                        Log.i(tag, "onSkuDetailsResponse: $responseCode - $debugMessage")
+                        logInfo("onSkuDetailsResponse: $responseCode - $debugMessage")
+
+                        logInfo("Is billing client ready: ${isReady()}")
 
                         continuation.safeResume(ResultWrapper(error = responseCode))
                     }
@@ -118,41 +187,45 @@ class GooglePlayBillingClientWrapper(
         }
     }
 
+    /**
+     * Searches synchronously for existing purchases at Google Play Billing
+     */
     fun querySyncSubscriptionPurchases(): ResultWrapper<List<GooglePlayPurchasedPlanModel>, String> {
-        if (!billingClient.isReady) {
+        if (!isReady()) {
             val errorMessage = "queryPurchases: BillingClient is not ready"
-            Log.e(tag, errorMessage)
+            logError(errorMessage)
 
             return ResultWrapper(error = errorMessage)
         }
 
-        Log.i(tag, "queryPurchases: SUBS")
-        val result = billingClient.queryPurchases(BillingClient.SkuType.SUBS)
+        logInfo("queryPurchases: SUBS")
+        val result = billingClient?.queryPurchases(BillingClient.SkuType.SUBS)
 
-        val purchasesList = result.purchasesList?.let { purchases ->
-            purchases.map { mapPurchaseToPurchasedPlanModel(it) }
-        } ?: emptyList()
-        Log.i(tag, "queryPurchases result size: ${purchasesList.size}")
+        val purchasesList = result?.purchasesList?.map { it.toDomainReceipt() } ?: emptyList()
+        logInfo("queryPurchases result size: ${purchasesList.size}")
 
         return ResultWrapper(success = purchasesList)
     }
 
+    /**
+     * Searches asynchronously for existing purchases at Google Play Billing
+     */
     suspend fun queryAsyncSubscriptionPurchases(): ResultWrapper<List<PurchaseHistoryRecord>, String> {
-        if (!billingClient.isReady) {
+        if (!isReady()) {
             val errorMessage = "queryPurchases: BillingClient is not ready"
-            Log.e(tag, errorMessage)
+            logError(errorMessage)
 
             return ResultWrapper(error = errorMessage)
         }
 
         return suspendCoroutine { continuation ->
-            Log.i(tag, "queryPurchases: SUBS")
-            billingClient.queryPurchaseHistoryAsync(BillingClient.SkuType.SUBS) { billingResult, purchaseHistoryRecordList ->
+            logInfo("queryPurchases: SUBS")
+            billingClient?.queryPurchaseHistoryAsync(BillingClient.SkuType.SUBS) { billingResult, purchaseHistoryRecordList ->
                 val responseCode = billingResult.responseCode.toGooglePlayBillingResponseCodeModel()
                 when {
                     responseCode.isSuccess() -> {
                         val purchasesList = purchaseHistoryRecordList ?: emptyList()
-                        Log.i(tag, "queryPurchases result size: ${purchasesList.size}")
+                        logInfo("queryPurchases result szie: ${purchasesList.size}")
 
                         continuation.safeResume(ResultWrapper(success = purchasesList))
                     }
@@ -164,41 +237,51 @@ class GooglePlayBillingClientWrapper(
         }
     }
 
-    fun launchBillingFlow(activity: Activity, skuDetailsJson: String): Int {
-        val skuDetails = SkuDetails(skuDetailsJson)
+    /**
+     * Shows the purchase GooglePlay UI purchase
+     */
+    fun launchBillingFlow(activity: Activity, skuDetails: SkuDetails): Int? {
         val billingBuilder = BillingFlowParams.newBuilder().setSkuDetails(skuDetails)
 
         val billingParams = billingBuilder.build()
 
         val sku = billingParams.sku
         val oldSku = billingParams.oldSku
-        Log.i(tag, "launchBillingFlow: sku: $sku, oldSku: $oldSku")
+        logInfo("launchBillingFlow: sku: $sku, oldSku: $oldSku")
 
-        if (!billingClient.isReady) {
-            Log.i(tag, "launchBillingFlow: BillingClient is not ready")
+        if (!isReady()) {
+            logInfo("launchBillingFlow: BillingClient is not ready")
         }
 
-        val billingResult = billingClient.launchBillingFlow(activity, billingParams)
+        val billingResult = billingClient?.launchBillingFlow(activity, billingParams)
 
-        val responseCode = billingResult.responseCode
-        val debugMessage = billingResult.debugMessage
-        Log.i(tag, "launchBillingFlow: BillingResponse $responseCode - $debugMessage")
+        val responseCode = billingResult?.responseCode
+        val debugMessage = billingResult?.debugMessage
+        logInfo("launchBillingFlow: BillingResponse $responseCode - $debugMessage")
 
         return responseCode
     }
 
+    /**
+     * Purchases should be recognized after been associated to user.
+     * Purchases that are not recognized on 3 days will be automatically reversed
+     * This operation is now made at client, but could be made by server
+     *
+     * For more details, see:
+     * https://developer.android.com/google/play/billing/billing_library_releases_notes#2_0_acknowledge
+     */
     suspend fun acknowledgePurchase(purchaseToken: String, userId: String): ResultWrapper<Unit, GooglePlayBillingResponseCodeModel> {
         return suspendCoroutine { continuation ->
-            Log.i(tag, "acknowledgePurchase")
+            logInfo("acknowledgePurchase")
             val params = AcknowledgePurchaseParams.newBuilder()
                 .setPurchaseToken(purchaseToken)
                 .setDeveloperPayload(userId)
                 .build()
 
-            billingClient.acknowledgePurchase(params) { billingResult ->
+            billingClient?.acknowledgePurchase(params) { billingResult ->
                 val responseCode = billingResult.responseCode.toGooglePlayBillingResponseCodeModel()
                 val debugMessage = billingResult.debugMessage
-                Log.i(tag, "acknowledgePurchase: $responseCode - $debugMessage")
+                logInfo("acknowledgePurchase: $responseCode - $debugMessage")
 
                 when {
                     responseCode.isSuccess() -> {
@@ -210,7 +293,7 @@ class GooglePlayBillingClientWrapper(
         }
     }
 
-    suspend fun getFirstSkuDetails(plansCodes: List<String>, type: GooglePlayBillingType): ResultWrapper<String, GooglePlayBillingResponseCodeModel> {
+    suspend fun getFirstSkuDetails(plansCodes: List<String>, type: GooglePlayBillingType): ResultWrapper<SkuDetails, GooglePlayBillingResponseCodeModel> {
         val plans = querySkuDetails(plansCodes, type)
 
         return if (plans.success?.isNotEmpty() == true) {
@@ -222,87 +305,65 @@ class GooglePlayBillingClientWrapper(
         }
     }
 
-    fun launchPriceChangeConfirmationFlow(activity: Activity, skuDetailsJson: String) {
-        val skuDetails = SkuDetails(skuDetailsJson)
+    fun launchPriceChangeConfirmationFlow(activity: Activity, skuDetails: SkuDetails) {
         val priceChangeFlowParams = PriceChangeFlowParams.newBuilder().setSkuDetails(skuDetails).build()
 
-        billingClient.launchPriceChangeConfirmationFlow(activity, priceChangeFlowParams) { billingResult ->
+        billingClient?.launchPriceChangeConfirmationFlow(activity, priceChangeFlowParams) { billingResult ->
             val responseCode = billingResult.responseCode.toGooglePlayBillingResponseCodeModel()
             val debugMessage = billingResult.debugMessage
-            Log.i(tag, "launchPriceChangeConfirmationFlow: $responseCode - $debugMessage")
+            logInfo("launchPriceChangeConfirmationFlow: $responseCode - $debugMessage")
 
             _priceChangeEvent.postValue(responseCode)
         }
 
     }
 
-    fun mapSkuDetailsToPlanModel(skuDetailsJson: String) : PlanModel {
-        val skuDetails = SkuDetails(skuDetailsJson)
-
-        return PlanModel(
-            id = "-1",
-            storeId = skuDetails.sku,
-            title = skuDetails.title,
-            price = skuDetails.price,
-            gateway = PlanGateway.GOOGLE_PLAY,
-            customMessage = ""
-        )
-    }
-
-    private fun mapPurchaseToPurchasedPlanModel(purchase: Purchase) : GooglePlayPurchasedPlanModel {
-        return GooglePlayPurchasedPlanModel(
-            orderId = purchase.orderId,
-            productId = purchase.sku,
-            purchaseToken = purchase.purchaseToken
-        )
-    }
-
-    //region BILLING CLIENT STATE LISTENER
-    override fun onBillingSetupFinished(billingResult: BillingResult) {
-        val responseCode = billingResult.responseCode.toGooglePlayBillingResponseCodeModel()
-        val debugMessage = billingResult.debugMessage
-        Log.i(tag, "onBillingSetupFinished: $responseCode - $debugMessage")
-
-        _connectionStatusEvent.postValue(responseCode)
-    }
-
-    override fun onBillingServiceDisconnected() {
-        Log.i(tag, "onBillingServiceDisconnected")
-
-        if (retryConnectionQty < maxReconnectionAttempts) {
-            Log.i(tag, "trying to reconnect - attempt: $retryConnectionQty")
-            billingClient.startConnection(this)
-        } else {
-            Log.w(tag, "All attempts failed: $retryConnectionQty")
-            val serviceDisconnected = BillingClient.BillingResponseCode.SERVICE_DISCONNECTED.toGooglePlayBillingResponseCodeModel()
-            _connectionStatusEvent.postValue(serviceDisconnected)
-        }
-    }
-    //endregion
-
     //region PURCHASES UPDATED LISTENER
+    /**
+     * Purchases initialized by app or another source will be reported here.
+     * ATTENTION! All purchased reported here must to be consumed or acknowledged.
+     */
     override fun onPurchasesUpdated(billingResult: BillingResult, purchases: MutableList<Purchase>?) {
         val responseCode = billingResult.responseCode.toGooglePlayBillingResponseCodeModel()
         val debugMessage = billingResult.debugMessage
-        Log.i(tag, "onPurchasesUpdated: $responseCode - $debugMessage")
+        logInfo("onPurchasesUpdated: $responseCode - $debugMessage")
 
         when {
             responseCode.isSuccess() -> {
-                Log.i(tag, "processPurchases: ${purchases?.size} purchase(s)")
+                logInfo("processPurchases: ${purchases?.size} purchase(s)")
+                logPurchasesInfo(purchases)
 
-                _purchaseUpdateEvent.postValue(
-                    ResultWrapper(
-                        success = purchases?.map { mapPurchaseToPurchasedPlanModel(it) } ?: emptyList()
-                    )
-                )
+                _purchaseUpdateEvent.postValue(ResultWrapper(success = purchases?.map { it.toDomainReceipt() } ?: emptyList()))
             }
             else -> _purchaseUpdateEvent.postValue(ResultWrapper(error = responseCode))
         }
     }
+
+    private fun logPurchasesInfo(purchases: MutableList<Purchase>?) {
+        purchases?.let { purchaseList ->
+            purchaseList.forEach {
+                logInfo("Purchase info: { \"orderId\": \"${it.orderId}\", \"purchaseTime\": ${it.purchaseTime}, \"purchaseState\": ${it.purchaseState}, \"autoRenewing\": ${it.isAutoRenewing}, \"acknowledged\": ${it.isAcknowledged} }")
+            }
+        } ?: logInfo("List of purchase is null")
+    }
+
     //endregion
 
+    private fun tryToReconnect(retryBlock: () -> Unit, allAttemptsFailedBlock: () -> Unit) {
+        if (retryConnectionQty < maxReconnectionAttempts) {
+            logInfo("trying to reconnect - attempt: $retryConnectionQty")
+            retryBlock()
+            retryConnectionQty++
+        }
+        else {
+            logInfo("All attempts failed: $retryConnectionQty")
+            allAttemptsFailedBlock()
+            retryConnectionQty = 0
+        }
+    }
+
     private fun Int.toGooglePlayBillingResponseCodeModel(): GooglePlayBillingResponseCodeModel {
-        return when (this) {
+        return when(this) {
             BillingClient.BillingResponseCode.OK -> GooglePlayBillingResponseCodeModel.OK
             BillingClient.BillingResponseCode.SERVICE_TIMEOUT -> GooglePlayBillingResponseCodeModel.SERVICE_TIMEOUT
             BillingClient.BillingResponseCode.FEATURE_NOT_SUPPORTED -> GooglePlayBillingResponseCodeModel.FEATURE_NOT_SUPPORTED
@@ -318,47 +379,22 @@ class GooglePlayBillingClientWrapper(
             else -> GooglePlayBillingResponseCodeModel.UNKNOWN
         }
     }
-}
 
-enum class GooglePlayBillingResponseCodeModel {
-    OK,
-    SERVICE_TIMEOUT,
-    FEATURE_NOT_SUPPORTED,
-    SERVICE_DISCONNECTED,
-    USER_CANCELED,
-    SERVICE_UNAVAILABLE,
-    BILLING_UNAVAILABLE,
-    ITEM_UNAVAILABLE,
-    DEVELOPER_ERROR,
-    ERROR,
-    ITEM_ALREADY_OWNED,
-    ITEM_NOT_OWNED,
-    UNKNOWN
-}
+    private fun logInfo(message: String) {
+        Log.i("GooglePlayBillingClient", message)
+    }
 
-enum class GooglePlayBillingType(val value: String) {
-    SUBS(BillingClient.SkuType.SUBS),
-    INAPP(BillingClient.SkuType.INAPP)
-}
+    private fun logError(message: String? = null, throwable: Throwable? = null) {
+        Log.e("GooglePlayBillingClient", message, throwable)
+    }
 
-fun GooglePlayBillingResponseCodeModel.isSuccess(): Boolean = when (this) {
-    GooglePlayBillingResponseCodeModel.OK -> true
-    GooglePlayBillingResponseCodeModel.SERVICE_TIMEOUT,
-    GooglePlayBillingResponseCodeModel.FEATURE_NOT_SUPPORTED,
-    GooglePlayBillingResponseCodeModel.SERVICE_DISCONNECTED,
-    GooglePlayBillingResponseCodeModel.USER_CANCELED,
-    GooglePlayBillingResponseCodeModel.SERVICE_UNAVAILABLE,
-    GooglePlayBillingResponseCodeModel.BILLING_UNAVAILABLE,
-    GooglePlayBillingResponseCodeModel.ITEM_UNAVAILABLE,
-    GooglePlayBillingResponseCodeModel.DEVELOPER_ERROR,
-    GooglePlayBillingResponseCodeModel.ERROR,
-    GooglePlayBillingResponseCodeModel.ITEM_ALREADY_OWNED,
-    GooglePlayBillingResponseCodeModel.ITEM_NOT_OWNED,
-    GooglePlayBillingResponseCodeModel.UNKNOWN -> false
-}
-
-fun <T> Continuation<T>.safeResume(value: T) {
-    if(this.context.isActive) {
-        return this.resume(value)
+    private fun <T> Continuation<T>.safeResume(value: T) {
+        try {
+            if (this.context.isActive) {
+                this.resume(value)
+            }
+        } catch (illegalStateException: IllegalStateException) {
+            logError("Unable to resume.", illegalStateException)
+        }
     }
 }

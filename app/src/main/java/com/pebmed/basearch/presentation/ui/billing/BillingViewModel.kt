@@ -13,12 +13,14 @@ import br.com.pebmed.domain.extensions.SupportedDateFormat
 import br.com.pebmed.domain.extensions.toDate
 import br.com.pebmed.domain.extensions.toSupportedDateFormat
 import br.com.pebmed.domain.usecases.*
+import com.android.billingclient.api.SkuDetails
 import com.pebmed.basearch.presentation.ui.base.ViewState
 import com.pebmed.basearch.presentation.ui.billing.state.PlansViewState
 import com.pebmed.basearch.presentation.ui.billing.state.UserStatusViewState
 import com.pebmed.platform.billing.GooglePlayBillingClientWrapper
 import com.pebmed.platform.billing.GooglePlayBillingResponseCodeModel
 import com.pebmed.platform.billing.GooglePlayBillingType
+import com.pebmed.platform.billing.toPlanModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -33,7 +35,7 @@ class BillingViewModel(
     private val setPendingSubscriptionValidationUseCase: SetPendingSubscriptionValidationUseCase,
     private val getPendingSubscriptionValidationUseCase: GetPendingSubscriptionValidationUseCase
 ) : ViewModel() {
-    var googlePlayPlansMap: Map<String, String> = emptyMap()
+    var googlePlayPlansMap: Map<String, SkuDetails> = emptyMap()
     var planUnderPurchase: PlanModel? = null
 
     private val _userStatusViewState = MutableLiveData<UserStatusViewState>()
@@ -341,7 +343,7 @@ class BillingViewModel(
 
             Log.d(tag, "googlePlayPlansResponse mapping")
             googlePlayPlansMap.map { skuMap ->
-                val plan = googlePlayBillingClientWrapper.mapSkuDetailsToPlanModel(skuMap.value)
+                val plan = skuMap.value.toPlanModel()
                 googlePlayPlans.add(plan)
             }
             Log.i(tag, "${googlePlayPlans.size} google play plans added")
