@@ -9,17 +9,15 @@ import br.com.pebmed.domain.entities.OwnerModel
  */
 import io.mockk.*
 
-class MockOwnerModel {
-    
-    companion object {
-        fun mock() : OwnerModel {
-            val mockedOwnerModel = mockk<OwnerModel>()
+object MockOwnerModel {
 
-            every {
-                mockedOwnerModel.id
-            } returns 1
+    fun mock() : OwnerModel {
+        val mockedOwnerModel = mockk<OwnerModel>()
 
-            return mockedOwnerModel
-        }
+        every {
+            mockedOwnerModel.id
+        } returns 1
+
+        return mockedOwnerModel
     }
 }
