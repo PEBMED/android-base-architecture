@@ -3,38 +3,79 @@ package br.com.pebmed.domain
 import br.com.pebmed.domain.entities.PullRequestModel
 import br.com.pebmed.domain.entities.UserModel
 import java.util.*
+/**
+ * https://issuetracker.google.com/issues/139438142
+ * Bug na IDE que não encontra dependências importadas
+ * O build continua funcionando normalmente mesmo com esse problema
+ * gerado ao utilizar o java-test-fixtures plugin
+ */
+import io.mockk.*
 
-class MockPullRequestModel {
+object MockPullRequestModel {
 
-    companion object {
-        val mockDate = Date()
+    val mockDate = Date()
 
-        fun mockList(itemsOnList: Int = 1) : List<PullRequestModel> {
-            val list = mutableListOf<PullRequestModel>()
+    fun mockList(itemsOnList: Int = 1) : List<PullRequestModel> {
+        val list = mutableListOf<PullRequestModel>()
 
-            for (index in 1 .. itemsOnList) {
-                list.add(
+        for (index in 1 .. itemsOnList) {
+            list.add(
                     mock(
-                        MockUserModel.mock()
+                            MockUserModel.mock()
                     )
-                )
-            }
-
-            return list
+            )
         }
 
-        fun mock(user: UserModel) = PullRequestModel(
-            number = 1,
-            htmlUrl = "http://the.url",
-            title = "Title",
-            user = user,
-            body = "Body",
-            createdAt = mockDate,
-            comments = 1,
-            commits = 1,
-            additions = 1,
-            deletions = 1,
-            changedFiles = 1
-        )
+        return list
+    }
+
+    fun mock(user: UserModel) : PullRequestModel {
+        val mockedPullRequestModel = mockk<PullRequestModel>()
+
+        every {
+            mockedPullRequestModel.number
+        } returns 1
+
+        every {
+            mockedPullRequestModel.htmlUrl
+        } returns "http://the.url"
+
+        every {
+            mockedPullRequestModel.title
+        } returns "Title"
+
+        every {
+            mockedPullRequestModel.user
+        } returns user
+
+        every {
+            mockedPullRequestModel.body
+        } returns "Body"
+
+        every {
+            mockedPullRequestModel.createdAt
+        } returns mockDate
+
+        every {
+            mockedPullRequestModel.comments
+        } returns 1
+
+        every {
+            mockedPullRequestModel.commits
+        } returns 1
+
+        every {
+            mockedPullRequestModel.additions
+        } returns 1
+
+        every {
+            mockedPullRequestModel.deletions
+        } returns 1
+
+        every {
+            mockedPullRequestModel.changedFiles
+        } returns 1
+
+        return mockedPullRequestModel
     }
 }

@@ -5,6 +5,7 @@ import br.com.pebmed.domain.*
 import br.com.pebmed.domain.base.BaseErrorData
 import br.com.pebmed.domain.base.BaseErrorStatus
 import br.com.pebmed.domain.entities.PullRequestModel
+import br.com.pebmed.domain.entities.UserModel
 import br.com.pebmed.domain.usecases.GetPullRequestsUseCase
 import com.example.basearch.presentation.ui.base.ViewState
 import com.example.basearch.presentation.ui.pullRequest.list.PullRequestListViewModel
@@ -91,7 +92,18 @@ class PullRequestListViewModelTest {
 
         val successValue = valueHistory[1]
         assertTrue(successValue is ViewState.Success)
-        assertEquals(resultList, (successValue as ViewState.Success).data)
+        assertEquals(resultList[0].number, (successValue as ViewState.Success).data[0].number)
+        assertEquals(resultList[0].body, (successValue as ViewState.Success).data[0].body)
+        assertEquals(resultList[0].additions, (successValue as ViewState.Success).data[0].additions)
+        assertEquals(resultList[0].comments, (successValue as ViewState.Success).data[0].comments)
+        assertEquals(resultList[0].commits, (successValue as ViewState.Success).data[0].commits)
+        assertEquals(resultList[0].htmlUrl, (successValue as ViewState.Success).data[0].htmlUrl)
+        assertEquals(resultList[0].deletions, (successValue as ViewState.Success).data[0].deletions)
+        assertEquals(resultList[0].changedFiles, (successValue as ViewState.Success).data[0].changedFiles)
+        assertEquals(resultList[0].createdAt, (successValue as ViewState.Success).data[0].createdAt)
+        assertEquals(resultList[0].title, (successValue as ViewState.Success).data[0].title)
+        assertEquals(resultList[0].user.login, (successValue as ViewState.Success).data[0].user.login)
+        assertEquals(resultList[0].user.avatarUrl, (successValue as ViewState.Success).data[0].user.avatarUrl)
     }
 
     @ExperimentalCoroutinesApi
