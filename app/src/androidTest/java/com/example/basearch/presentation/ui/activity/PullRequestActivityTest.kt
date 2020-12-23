@@ -5,18 +5,17 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.core.app.launchActivity
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
+import br.com.pebmed.domain.MockGetPullRequestUseCase
 import br.com.pebmed.domain.MockPullRequestModel
-import br.com.pebmed.domain.MockResultWrapper
 import br.com.pebmed.domain.MockUserModel
-import br.com.pebmed.domain.usecases.GetPullRequestUseCase
 import com.example.basearch.R
 import com.example.basearch.presentation.ui.pullRequest.details.PullRequestActivity
 import com.example.basearch.presentation.ui.pullRequest.details.PullRequestViewModel
 import com.pebmed.basearch.presentation.utils.GlobalEspressoIdlingResource
 import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
 import io.mockk.MockKAnnotations
-import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
+import io.mockk.mockk
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -29,7 +28,7 @@ import org.koin.dsl.module
 class PullRequestActivityTest {
 
     @MockK
-    private lateinit var getPullRequestUseCase: GetPullRequestUseCase
+    private lateinit var mockGetPullRequestUseCase: MockGetPullRequestUseCase
 
     private lateinit var pullRequestViewModel: PullRequestViewModel
 
@@ -37,7 +36,9 @@ class PullRequestActivityTest {
     fun before() {
         MockKAnnotations.init(this)
 
-        pullRequestViewModel = PullRequestViewModel(getPullRequestUseCase)
+        mockGetPullRequestUseCase = MockGetPullRequestUseCase(mockk())
+
+        pullRequestViewModel = PullRequestViewModel(mockGetPullRequestUseCase.mock)
 
         loadKoinModules(module {
             viewModel(override = true) {
@@ -62,9 +63,8 @@ class PullRequestActivityTest {
         val pullRequestModel = MockPullRequestModel.mock(
             MockUserModel.mock()
         )
-        coEvery {
-            getPullRequestUseCase.runAsync(any())
-        } returns MockResultWrapper.mockSuccess(pullRequestModel)
+
+        mockGetPullRequestUseCase.mockSuccess()
 
         val intent =
             Intent(ApplicationProvider.getApplicationContext(), PullRequestActivity::class.java)
