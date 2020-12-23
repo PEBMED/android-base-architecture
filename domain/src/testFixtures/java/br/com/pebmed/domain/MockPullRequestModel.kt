@@ -7,10 +7,12 @@ import java.util.*
 class MockPullRequestModel {
 
     companion object {
-        fun mockList(itemsOnList: Int = 2) : List<PullRequestModel> {
+        val mockDate = Date()
+
+        fun mockList(itemsOnList: Int = 1) : List<PullRequestModel> {
             val list = mutableListOf<PullRequestModel>()
 
-            for (index in 0 .. itemsOnList) {
+            for (index in 1 .. itemsOnList) {
                 list.add(
                     mock(
                         MockUserModel.mock()
@@ -27,7 +29,7 @@ class MockPullRequestModel {
             title = "Title",
             user = user,
             body = "Body",
-            createdAt = Date(),
+            createdAt = mockDate,
             comments = 1,
             commits = 1,
             additions = 1,

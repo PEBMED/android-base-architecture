@@ -14,8 +14,20 @@ class MockGetPullRequestsUseCase(val mock: GetPullRequestsUseCase) {
 
     fun mockSuccess() {
         coEvery {
-            mock.runAsync()
+            mock.runAsync(any())
         } returns ResultWrapper(success = MockPullRequestModel.mockList())
+    }
+
+    fun mockSuccessWithEmptyList() {
+        coEvery {
+            mock.runAsync(any())
+        } returns ResultWrapper(success = MockPullRequestModel.mockList(0))
+    }
+
+    fun mockError() {
+        coEvery {
+            mock.runAsync(any())
+        } returns ResultWrapper(error = MockBaseErrorData.mockStatusError())
     }
 
     companion object {

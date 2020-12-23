@@ -12,6 +12,7 @@ import com.jraska.livedata.test
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
+import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineDispatcher
@@ -35,11 +36,13 @@ class PullRequestListViewModelTest {
     private val testDispatcher = TestCoroutineDispatcher()
 
     @MockK(relaxUnitFun = true)
-    private lateinit var getPullRequestsUseCase: GetPullRequestsUseCase
+    private lateinit var mockGetPullRequestsUseCase: MockGetPullRequestsUseCase
 
     private lateinit var pullRequest: PullRequestModel
 
     private lateinit var params: GetPullRequestsUseCase.Params
+
+    private lateinit var viewModel : PullRequestListViewModel
 
     @get:Rule
     val taskExecutorRule = InstantTaskExecutorRule()
@@ -49,10 +52,16 @@ class PullRequestListViewModelTest {
     fun before() {
         MockKAnnotations.init(this)
 
+        mockGetPullRequestsUseCase = MockGetPullRequestsUseCase(mockk())
         this.pullRequest = MockPullRequestModel.mock(MockUserModel.mock())
-        this.params = MockGetPullRequestsUseCase.Params.mock()
+        this.params = MockGetPullRequestsUseCase.mockParams()
 
         Dispatchers.setMain(testDispatcher)
+
+        viewModel = PullRequestListViewModel(
+                testDispatcher,
+                mockGetPullRequestsUseCase.mock
+        )
     }
 
     @ExperimentalCoroutinesApi
@@ -65,20 +74,10 @@ class PullRequestListViewModelTest {
     @ExperimentalCoroutinesApi
     @Test
     fun `SHOULD handle success state in correct order`() = testDispatcher.runBlockingTest {
-        val viewModel = PullRequestListViewModel(
-            testDispatcher,
-            getPullRequestsUseCase
-        )
 
-        val resultList = MockPullRequestModel.mockList(1)
-        val resultWrapper =
-            MockResultWrapper.mockSuccess<List<PullRequestModel>, BaseErrorData<BaseErrorStatus>>(
-                resultList
-            )
+        val resultList = MockPullRequestModel.mockList()
 
-        coEvery {
-            getPullRequestsUseCase.runAsync(params)
-        } returns resultWrapper
+        mockGetPullRequestsUseCase.mockSuccess()
 
         val testObserver = viewModel.pullRequestListState.test()
 
@@ -98,19 +97,8 @@ class PullRequestListViewModelTest {
     @ExperimentalCoroutinesApi
     @Test
     fun `SHOULD handle empty state`() = testDispatcher.runBlockingTest {
-        val viewModel = PullRequestListViewModel(
-            testDispatcher,
-            getPullRequestsUseCase
-        )
 
-        val emptyResultWrapper =
-            MockResultWrapper.mockSuccess<List<PullRequestModel>, BaseErrorData<BaseErrorStatus>>(
-                success = listOf()
-            )
-
-        coEvery {
-            getPullRequestsUseCase.runAsync(params)
-        } returns emptyResultWrapper
+        mockGetPullRequestsUseCase.mockSuccessWithEmptyList()
 
         val testObserver = viewModel.pullRequestListState.test()
 
@@ -129,20 +117,10 @@ class PullRequestListViewModelTest {
     @ExperimentalCoroutinesApi
     @Test
     fun `SHOULD handle error state in correct order`() = testDispatcher.runBlockingTest {
-        val viewModel = PullRequestListViewModel(
-            testDispatcher,
-            getPullRequestsUseCase
-        )
 
-        val errorData = MockBaseErrorData.mockStatusError()
-        val errorResultWrapper =
-            MockResultWrapper.mockError<List<PullRequestModel>, BaseErrorData<BaseErrorStatus>>(
-                errorData
-            )
+        val expectedError = BaseErrorData(BaseErrorStatus.DEFAULT_ERROR)
 
-        coEvery {
-            getPullRequestsUseCase.runAsync(params)
-        } returns errorResultWrapper
+        mockGetPullRequestsUseCase.mockError()
 
         val testObserver = viewModel.pullRequestListState.test()
 
@@ -156,6 +134,6 @@ class PullRequestListViewModelTest {
 
         val errorValue = valueHistory[1]
         assertTrue(errorValue is ViewState.Error)
-        assertEquals(errorData, (errorValue as ViewState.Error).error)
+        assertEquals(expectedError, (errorValue as ViewState.Error).error)
     }
 }
