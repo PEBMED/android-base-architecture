@@ -17,4 +17,11 @@ class MockGetPullRequestUseCase(val mock: GetPullRequestUseCase) {
             mock.runAsync(any())
         } returns ResultWrapper(success = MockPullRequestModel.mock(MockUserModel.mock()))
     }
+
+    fun mockUiSuccess() {
+        coEvery {
+            mock.runAsync(any())
+        } returns ResultWrapper(success = MockPullRequestModel.mockUiModel(MockUserModel.mock()))
+    }
+
 }

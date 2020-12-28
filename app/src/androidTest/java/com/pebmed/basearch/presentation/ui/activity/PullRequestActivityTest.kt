@@ -8,18 +8,10 @@ import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import br.com.pebmed.domain.MockGetPullRequestUseCase
 import br.com.pebmed.domain.MockPullRequestModel
 import br.com.pebmed.domain.MockUserModel
-import com.example.basearch.R
-import com.example.basearch.presentation.ui.pullRequest.details.PullRequestActivity
-import com.example.basearch.presentation.ui.pullRequest.details.PullRequestViewModel
-import com.pebmed.basearch.presentation.utils.GlobalEspressoIdlingResource
-import androidx.test.rule.ActivityTestRule
-import br.com.pebmed.domain.FakePullRequestModel
-import br.com.pebmed.domain.FakeResultWrapper
-import br.com.pebmed.domain.FakeUserModel
-import br.com.pebmed.domain.usecases.GetPullRequestUseCase
 import com.pebmed.basearch.R
 import com.pebmed.basearch.presentation.ui.pullRequest.details.PullRequestActivity
 import com.pebmed.basearch.presentation.ui.pullRequest.details.PullRequestViewModel
+import com.pebmed.basearch.presentation.utils.GlobalEspressoIdlingResource
 import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
@@ -68,11 +60,11 @@ class PullRequestActivityTest {
 
     @Test
     fun openActivity_SuccessLoad() {
-        val pullRequestModel = MockPullRequestModel.mock(
+        val pullRequestModel = MockPullRequestModel.mockUiModel(
             MockUserModel.mock()
         )
 
-        mockGetPullRequestUseCase.mockSuccess()
+        mockGetPullRequestUseCase.mockUiSuccess()
 
         val intent =
             Intent(ApplicationProvider.getApplicationContext(), PullRequestActivity::class.java)
@@ -84,8 +76,4 @@ class PullRequestActivityTest {
             assertDisplayed(R.id.textAuthorName, pullRequestModel.user.login)
         }
     }
-
-    //TODO test error State
-
-    //TODO test loading State (probably will need to make an Custom IdlingResource)
 }

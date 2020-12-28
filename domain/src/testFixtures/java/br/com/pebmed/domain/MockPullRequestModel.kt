@@ -78,4 +78,24 @@ object MockPullRequestModel {
 
         return mockedPullRequestModel
     }
+
+    /*
+    * Método específico para o teste de UI
+    * Bug no Mockk não permite mockar um Date() por isso
+    * é retornado um objeto real nesse caso.
+    * Referência: https://github.com/mockk/mockk/issues/253
+    * */
+    fun mockUiModel(mockUserModel: UserModel) = PullRequestModel(
+            number = 1,
+            htmlUrl = "htmlUrl",
+            title = "title",
+            user = mockUserModel,
+            body = "body",
+            createdAt = MockDate.today(),
+            comments = 1,
+            commits = 1,
+            additions = 1,
+            deletions = 1,
+            changedFiles = 1
+    )
 }
