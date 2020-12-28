@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/cardViewBillingPlanItem"
+    style="@style/AppCardView">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/margin_default"
+        tools:background="@android:color/white">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textBillingItemTitle"
+            style="@style/AppText.Title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Plano Anual"
+            android:lines="1"
+            android:ellipsize="end"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textBillingItemPrice"
+            style="@style/AppText.Subtitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textBillingItemTitle"
+            tools:text="R$40"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textBillingItemStoreId"
+            style="@style/AppText.Subtitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textBillingItemPrice"
+            tools:text="PLAN_CODE"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textBillingItemCustomMessage"
+            style="@style/AppText.Subtitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textBillingItemStoreId"
+            tools:text="custom message..."
+            android:lines="1"
+            android:ellipsize="end"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

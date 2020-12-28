@@ -1,12 +1,9 @@
 package br.com.pebmed.domain.di
 
-import br.com.pebmed.domain.usecases.GetPullRequestUseCase
-import br.com.pebmed.domain.usecases.GetPullRequestsUseCase
-import br.com.pebmed.domain.usecases.GetReposUseCase
+import br.com.pebmed.domain.usecases.*
 import org.koin.dsl.module
 
 val useCaseModule = module {
-
     factory {
         GetReposUseCase(
             repoRepository = get()
@@ -22,6 +19,42 @@ val useCaseModule = module {
     factory {
         GetPullRequestUseCase(
             pullRequestRepository = get()
+        )
+    }
+
+    factory {
+        GetPlansUseCase(
+            billingRepository = get()
+        )
+    }
+
+    factory {
+        ValidatePurchasedStorePlanUseCase(
+            billingRepository = get()
+        )
+    }
+
+    factory {
+        SetPendingSubscriptionValidationUseCase(
+            billingRepository = get()
+        )
+    }
+
+    factory {
+        GetPendingSubscriptionValidationUseCase(
+            billingRepository = get()
+        )
+    }
+
+    factory {
+        SavePurchasedPlanUseCase(
+            billingRepository = get()
+        )
+    }
+
+    factory {
+        GetPurchasedPlanUseCase(
+            billingRepository = get()
         )
     }
 }

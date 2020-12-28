@@ -15,13 +15,15 @@ interface PreferenceStorage {
 }
 
 class SharedPreferencesUtil(context: Context) : PreferenceStorage {
-    private val prefs = context.applicationContext.getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
+    val prefs = context.applicationContext.getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
 
     override var lastRepoSyncDate by StringPreference(prefs, PREF_LAST_REPO_SYNC_DATE, "")
 
     companion object {
         const val PREFS_NAME = "basearch"
         const val PREF_LAST_REPO_SYNC_DATE = "pref_last_repo_sync_date"
+        const val PREF_PURCHASED_PLAN = "pref_purchased_plan"
+        const val PREF_PENDING_SUBSCRIPTION_VALIDATION = "pref_pending_subscription_validation"
     }
 }
 
