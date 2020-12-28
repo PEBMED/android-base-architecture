@@ -13,11 +13,11 @@ android {
     buildToolsVersion globalConfiguration["buildToolsVersion"]
 
     defaultConfig {
-        applicationId "com.example.basearch"
+        applicationId "com.pebmed.basearch"
         minSdkVersion globalConfiguration["minSDK"]
         targetSdkVersion globalConfiguration["targetSDK"]
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         testInstrumentationRunnerArguments clearPackageData: 'true'
@@ -47,6 +47,7 @@ android {
 dependencies {
     implementation project(path: ':domain')
     implementation project(path: ':data')
+    implementation project(path: ':platform')
 
     def dependencies = rootProject.ext.dependencies
     def testDependencies = rootProject.ext.testDependecies
@@ -62,7 +63,6 @@ dependencies {
     implementation dependencies.cardView
     implementation dependencies.recyclerView
 
-
     //Glide
     implementation dependencies.glide
 
@@ -74,7 +74,8 @@ dependencies {
     implementation dependencies.koinViewModel
 
     //LifeCycle
-    implementation dependencies.lifeCycle
+    implementation dependencies.viewModel
+    implementation dependencies.liveData
 
     //CircleImageView
     implementation dependencies.circleImageView
