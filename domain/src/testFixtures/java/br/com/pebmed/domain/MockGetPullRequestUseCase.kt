@@ -18,10 +18,21 @@ class MockGetPullRequestUseCase(val mock: GetPullRequestUseCase) {
         } returns ResultWrapper(success = MockPullRequestModel.mock(MockUserModel.mock()))
     }
 
+    fun mockError() {
+        coEvery {
+            mock.runAsync(any())
+        } returns ResultWrapper(error = MockBaseErrorData.mockStatusError())
+    }
+
     fun mockUiSuccess() {
         coEvery {
             mock.runAsync(any())
         } returns ResultWrapper(success = MockPullRequestModel.mockUiModel(MockUserModel.mock()))
     }
 
+    fun params() = GetPullRequestUseCase.Params(
+        owner = "owner",
+        repoName = "repoName",
+        pullRequestNumber = 1
+    )
 }
