@@ -74,7 +74,7 @@ class PullRequestListViewModelTest {
 
     @ExperimentalCoroutinesApi
     @Test
-    fun `SHOULD handle success state in correct order`() = testDispatcher.runBlockingTest {
+    fun `SHOULD return success state WHEN fetch pull request success`() = testDispatcher.runBlockingTest {
 
         val resultList = MockPullRequestModel.mockList()
 
@@ -108,7 +108,7 @@ class PullRequestListViewModelTest {
 
     @ExperimentalCoroutinesApi
     @Test
-    fun `SHOULD handle empty state`() = testDispatcher.runBlockingTest {
+    fun `SHOULD return empty state WHEN pull request list is empty`() = testDispatcher.runBlockingTest {
 
         mockGetPullRequestsUseCase.mockSuccessWithEmptyList()
 
@@ -128,7 +128,7 @@ class PullRequestListViewModelTest {
 
     @ExperimentalCoroutinesApi
     @Test
-    fun `SHOULD handle error state in correct order`() = testDispatcher.runBlockingTest {
+    fun `SHOULD return DEFAULT error state WHEN fetch pull requests error`() = testDispatcher.runBlockingTest {
 
         val expectedError = BaseErrorData(BaseErrorStatus.DEFAULT_ERROR)
 

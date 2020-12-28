@@ -60,7 +60,7 @@ class PullRequestRepositoryImplTest {
     }
 
     @Test
-    fun `SHOULD call functions in the correct order`() {
+    fun `SHOULD correct order WHEN call getPullRequests repository functions`() {
 
         coEvery {
             mockPullRequestRemoteDataSource.getPullRequests(any(), any())
