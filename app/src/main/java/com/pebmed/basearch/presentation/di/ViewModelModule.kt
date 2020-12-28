@@ -26,6 +26,7 @@ val viewModelModule = module {
 
     viewModel {
         PullRequestViewModel(
+            Dispatchers.IO,
             get() as GetPullRequestUseCase
         )
     }
