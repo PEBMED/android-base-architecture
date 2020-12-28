@@ -16,6 +16,7 @@ import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertD
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
+import kotlinx.coroutines.Dispatchers
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -38,7 +39,10 @@ class PullRequestActivityTest {
 
         mockGetPullRequestUseCase = MockGetPullRequestUseCase(mockk())
 
-        pullRequestViewModel = PullRequestViewModel(mockGetPullRequestUseCase.mock)
+        pullRequestViewModel = PullRequestViewModel(
+            Dispatchers.Main,
+            mockGetPullRequestUseCase.mock
+        )
 
         loadKoinModules(module {
             viewModel(override = true) {
