@@ -9,33 +9,30 @@ import br.com.pebmed.domain.entities.RepoModel
  */
 import io.mockk.*
 
-class MockGitRepoModel {
-    
-    companion object {
-        fun mock(itemsOnList: Int): List<RepoModel> {
-            val list = mutableListOf<RepoModel>()
+object MockGitRepoModel {
+    fun mock(itemsOnList: Int): List<RepoModel> {
+        val list = mutableListOf<RepoModel>()
 
-            for (index in 0 .. itemsOnList) {
-                list.add(
-                    mock()
-                )
-            }
-
-            return list
+        for (index in 0 .. itemsOnList) {
+            list.add(
+                mock()
+            )
         }
 
-        fun mock() : RepoModel {
-            val mockedRepoModel = mockk<RepoModel>()
+        return list
+    }
 
-            every {
-                mockedRepoModel.id
-            } returns 1
+    fun mock() : RepoModel {
+        val mockedRepoModel = mockk<RepoModel>()
 
-            every {
-                mockedRepoModel.ownerModel
-            } returns MockOwnerModel.mock()
+        every {
+            mockedRepoModel.id
+        } returns 1
 
-            return mockedRepoModel
-        }
+        every {
+            mockedRepoModel.ownerModel
+        } returns MockOwnerModel.mock()
+
+        return mockedRepoModel
     }
 }

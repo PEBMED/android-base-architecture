@@ -5,18 +5,11 @@ import br.com.pebmed.domain.base.BaseErrorStatus
 import br.com.pebmed.domain.base.ResultWrapper
 import br.com.pebmed.domain.entities.PullRequestModel
 
-class MockBaseErrorData {
+object MockBaseErrorData {
 
-    companion object {
-        fun mockStringError() = BaseErrorData (
-            errorBody = "# TEST MESSAGE"
-        )
+    fun mockStringError() = BaseErrorData (errorBody = "# TEST MESSAGE")
 
-        fun mockStatusError() = BaseErrorData (
-            errorBody = BaseErrorStatus.DEFAULT_ERROR
-        )
+    fun mockStatusError() = BaseErrorData (errorBody = BaseErrorStatus.DEFAULT_ERROR)
 
-        fun mockBaseErrorStatusDefault() = BaseErrorStatus.DEFAULT_ERROR
-    }
-
+    fun mockBaseErrorStatusDefault() = BaseErrorStatus.DEFAULT_ERROR
 }
