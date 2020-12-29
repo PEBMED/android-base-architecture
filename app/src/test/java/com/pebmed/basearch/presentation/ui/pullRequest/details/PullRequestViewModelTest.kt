@@ -43,7 +43,7 @@ class PullRequestViewModelTest {
         MockKAnnotations.init(this)
 
         mockGetPullRequestsUseCase = MockGetPullRequestUseCase(mockk())
-        this.pullRequest = MockPullRequestModel.mock(MockUserModel.mock())
+        this.pullRequest = MockPullRequestModel.generic()
 
         Dispatchers.setMain(testDispatcher)
 
@@ -66,7 +66,7 @@ class PullRequestViewModelTest {
     @Test
     fun `SHOULD return single pull request WHEN success state in correct order`() = testDispatcher.runBlockingTest {
 
-        val result = MockPullRequestModel.mock(MockUserModel.mock())
+        val result = MockPullRequestModel.generic()
 
         mockGetPullRequestsUseCase.mockSuccess()
 

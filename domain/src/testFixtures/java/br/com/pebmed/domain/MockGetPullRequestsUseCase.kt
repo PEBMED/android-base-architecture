@@ -15,13 +15,13 @@ class MockGetPullRequestsUseCase(val mock: GetPullRequestsUseCase) {
     fun mockSuccess() {
         coEvery {
             mock.runAsync(any())
-        } returns ResultWrapper(success = MockPullRequestModel.mockList())
+        } returns ResultWrapper(success = MockPullRequestModel.mockListWithOneGenericItem())
     }
 
     fun mockSuccessWithEmptyList() {
         coEvery {
             mock.runAsync(any())
-        } returns ResultWrapper(success = MockPullRequestModel.mockList(0))
+        } returns ResultWrapper(success = MockPullRequestModel.mockEmptyList())
     }
 
     fun mockError() {
@@ -31,7 +31,7 @@ class MockGetPullRequestsUseCase(val mock: GetPullRequestsUseCase) {
     }
 
     companion object {
-        fun mockParams() = GetPullRequestsUseCase.Params(
+        fun mockGenericParams() = GetPullRequestsUseCase.Params(
             owner = "OwnerModel",
             repoName = "RepoName"
         )

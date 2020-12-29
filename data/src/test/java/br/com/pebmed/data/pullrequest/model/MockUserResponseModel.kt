@@ -19,7 +19,7 @@ object MockUserResponseModel {
 
         every {
             mockedUserResponseModel.mapTo()
-        } returns MockUserModel.mock()
+        } returns MockUserModel.generic()
 
         return mockedUserResponseModel
     }

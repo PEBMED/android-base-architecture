@@ -65,7 +65,7 @@ class PullRequestActivityTest {
     @Test
     fun openActivity_SuccessLoad() {
         val pullRequestModel = MockPullRequestModel.mockUiModel(
-            MockUserModel.mock()
+            MockUserModel.generic()
         )
 
         mockGetPullRequestUseCase.mockUiSuccess()

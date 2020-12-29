@@ -57,9 +57,7 @@ object MockPullRequestResponseModel {
 
         every {
             mockedPullRequestResponseModel.mapTo()
-        } returns MockPullRequestModel.mock(
-            MockUserModel.mock()
-        )
+        } returns MockPullRequestModel.generic()
 
         return mockedPullRequestResponseModel
     }

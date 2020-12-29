@@ -1,20 +1,9 @@
 package br.com.pebmed.domain.usecases
 
 import br.com.pebmed.domain.MockGetPullRequestsUseCase
-import br.com.pebmed.domain.MockPullRequestModel
-import br.com.pebmed.domain.MockUserModel
-import br.com.pebmed.domain.base.BaseErrorData
 import br.com.pebmed.domain.base.BaseErrorStatus
-import br.com.pebmed.domain.base.CompleteResultWrapper
-import br.com.pebmed.domain.base.ResultWrapper
-import br.com.pebmed.domain.entities.PullRequestModel
-import br.com.pebmed.domain.entities.UserModel
-import br.com.pebmed.domain.repository.PullRequestRepository
-import io.mockk.MockKAnnotations
-import io.mockk.coEvery
-import io.mockk.coVerify
-import io.mockk.confirmVerified
-import io.mockk.impl.annotations.MockK
+import br.com.pebmed.domain.repository.MockPullRequestRepository
+import io.mockk.*
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -22,20 +11,15 @@ import org.junit.Test
 
 class GetPullRequestsUseCaseTest {
 
-    @MockK
-    private lateinit var pullRequestRepository: PullRequestRepository
+    private lateinit var mockPullRequestRepository: MockPullRequestRepository
 
-    private lateinit var user: UserModel
-    private lateinit var pullRequest: PullRequestModel
     private lateinit var getPullRequestsUseCase: GetPullRequestsUseCase
 
     @Before
     fun setUp() {
-        MockKAnnotations.init(this)
+        mockPullRequestRepository = MockPullRequestRepository(mockk())
 
-        user = MockUserModel.mock()
-        pullRequest = MockPullRequestModel.mock(user)
-        getPullRequestsUseCase = GetPullRequestsUseCase(pullRequestRepository)
+        getPullRequestsUseCase = GetPullRequestsUseCase(mockPullRequestRepository.mock)
     }
 
     /**
@@ -43,44 +27,33 @@ class GetPullRequestsUseCaseTest {
      */
     @Test
     fun `SHOULD return pull requests list WHEN success fetched`() = runBlocking {
-        coEvery {
-            pullRequestRepository.getPullRequests(any(), any())
-        } returns CompleteResultWrapper(
-            success = listOf(pullRequest)
-        )
+        mockPullRequestRepository.mockGetPullRequestsListWithOneItem()
 
-        val resultWrapper = getPullRequestsUseCase.runAsync(MockGetPullRequestsUseCase.mockParams())
+        val resultWrapper = getPullRequestsUseCase.runAsync(MockGetPullRequestsUseCase.mockGenericParams())
 
         assertEquals("luis.fernandez", resultWrapper.success?.get(0)?.user?.login)
     }
 
     @Test
     fun `SHOULD return default error WHEN error fetched`() = runBlocking {
-        coEvery {
-            pullRequestRepository.getPullRequests(any(), any())
-        } returns ResultWrapper(
-            error = BaseErrorData(Unit)
-        )
+        mockPullRequestRepository.mockGetPullRequestWithBaseErrorDataUnit()
 
-        val resultWrapper = getPullRequestsUseCase.runAsync(MockGetPullRequestsUseCase.mockParams())
+        val resultWrapper = getPullRequestsUseCase.runAsync(MockGetPullRequestsUseCase.mockGenericParams())
 
         assertEquals(BaseErrorStatus.DEFAULT_ERROR, resultWrapper.error?.errorBody)
     }
 
     @Test
     fun `SHOULD call correct dependency function WHEN run`() = runBlocking {
-        coEvery {
-            pullRequestRepository.getPullRequests(any(), any())
-        } returns CompleteResultWrapper(
-            success = listOf(pullRequest)
-        )
+        mockPullRequestRepository.mockGetPullRequestsListWithOneItem()
 
-        getPullRequestsUseCase.runAsync(MockGetPullRequestsUseCase.mockParams())
+
+        getPullRequestsUseCase.runAsync(MockGetPullRequestsUseCase.mockGenericParams())
 
         coVerify {
-            pullRequestRepository.getPullRequests(any(), any())
+            mockPullRequestRepository.mock.getPullRequests(any(), any())
         }
 
-        confirmVerified(pullRequestRepository)
+        confirmVerified(mockPullRequestRepository.mock)
     }
 }

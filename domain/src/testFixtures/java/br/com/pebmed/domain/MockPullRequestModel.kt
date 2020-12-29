@@ -15,21 +15,25 @@ object MockPullRequestModel {
 
     val mockDate = Date()
 
-    fun mockList(itemsOnList: Int = 1) : List<PullRequestModel> {
+    fun mockListWithOneGenericItem() : List<PullRequestModel> {
+        return mockListWithGenericItems(1)
+    }
+
+    fun mockEmptyList() : List<PullRequestModel> {
+        return mockListWithGenericItems(0)
+    }
+
+    private fun mockListWithGenericItems(itemsOnList: Int) : List<PullRequestModel> {
         val list = mutableListOf<PullRequestModel>()
 
         for (index in 1 .. itemsOnList) {
-            list.add(
-                    mock(
-                            MockUserModel.mock()
-                    )
-            )
+            list.add(generic())
         }
 
         return list
     }
 
-    fun mock(user: UserModel) : PullRequestModel {
+    fun generic() : PullRequestModel {
         val mockedPullRequestModel = mockk<PullRequestModel>()
 
         every {
@@ -46,7 +50,7 @@ object MockPullRequestModel {
 
         every {
             mockedPullRequestModel.user
-        } returns user
+        } returns MockUserModel.generic()
 
         every {
             mockedPullRequestModel.body

@@ -5,13 +5,11 @@ import br.com.pebmed.domain.*
 import br.com.pebmed.domain.base.BaseErrorData
 import br.com.pebmed.domain.base.BaseErrorStatus
 import br.com.pebmed.domain.entities.PullRequestModel
-import br.com.pebmed.domain.entities.UserModel
 import br.com.pebmed.domain.usecases.GetPullRequestsUseCase
 import com.pebmed.basearch.presentation.ui.base.ViewState
 import com.pebmed.basearch.presentation.ui.pullRequest.list.PullRequestListViewModel
 import com.jraska.livedata.test
 import io.mockk.MockKAnnotations
-import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
@@ -54,8 +52,8 @@ class PullRequestListViewModelTest {
         MockKAnnotations.init(this)
 
         mockGetPullRequestsUseCase = MockGetPullRequestsUseCase(mockk())
-        this.pullRequest = MockPullRequestModel.mock(MockUserModel.mock())
-        this.params = MockGetPullRequestsUseCase.mockParams()
+        this.pullRequest = MockPullRequestModel.generic()
+        this.params = MockGetPullRequestsUseCase.mockGenericParams()
 
         Dispatchers.setMain(testDispatcher)
 
@@ -76,7 +74,7 @@ class PullRequestListViewModelTest {
     @Test
     fun `SHOULD return success state WHEN fetch pull request success`() = testDispatcher.runBlockingTest {
 
-        val resultList = MockPullRequestModel.mockList()
+        val resultList = MockPullRequestModel.mockListWithOneGenericItem()
 
         mockGetPullRequestsUseCase.mockSuccess()
 

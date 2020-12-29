@@ -15,7 +15,7 @@ class MockGetPullRequestUseCase(val mock: GetPullRequestUseCase) {
     fun mockSuccess() {
         coEvery {
             mock.runAsync(any())
-        } returns ResultWrapper(success = MockPullRequestModel.mock(MockUserModel.mock()))
+        } returns ResultWrapper(success = MockPullRequestModel.generic())
     }
 
     fun mockError() {
@@ -27,7 +27,7 @@ class MockGetPullRequestUseCase(val mock: GetPullRequestUseCase) {
     fun mockUiSuccess() {
         coEvery {
             mock.runAsync(any())
-        } returns ResultWrapper(success = MockPullRequestModel.mockUiModel(MockUserModel.mock()))
+        } returns ResultWrapper(success = MockPullRequestModel.mockUiModel(MockUserModel.generic()))
     }
 
     fun params() = GetPullRequestUseCase.Params(

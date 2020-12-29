@@ -11,7 +11,7 @@ import io.mockk.*
 
 object MockUserModel {
 
-    fun mock() : UserModel {
+    fun generic() : UserModel {
         val mockedUserModel = mockk<UserModel>()
 
         every {
