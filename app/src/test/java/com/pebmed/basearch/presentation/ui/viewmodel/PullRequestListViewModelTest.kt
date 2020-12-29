@@ -90,18 +90,22 @@ class PullRequestListViewModelTest {
 
         val successValue = valueHistory[1]
         assertTrue(successValue is ViewState.Success)
-        assertEquals(resultList[0].number, (successValue as ViewState.Success).data[0].number)
-        assertEquals(resultList[0].body, (successValue as ViewState.Success).data[0].body)
-        assertEquals(resultList[0].additions, (successValue as ViewState.Success).data[0].additions)
-        assertEquals(resultList[0].comments, (successValue as ViewState.Success).data[0].comments)
-        assertEquals(resultList[0].commits, (successValue as ViewState.Success).data[0].commits)
-        assertEquals(resultList[0].htmlUrl, (successValue as ViewState.Success).data[0].htmlUrl)
-        assertEquals(resultList[0].deletions, (successValue as ViewState.Success).data[0].deletions)
-        assertEquals(resultList[0].changedFiles, (successValue as ViewState.Success).data[0].changedFiles)
-        assertEquals(resultList[0].createdAt, (successValue as ViewState.Success).data[0].createdAt)
-        assertEquals(resultList[0].title, (successValue as ViewState.Success).data[0].title)
-        assertEquals(resultList[0].user.login, (successValue as ViewState.Success).data[0].user.login)
-        assertEquals(resultList[0].user.avatarUrl, (successValue as ViewState.Success).data[0].user.avatarUrl)
+
+        val firstListItem = resultList[0]
+        val firstSuccessDataListItem = (successValue as ViewState.Success).data[0]
+
+        assertEquals(firstListItem.number        , firstSuccessDataListItem.number)
+        assertEquals(firstListItem.body          , firstSuccessDataListItem.body)
+        assertEquals(firstListItem.additions     , firstSuccessDataListItem.additions)
+        assertEquals(firstListItem.comments      , firstSuccessDataListItem.comments)
+        assertEquals(firstListItem.commits       , firstSuccessDataListItem.commits)
+        assertEquals(firstListItem.htmlUrl       , firstSuccessDataListItem.htmlUrl)
+        assertEquals(firstListItem.deletions     , firstSuccessDataListItem.deletions)
+        assertEquals(firstListItem.changedFiles  , firstSuccessDataListItem.changedFiles)
+        assertEquals(firstListItem.createdAt     , firstSuccessDataListItem.createdAt)
+        assertEquals(firstListItem.title         , firstSuccessDataListItem.title)
+        assertEquals(firstListItem.user.login    , firstSuccessDataListItem.user.login)
+        assertEquals(firstListItem.user.avatarUrl, firstSuccessDataListItem.user.avatarUrl)
     }
 
     @ExperimentalCoroutinesApi
