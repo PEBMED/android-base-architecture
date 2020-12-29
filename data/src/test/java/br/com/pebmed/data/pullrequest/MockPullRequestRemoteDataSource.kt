@@ -1,7 +1,7 @@
 package br.com.pebmed.data.pullrequest
 
 import br.com.pebmed.data.pullRequest.PullRequestRemoteDataSource
-import br.com.pebmed.data.pullrequest.model.mock.MockPullRequestResponseModel
+import br.com.pebmed.data.pullrequest.model.MockPullRequestResponseModel
 import br.com.pebmed.domain.base.CompleteResultWrapper
 import io.mockk.coEvery
 

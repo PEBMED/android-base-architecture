@@ -1,4 +1,4 @@
-package br.com.pebmed.data.pullrequest.model.mock
+package br.com.pebmed.data.pullrequest.model
 
 import br.com.pebmed.data.pullRequest.model.PullRequestResponseModel
 import br.com.pebmed.domain.MockPullRequestModel
