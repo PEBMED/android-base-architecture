@@ -1,59 +1,47 @@
 package br.com.pebmed.domain.usecases
 
-import br.com.pebmed.domain.MockGitRepoModel
-import br.com.pebmed.domain.base.ResultWrapper
-import br.com.pebmed.domain.repository.RepoRepository
-import io.mockk.MockKAnnotations
-import io.mockk.coEvery
+import br.com.pebmed.domain.repository.MockRepoRepository
 import io.mockk.coVerify
 import io.mockk.confirmVerified
-import io.mockk.impl.annotations.MockK
+import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
 
-
 class GetReposUseCaseTest {
-    @MockK(relaxUnitFun = true)
-    private lateinit var repoRepository: RepoRepository
+    private lateinit var mockRepoRepository: MockRepoRepository
 
     private lateinit var getReposUseCase: GetReposUseCase
 
-    private val fakePage = 1
-    private val fakeLanguage = "java"
-
     @Before
     fun setUp() {
-        MockKAnnotations.init(this)
+        mockRepoRepository = MockRepoRepository(mockk())
 
-        getReposUseCase = GetReposUseCase(repoRepository)
+        getReposUseCase = GetReposUseCase(mockRepoRepository.mock)
     }
 
     @Test
     fun `SHOULD save last sync date WHEN force sync param is true`() {
-        runBlocking {
-            coEvery {
-                repoRepository.getAllRepos(
-                    fromRemote = true,
-                    page = fakePage,
-                    language = fakeLanguage
-                )
-            } returns ResultWrapper(
-                success = MockGitRepoModel.mock(1)
-            )
+        //ARRANGE
+        mockRepoRepository.mockGetAllReposSuccessWithOneListItem()
+        val fakePage = 1
+        val fakeLanguage = "java"
 
+        //ACT
+        runBlocking {
             getReposUseCase.runAsync(GetReposUseCase.Params(true))
 
+            //ASSERT
             coVerify {
-                repoRepository.getAllRepos(
+                mockRepoRepository.mock.getAllRepos(
                     fromRemote = true,
                     page = fakePage,
                     language = fakeLanguage
                 )
-                repoRepository.saveLastSyncDate(any())
+                mockRepoRepository.mock.saveLastSyncDate(any())
             }
 
-            confirmVerified(repoRepository)
+            confirmVerified(mockRepoRepository.mock)
         }
     }
 }

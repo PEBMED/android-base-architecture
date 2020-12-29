@@ -10,19 +10,23 @@ import br.com.pebmed.domain.entities.RepoModel
 import io.mockk.*
 
 object MockGitRepoModel {
-    fun mock(itemsOnList: Int): List<RepoModel> {
+    fun mockListWithOneGenericItem(): List<RepoModel>  {
+        return generic(1)
+    }
+
+    private fun generic(itemsOnList: Int): List<RepoModel> {
         val list = mutableListOf<RepoModel>()
 
         for (index in 0 .. itemsOnList) {
             list.add(
-                mock()
+                generic()
             )
         }
 
         return list
     }
 
-    fun mock() : RepoModel {
+    fun generic() : RepoModel {
         val mockedRepoModel = mockk<RepoModel>()
 
         every {
