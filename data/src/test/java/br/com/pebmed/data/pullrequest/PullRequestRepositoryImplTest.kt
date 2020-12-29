@@ -15,82 +15,31 @@ import org.junit.Test
 
 class PullRequestRepositoryImplTest {
 
-    @MockK
-    private lateinit var mockPullRequestRemoteDataSource: PullRequestRemoteDataSource
-
-    private lateinit var pullRequestModel: PullRequestResponseModel
+    private lateinit var mockPullRequestRemoteDataSource: MockPullRequestRemoteDataSource
 
     private lateinit var pullRequestRepositoryImpl: PullRequestRepositoryImpl
 
     @Before
     fun setUp() {
-        MockKAnnotations.init(this)
+        mockPullRequestRemoteDataSource = MockPullRequestRemoteDataSource(mockk())
 
-        pullRequestModel = MockPullRequestResponseModel.generic()
-
-        pullRequestRepositoryImpl = PullRequestRepositoryImpl(mockPullRequestRemoteDataSource)
+        pullRequestRepositoryImpl = PullRequestRepositoryImpl(mockPullRequestRemoteDataSource.mock)
     }
 
     @Test
     fun `SHOULD list pull requests WHEN success fetched`() = runBlocking {
+        //ARRANGE
+        mockPullRequestRemoteDataSource.mockGetPullRequestListWithOneItem()
 
-        coEvery {
-            mockPullRequestRemoteDataSource.getPullRequests(any(), any())
-        } returns CompleteResultWrapper(
-            success = listOf(pullRequestModel)
-        )
+        //ACT
+        val result = pullRequestRepositoryImpl.getPullRequests(owner = "", repoName = "")
 
-        val result = PullRequestRepositoryImpl(mockPullRequestRemoteDataSource).getPullRequests(
-                owner = "",
-                repoName = ""
-            )
-
-
+        //ASSERT
         coVerify {
-            mockPullRequestRemoteDataSource.getPullRequests(any(), any())
+            mockPullRequestRemoteDataSource.mock.getPullRequests(any(), any())
         }
-
         confirmVerified(mockPullRequestRemoteDataSource)
 
         assertNotNull(result.success)
-    }
-
-    @Test
-    fun `SHOULD correct order WHEN call getPullRequests repository functions`() {
-
-        coEvery {
-            mockPullRequestRemoteDataSource.getPullRequests(any(), any())
-        } returns CompleteResultWrapper(
-            success = listOf(pullRequestModel)
-        )
-
-        val pullRequestRepositoryImpl =
-            spyk(
-                PullRequestRepositoryImpl(
-                    mockPullRequestRemoteDataSource
-                ), recordPrivateCalls = true)
-        runBlocking {
-            pullRequestRepositoryImpl.getPullRequests("", "")
-        }
-
-        coVerify {
-            pullRequestRepositoryImpl.getPullRequests(any(), any())
-            pullRequestRepositoryImpl["handleGetPullRequestsSuccess"]()
-            //pullRequestRepositoryImpl["handleListPullRequestsError"]()
-        }
-
-        coVerifySequence {
-            pullRequestRepositoryImpl.getPullRequests(any(), any())
-            pullRequestRepositoryImpl["handleGetPullRequestsSuccess"]()
-            //pullRequestRepositoryImpl["handleListPullRequestsError"]()
-        }
-
-        confirmVerified(
-            pullRequestRepositoryImpl
-        )
-    }
-
-    @After
-    fun tearDown() {
     }
 }
