@@ -3,9 +3,7 @@ package br.com.pebmed.data.repository
 import br.com.pebmed.data.pullRequest.PullRequestRemoteDataSource
 import br.com.pebmed.data.pullRequest.PullRequestRepositoryImpl
 import br.com.pebmed.data.pullRequest.model.PullRequestResponseModel
-import br.com.pebmed.data.pullRequest.model.UserResponseModel
-import br.com.pebmed.data.pullrequest.model.fake.MockPullRequestResponseModel
-import br.com.pebmed.data.pullrequest.model.fake.MockUserResponseModel
+import br.com.pebmed.data.pullrequest.model.mock.MockPullRequestResponseModel
 import br.com.pebmed.domain.base.CompleteResultWrapper
 import io.mockk.*
 import io.mockk.impl.annotations.MockK
@@ -20,7 +18,6 @@ class PullRequestRepositoryImplTest {
     @MockK
     private lateinit var mockPullRequestRemoteDataSource: PullRequestRemoteDataSource
 
-    private lateinit var userModel: UserResponseModel
     private lateinit var pullRequestModel: PullRequestResponseModel
 
     private lateinit var pullRequestRepositoryImpl: PullRequestRepositoryImpl
@@ -29,8 +26,7 @@ class PullRequestRepositoryImplTest {
     fun setUp() {
         MockKAnnotations.init(this)
 
-        userModel = MockUserResponseModel.loadUserResponse()
-        pullRequestModel = MockPullRequestResponseModel.loadPullRequestResponse(userModel)
+        pullRequestModel = MockPullRequestResponseModel.generic()
 
         pullRequestRepositoryImpl = PullRequestRepositoryImpl(mockPullRequestRemoteDataSource)
     }
