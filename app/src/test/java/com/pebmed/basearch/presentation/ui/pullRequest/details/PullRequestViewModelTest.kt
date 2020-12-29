@@ -82,48 +82,21 @@ class PullRequestViewModelTest {
 
         val successValue = valueHistory[1]
         assertTrue(successValue is ViewState.Success)
-        assertEquals(
-            result.number,
-            (successValue as ViewState.Success).data.number
-        )
-        assertEquals(result.body, (successValue as ViewState.Success).data.body)
-        assertEquals(
-            result.additions,
-            (successValue as ViewState.Success).data.additions
-        )
-        assertEquals(
-            result.comments,
-            (successValue as ViewState.Success).data.comments
-        )
-        assertEquals(
-            result.commits,
-            (successValue as ViewState.Success).data.commits
-        )
-        assertEquals(
-            result.htmlUrl,
-            (successValue as ViewState.Success).data.htmlUrl
-        )
-        assertEquals(
-            result.deletions,
-            (successValue as ViewState.Success).data.deletions
-        )
-        assertEquals(
-            result.changedFiles,
-            (successValue as ViewState.Success).data.changedFiles
-        )
-        assertEquals(
-            result.createdAt,
-            (successValue as ViewState.Success).data.createdAt
-        )
-        assertEquals(result.title, (successValue as ViewState.Success).data.title)
-        assertEquals(
-            result.user.login,
-            (successValue as ViewState.Success).data.user.login
-        )
-        assertEquals(
-            result.user.avatarUrl,
-            (successValue as ViewState.Success).data.user.avatarUrl
-        )
+
+        val successData = (successValue as ViewState.Success).data
+
+        assertEquals(result.number        , successData.number)
+        assertEquals(result.body          , successData.body)
+        assertEquals(result.additions     , successData.additions)
+        assertEquals(result.comments      , successData.comments)
+        assertEquals(result.commits       , successData.commits)
+        assertEquals(result.htmlUrl       , successData.htmlUrl)
+        assertEquals(result.deletions     , successData.deletions)
+        assertEquals(result.changedFiles  , successData.changedFiles)
+        assertEquals(result.createdAt     , successData.createdAt)
+        assertEquals(result.title         , successData.title)
+        assertEquals(result.user.login    , successData.user.login)
+        assertEquals(result.user.avatarUrl, successData.user.avatarUrl)
     }
 
     @ExperimentalCoroutinesApi
