@@ -5,7 +5,7 @@ import br.com.pebmed.domain.*
 import br.com.pebmed.domain.base.BaseErrorData
 import br.com.pebmed.domain.base.BaseErrorStatus
 import br.com.pebmed.domain.entities.PullRequestModel
-import br.com.pebmed.domain.usecases.GetPullRequestsUseCase
+import br.com.pebmed.domain.usecases.GetPullRequestListUseCase
 import com.pebmed.basearch.presentation.ui.base.ViewState
 import com.pebmed.basearch.presentation.ui.pullRequest.list.PullRequestListViewModel
 import com.jraska.livedata.test
@@ -35,11 +35,11 @@ class PullRequestListViewModelTest {
     private val testDispatcher = TestCoroutineDispatcher()
 
     @MockK(relaxUnitFun = true)
-    private lateinit var mockGetPullRequestsUseCase: MockGetPullRequestsUseCase
+    private lateinit var mockGetPullRequestsUseCase: MockGetPullRequestListUseCase
 
     private lateinit var pullRequest: PullRequestModel
 
-    private lateinit var params: GetPullRequestsUseCase.Params
+    private lateinit var params: GetPullRequestListUseCase.Params
 
     private lateinit var viewModel : PullRequestListViewModel
 
@@ -51,9 +51,9 @@ class PullRequestListViewModelTest {
     fun before() {
         MockKAnnotations.init(this)
 
-        mockGetPullRequestsUseCase = MockGetPullRequestsUseCase(mockk())
+        mockGetPullRequestsUseCase = MockGetPullRequestListUseCase(mockk())
         this.pullRequest = MockPullRequestModel.generic()
-        this.params = MockGetPullRequestsUseCase.mockGenericParams()
+        this.params = MockGetPullRequestListUseCase.mockGenericParams()
 
         Dispatchers.setMain(testDispatcher)
 

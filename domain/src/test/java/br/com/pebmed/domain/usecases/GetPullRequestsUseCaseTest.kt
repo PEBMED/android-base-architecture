@@ -1,6 +1,6 @@
 package br.com.pebmed.domain.usecases
 
-import br.com.pebmed.domain.MockGetPullRequestsUseCase
+import br.com.pebmed.domain.MockGetPullRequestListUseCase
 import br.com.pebmed.domain.base.BaseErrorStatus
 import br.com.pebmed.domain.repository.MockPullRequestRepository
 import io.mockk.*
@@ -13,13 +13,13 @@ class GetPullRequestsUseCaseTest {
 
     private lateinit var mockPullRequestRepository: MockPullRequestRepository
 
-    private lateinit var getPullRequestsUseCase: GetPullRequestsUseCase
+    private lateinit var getPullRequestsUseCase: GetPullRequestListUseCase
 
     @Before
     fun setUp() {
         mockPullRequestRepository = MockPullRequestRepository(mockk())
 
-        getPullRequestsUseCase = GetPullRequestsUseCase(mockPullRequestRepository.mock)
+        getPullRequestsUseCase = GetPullRequestListUseCase(mockPullRequestRepository.mock)
     }
 
     /**
@@ -29,7 +29,7 @@ class GetPullRequestsUseCaseTest {
     fun `SHOULD return pull requests list WHEN success fetched`() = runBlocking {
         mockPullRequestRepository.mockGetPullRequestsListWithOneItem()
 
-        val resultWrapper = getPullRequestsUseCase.runAsync(MockGetPullRequestsUseCase.mockGenericParams())
+        val resultWrapper = getPullRequestsUseCase.runAsync(MockGetPullRequestListUseCase.mockGenericParams())
 
         assertEquals("luis.fernandez", resultWrapper.success?.get(0)?.user?.login)
     }
@@ -38,7 +38,7 @@ class GetPullRequestsUseCaseTest {
     fun `SHOULD return default error WHEN error fetched`() = runBlocking {
         mockPullRequestRepository.mockGetPullRequestWithBaseErrorDataUnit()
 
-        val resultWrapper = getPullRequestsUseCase.runAsync(MockGetPullRequestsUseCase.mockGenericParams())
+        val resultWrapper = getPullRequestsUseCase.runAsync(MockGetPullRequestListUseCase.mockGenericParams())
 
         assertEquals(BaseErrorStatus.DEFAULT_ERROR, resultWrapper.error?.errorBody)
     }
@@ -48,7 +48,7 @@ class GetPullRequestsUseCaseTest {
         mockPullRequestRepository.mockGetPullRequestsListWithOneItem()
 
 
-        getPullRequestsUseCase.runAsync(MockGetPullRequestsUseCase.mockGenericParams())
+        getPullRequestsUseCase.runAsync(MockGetPullRequestListUseCase.mockGenericParams())
 
         coVerify {
             mockPullRequestRepository.mock.getPullRequests(any(), any())

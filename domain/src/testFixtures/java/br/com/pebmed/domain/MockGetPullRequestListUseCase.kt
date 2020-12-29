@@ -1,7 +1,7 @@
 package br.com.pebmed.domain
 
 import br.com.pebmed.domain.base.ResultWrapper
-import br.com.pebmed.domain.usecases.GetPullRequestsUseCase
+import br.com.pebmed.domain.usecases.GetPullRequestListUseCase
 /**
  * https://issuetracker.google.com/issues/139438142
  * Bug na IDE que não encontra dependências importadas
@@ -10,7 +10,7 @@ import br.com.pebmed.domain.usecases.GetPullRequestsUseCase
  */
 import io.mockk.*
 
-class MockGetPullRequestsUseCase(val mock: GetPullRequestsUseCase) {
+class MockGetPullRequestListUseCase(val mock: GetPullRequestListUseCase) {
 
     fun mockSuccess() {
         coEvery {
@@ -31,7 +31,7 @@ class MockGetPullRequestsUseCase(val mock: GetPullRequestsUseCase) {
     }
 
     companion object {
-        fun mockGenericParams() = GetPullRequestsUseCase.Params(
+        fun mockGenericParams() = GetPullRequestListUseCase.Params(
             owner = "OwnerModel",
             repoName = "RepoName"
         )

@@ -20,7 +20,7 @@ val viewModelModule = module {
     viewModel {
         PullRequestListViewModel(
             Dispatchers.IO,
-            get() as GetPullRequestsUseCase
+            get() as GetPullRequestListUseCase
         )
     }
 
