@@ -1,4 +1,4 @@
-package br.com.pebmed.data.repository
+package br.com.pebmed.data.pullrequest
 
 import br.com.pebmed.data.pullRequest.PullRequestRemoteDataSource
 import br.com.pebmed.data.pullRequest.PullRequestRepositoryImpl
