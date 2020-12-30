@@ -4,7 +4,7 @@ ext {
     targetSDK = 29
     compileSDK = 29
 
-    buildTools = '3.5.0'
+    buildTools = '4.1.1'
     buildToolsVersion = '29.0.3'
 
     kotlinVersion = '1.3.61'
@@ -39,6 +39,9 @@ ext {
     //CircleImageView
     circleImageViewVersion = '3.0.0'
 
+    //Espresso IdlingResourceVersion
+    idlingResourceVersion = '3.2.0'
+
     //Billing
     googlePlayBillingVersion = '2.1.0'
 
@@ -46,6 +49,13 @@ ext {
     junitVersion = '4.12'
     espressoVersion = '3.2.0'
     runnerVersion = '1.2.0'
+    mockkVersion = '1.9.3'
+    androidxTestRulesVersion = '1.2.0'
+    baristaVersion = '3.2.0'
+    androidxTestCoreVersion = '1.2.0'
+    androidxJunitVersion = '1.1.1'
+    jraskaLiveDataVersion = '1.1.2'
+    archCoreVersion = '2.1.0'
 
     dependencies = [
             kotlin                : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion",
@@ -76,13 +86,27 @@ ext {
 
             circleImageView       : "de.hdodenhof:circleimageview:$circleImageViewVersion",
 
+            idlingResource        : "androidx.test.espresso:espresso-idling-resource:$idlingResourceVersion",
+
             googlePlayBilling     : "com.android.billingclient:billing:$googlePlayBillingVersion"
     ]
 
     testDependecies = [
             junit                 : "junit:junit:$junitVersion",
-            espresso              : "androidx.test.espresso:espresso-core:$espressoVersion",
+            mockk                 : "io.mockk:mockk:$mockkVersion",
+            kotlinxCoroutines     : "org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlinxCoroutinesVersion",
+            jraskaLiveData        : "com.jraska.livedata:testing-ktx:$jraskaLiveDataVersion",
+            archCore              : "androidx.arch.core:core-testing:$archCoreVersion"
+    ]
+
+    androidTestDependecies = [
+            koin                  : "org.koin:koin-test:$koinVersion",
             runner                : "androidx.test:runner:$runnerVersion",
-            koin                  : "org.koin:koin-test:$koinVersion"
+            espresso              : "androidx.test.espresso:espresso-core:$espressoVersion",
+            mockk                 : "io.mockk:mockk-android:$mockkVersion",
+            rules                 : "androidx.test:rules:$androidxTestRulesVersion",
+            barista               : "com.schibsted.spain:barista:$baristaVersion",
+            core                  : "androidx.test:core-ktx:$androidxTestCoreVersion",
+            junit                 : "androidx.test.ext:junit-ktx:$androidxJunitVersion"
     ]
 }

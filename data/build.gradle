@@ -25,6 +25,7 @@ android {
 
 dependencies {
     def dependencies = rootProject.ext.dependencies
+    def testDependecies = rootProject.ext.testDependecies
 
     implementation project(":domain")
 
@@ -46,7 +47,7 @@ dependencies {
     kapt dependencies.roomCompiler
 
     testImplementation(testFixtures(project(":domain")))
-    testImplementation "io.mockk:mockk:1.9.3"
     testImplementation testDependecies.junit
+    testImplementation testDependecies.mockk
 
 }

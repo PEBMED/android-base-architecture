@@ -1,53 +1,47 @@
 package br.com.pebmed.domain.usecases
 
-import br.com.pebmed.domain.FakeGitRepoModel
-import br.com.pebmed.domain.base.ResultWrapper
-import br.com.pebmed.domain.repository.RepoRepository
-import io.mockk.MockKAnnotations
-import io.mockk.coEvery
+import br.com.pebmed.domain.repository.MockRepoRepository
 import io.mockk.coVerify
 import io.mockk.confirmVerified
-import io.mockk.impl.annotations.MockK
+import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
 
-
 class GetReposUseCaseTest {
-    @MockK(relaxUnitFun = true)
-    private lateinit var repoRepository: RepoRepository
+    private lateinit var mockRepoRepository: MockRepoRepository
 
-    private val fakePage = 1
-    private val fakeLanguage = "java"
+    private lateinit var getReposUseCase: GetReposUseCase
 
     @Before
     fun setUp() {
-        MockKAnnotations.init(this)
+        mockRepoRepository = MockRepoRepository(mockk())
+
+        getReposUseCase = GetReposUseCase(mockRepoRepository.mock)
     }
 
     @Test
-    fun `SHOULD save last sync date WHEN force sync param is true`() = runBlocking {
-        coEvery {
-            repoRepository.getAllRepos(
-                fromRemote = true,
-                page = fakePage,
-                language = fakeLanguage
-            )
-        } returns ResultWrapper(
-            success = FakeGitRepoModel.mock(1)
-        )
+    fun `SHOULD save last sync date WHEN force sync param is true`() {
+        //ARRANGE
+        mockRepoRepository.mockGetAllReposSuccessWithOneListItem()
+        val fakePage = 1
+        val fakeLanguage = "java"
 
-        GetReposUseCase(repoRepository).runAsync(GetReposUseCase.Params(true))
+        //ACT
+        runBlocking {
+            getReposUseCase.runAsync(GetReposUseCase.Params(true))
 
-        coVerify {
-            repoRepository.getAllRepos(
-                fromRemote = true,
-                page = fakePage,
-                language = fakeLanguage
-            )
-            repoRepository.saveLastSyncDate(any())
+            //ASSERT
+            coVerify {
+                mockRepoRepository.mock.getAllRepos(
+                    fromRemote = true,
+                    page = fakePage,
+                    language = fakeLanguage
+                )
+                mockRepoRepository.mock.saveLastSyncDate(any())
+            }
+
+            confirmVerified(mockRepoRepository.mock)
         }
-
-        confirmVerified(repoRepository)
     }
 }

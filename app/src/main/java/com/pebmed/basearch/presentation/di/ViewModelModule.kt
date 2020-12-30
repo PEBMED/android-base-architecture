@@ -6,6 +6,7 @@ import com.pebmed.basearch.presentation.ui.main.MainViewModel
 import com.pebmed.basearch.presentation.ui.pullRequest.list.PullRequestListViewModel
 import com.pebmed.basearch.presentation.ui.pullRequest.details.PullRequestViewModel
 import com.pebmed.platform.billing.GooglePlayBillingClientWrapper
+import kotlinx.coroutines.Dispatchers
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -18,12 +19,14 @@ val viewModelModule = module {
 
     viewModel {
         PullRequestListViewModel(
-            get() as GetPullRequestsUseCase
+            Dispatchers.IO,
+            get() as GetPullRequestListUseCase
         )
     }
 
     viewModel {
         PullRequestViewModel(
+            Dispatchers.IO,
             get() as GetPullRequestUseCase
         )
     }

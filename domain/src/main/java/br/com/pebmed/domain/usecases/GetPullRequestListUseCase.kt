@@ -6,9 +6,9 @@ import br.com.pebmed.domain.base.ResultWrapper
 import br.com.pebmed.domain.base.usecase.BaseAsyncUseCase
 import br.com.pebmed.domain.entities.PullRequestModel
 import br.com.pebmed.domain.repository.PullRequestRepository
-import br.com.pebmed.domain.usecases.GetPullRequestsUseCase.Params
+import br.com.pebmed.domain.usecases.GetPullRequestListUseCase.Params
 
-class GetPullRequestsUseCase(
+class GetPullRequestListUseCase(
     private val pullRequestRepository: PullRequestRepository
 ) : BaseAsyncUseCase<ResultWrapper<List<PullRequestModel>, BaseErrorData<BaseErrorStatus>>, Params>() {
 

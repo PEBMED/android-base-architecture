@@ -19,6 +19,12 @@ android {
         versionCode 2
         versionName "1.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        testInstrumentationRunnerArguments clearPackageData: 'true'
+        testOptions {
+            execution 'ANDROIDX_TEST_ORCHESTRATOR'
+            animationsDisabled = true
+        }
     }
     buildTypes {
         release {
@@ -29,6 +35,9 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
     testOptions {
         unitTests.returnDefaultValues = true
@@ -42,6 +51,7 @@ dependencies {
 
     def dependencies = rootProject.ext.dependencies
     def testDependencies = rootProject.ext.testDependecies
+    def androidTestDependecies = rootProject.ext.androidTestDependecies
 
     implementation dependencies.kotlin
 
@@ -70,19 +80,25 @@ dependencies {
     //CircleImageView
     implementation dependencies.circleImageView
 
+    //Espresso IdlingResource
+    implementation dependencies.idlingResource
+
     testImplementation(testFixtures(project(":domain")))
     testImplementation testDependencies.junit
-    testImplementation 'com.jraska.livedata:testing-ktx:1.1.1'
-    testImplementation "io.mockk:mockk:1.9.3"
-    testImplementation 'androidx.arch.core:core-testing:2.1.0'
+    testImplementation testDependencies.mockk
+    testImplementation testDependencies.kotlinxCoroutines
+    testImplementation testDependencies.jraskaLiveData
+    testImplementation testDependencies.archCore
 
     androidTestImplementation(testFixtures(project(":domain")))
-    androidTestImplementation testDependencies.koin
-    androidTestImplementation testDependencies.runner
-    androidTestImplementation testDependencies.espresso
-    androidTestImplementation "io.mockk:mockk-android:1.9.3"
-    androidTestImplementation 'androidx.test:rules:1.2.0'
-    androidTestImplementation('com.schibsted.spain:barista:3.2.0') {
+    androidTestImplementation androidTestDependecies.koin
+    androidTestImplementation androidTestDependecies.runner
+    androidTestImplementation androidTestDependecies.espresso
+    androidTestImplementation androidTestDependecies.mockk
+    androidTestImplementation androidTestDependecies.rules
+    androidTestImplementation androidTestDependecies.core
+    androidTestImplementation androidTestDependecies.junit
+    androidTestImplementation(androidTestDependecies.barista) {
         exclude group: 'org.jetbrains.kotlin' // Only if you already use Kotlin in your project
     }
 }

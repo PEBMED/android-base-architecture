@@ -11,7 +11,7 @@ val useCaseModule = module {
     }
 
     factory {
-        GetPullRequestsUseCase(
+        GetPullRequestListUseCase(
             pullRequestRepository = get()
         )
     }
