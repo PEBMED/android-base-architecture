@@ -11,6 +11,7 @@ interface RepoRepository {
 
     suspend fun getAllRemoteRepos(
         page: Int,
+        perPage: Int,
         language: String
     ): ResultWrapper<List<RepoModel>, BaseErrorData<Unit>>
 
@@ -19,6 +20,7 @@ interface RepoRepository {
     suspend fun getAllRepos(
         fromRemote: Boolean = false,
         page: Int,
+        perPage: Int,
         language: String
     ): ResultWrapper<List<RepoModel>, BaseErrorData<Unit>>
 

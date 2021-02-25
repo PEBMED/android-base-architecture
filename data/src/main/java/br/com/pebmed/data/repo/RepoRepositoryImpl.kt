@@ -23,9 +23,10 @@ class RepoRepositoryImpl(
 
     override suspend fun getAllRemoteRepos(
         page: Int,
+        perPage: Int,
         language: String
     ): ResultWrapper<List<RepoModel>, BaseErrorData<Unit>> {
-        val remoteResult = remoteRepository.getRepos(page, language)
+        val remoteResult = remoteRepository.getRepos(page, perPage, language)
 
         return remoteResult.transformSuccess { getReposResponse ->
             getReposResponse.repos.map { repoPayload ->
@@ -47,10 +48,11 @@ class RepoRepositoryImpl(
     override suspend fun getAllRepos(
         fromRemote: Boolean,
         page: Int,
+        perPage: Int,
         language: String
     ): ResultWrapper<List<RepoModel>, BaseErrorData<Unit>> {
         return if (fromRemote) {
-            getAllRemoteRepos(page, language)
+            getAllRemoteRepos(page, perPage, language)
         } else {
             getAllLocalRepos()
         }

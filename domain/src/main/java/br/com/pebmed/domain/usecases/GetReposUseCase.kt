@@ -24,6 +24,7 @@ class GetReposUseCase(
         val result = repoRepository.getAllRepos(
             fromRemote = params.forceSync,
             page = 1,
+            perPage = 5,
             language = "java"
         )
 

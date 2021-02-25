@@ -10,8 +10,9 @@ class RepoRemoteDataSource(
 ) : BaseDataSourceImpl() {
     suspend fun getRepos(
         page: Int,
+        perPage: Int,
         language: String
     ): CompleteResultWrapper<GetReposResponse, BaseErrorData<Unit>> {
-        return safeApiCall { repoApi.getRepos(page, language) }
+        return safeApiCall { repoApi.getRepos(page, perPage, language) }
     }
 }

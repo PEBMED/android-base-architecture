@@ -9,6 +9,7 @@ interface RepoApi {
     @GET("/search/repositories?sort=stars")
     suspend fun getRepos(
         @Query("page") page: Int,
+        @Query("per_page") perPage: Int,
         @Query("q") language: String
     ): Response<GetReposResponse>
 }
