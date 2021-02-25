@@ -53,10 +53,11 @@
 
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
+    <com.pebmed.basearch.presentation.ui.base.EndlessRecyclerView
         android:id="@+id/recyclerViewRepos"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        app:erv_animate="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

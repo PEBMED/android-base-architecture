@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,6 +13,7 @@ import com.pebmed.basearch.R
 import com.pebmed.basearch.presentation.extensions.setGone
 import com.pebmed.basearch.presentation.extensions.setVisible
 import com.pebmed.basearch.presentation.extensions.showToast
+import com.pebmed.basearch.presentation.ui.base.EndlessRecyclerView
 import com.pebmed.basearch.presentation.ui.base.Navigator
 import com.pebmed.basearch.presentation.ui.base.ViewState
 import com.pebmed.basearch.presentation.ui.billing.BillingActivity
@@ -23,7 +25,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), EndlessRecyclerView.Callback {
     private val viewModel by viewModel<MainViewModel>()
     private lateinit var reposAdapter: ReposAdapter
     private val networkConnectivityManager by inject<NetworkConnectivityManager>()
@@ -115,6 +117,12 @@ class MainActivity : AppCompatActivity() {
 
         recyclerViewRepos.layoutManager = LinearLayoutManager(this)
         recyclerViewRepos.adapter = reposAdapter
+        recyclerViewRepos.callback(this)
+    }
+
+    override fun loadMore(nextPage: Int) {
+        Toast.makeText(baseContext, "LoadMore", Toast.LENGTH_SHORT).show()
+        viewModel.loadRepos(nextPage)
     }
 
     //region ViewStates
