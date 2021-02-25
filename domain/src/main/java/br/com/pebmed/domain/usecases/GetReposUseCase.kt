@@ -23,7 +23,7 @@ class GetReposUseCase(
     override suspend fun runAsync(params: Params): ResultWrapper<List<RepoModel>, BaseErrorData<BaseErrorStatus>> {
         val result = repoRepository.getAllRepos(
             fromRemote = params.forceSync,
-            page = 1,
+            page = params.page,
             perPage = 5,
             language = "java"
         )
@@ -35,5 +35,5 @@ class GetReposUseCase(
         return result.transformError { BaseErrorData(errorBody = BaseErrorStatus.DEFAULT_ERROR) }
     }
 
-    data class Params(val forceSync: Boolean)
+    data class Params(val forceSync: Boolean, val page: Int)
 }

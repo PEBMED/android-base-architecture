@@ -23,11 +23,11 @@ class MainViewModel(private val getReposUseCase: GetReposUseCase) : ViewModel() 
         loadRepos()
     }
 
-    fun loadRepos() {
+    fun loadRepos(page: Int = 1) {
         _reposState.postValue(ViewState.Loading())
 
         viewModelScope.launch(Dispatchers.IO) {
-            val params = GetReposUseCase.Params(true)
+            val params = GetReposUseCase.Params(true, page)
             val resultWrapper = getReposUseCase.runAsync(params)
 
             val viewState = loadViewState(resultWrapper)

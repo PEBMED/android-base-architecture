@@ -63,10 +63,17 @@ class MainActivity : AppCompatActivity(), EndlessRecyclerView.Callback {
         viewModel.reposState.observe(this, Observer {
             when (it) {
                 is ViewState.Loading -> {
-                    showLoadingView()
+                    if(reposAdapter.isEmpty()) {
+                        showLoadingView()
+                    }
                 }
 
                 is ViewState.Success -> {
+                    recyclerViewRepos.apply {
+                        stopPaging()
+                        nextPage(2)
+                        hasNextPage(true)
+                    }
                     showReposList(it.data)
                 }
 
@@ -125,7 +132,6 @@ class MainActivity : AppCompatActivity(), EndlessRecyclerView.Callback {
         viewModel.loadRepos(nextPage)
     }
 
-    //region ViewStates
     private fun showLoadingView() {
         hideErrorView()
         hideReposList()
