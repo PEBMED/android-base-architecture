@@ -36,38 +36,28 @@ class RepoRepositoryImpl(
         val nextPage = if(hasNextPage)  page+1 else 0
 
 
-        val transformedResult = remoteResult.transformSuccess { getReposResponse ->
-            getReposResponse.repos.map { repoPayload ->
-                repoPayload.mapTo()
-            }
+        return remoteResult.transformSuccess { getReposResponse ->
+            Pair(
+                    getReposResponse.repos.map { repoPayload ->
+                        repoPayload.mapTo()
+                    },
+                    PaginationData(nextPage, hasNextPage)
+            )
         }
-        return CompleteResultWrapper(
-                Pair(
-                        transformedResult.success ?: emptyList(),
-                        PaginationData(nextPage, hasNextPage)
-                ),
-                transformedResult.error,
-                transformedResult.keyValueMap,
-                transformedResult.statusCode
-        )
+
     }
 
     override suspend fun getAllLocalRepos(): ResultWrapper<Pair<List<RepoModel>, PaginationData?>, BaseErrorData<Unit>> {
         val localResponse = localRepository.getRepos()
 
-        val transformedResult = localResponse.transformSuccess { repoEntities ->
-            repoEntities.map { repoEntity ->
-                repoEntity.mapTo()
-            }
+        return localResponse.transformSuccess { repoEntities ->
+            Pair(
+                    repoEntities.map { repoEntity ->
+                        repoEntity.mapTo()
+                    },
+                    null
+            )
         }
-
-        return CompleteResultWrapper(
-                success = Pair(
-                        transformedResult.success ?: emptyList(),
-                        null
-                ),
-                error = transformedResult.error
-        )
     }
 
     override suspend fun getAllRepos(
