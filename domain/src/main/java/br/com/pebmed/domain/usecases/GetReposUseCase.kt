@@ -2,6 +2,7 @@ package br.com.pebmed.domain.usecases
 
 import br.com.pebmed.domain.base.BaseErrorData
 import br.com.pebmed.domain.base.BaseErrorStatus
+import br.com.pebmed.domain.base.PaginationData
 import br.com.pebmed.domain.base.ResultWrapper
 import br.com.pebmed.domain.base.usecase.BaseAsyncUseCase
 import br.com.pebmed.domain.entities.RepoModel
@@ -18,9 +19,9 @@ import br.com.pebmed.domain.usecases.GetReposUseCase.Params
  */
 class GetReposUseCase(
     private val repoRepository: RepoRepository
-) : BaseAsyncUseCase<ResultWrapper<List<RepoModel>, BaseErrorData<BaseErrorStatus>>, Params>() {
+) : BaseAsyncUseCase<ResultWrapper<Pair<List<RepoModel>, PaginationData?>, BaseErrorData<BaseErrorStatus>>, Params>() {
 
-    override suspend fun runAsync(params: Params): ResultWrapper<List<RepoModel>, BaseErrorData<BaseErrorStatus>> {
+    override suspend fun runAsync(params: Params): ResultWrapper<Pair<List<RepoModel>, PaginationData?>, BaseErrorData<BaseErrorStatus>> {
         val result = repoRepository.getAllRepos(
             fromRemote = params.forceSync,
             page = params.page,

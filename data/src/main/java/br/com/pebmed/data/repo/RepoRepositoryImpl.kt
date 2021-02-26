@@ -7,6 +7,8 @@ import br.com.pebmed.domain.repository.RepoRepository
 import br.com.pebmed.data.base.SharedPreferencesUtil
 import br.com.pebmed.data.repo.local.RepoLocalDataSource
 import br.com.pebmed.data.repo.remote.RepoRemoteDataSource
+import br.com.pebmed.domain.base.CompleteResultWrapper
+import br.com.pebmed.domain.base.PaginationData
 
 class RepoRepositoryImpl(
     private val remoteRepository: RepoRemoteDataSource,
@@ -25,24 +27,47 @@ class RepoRepositoryImpl(
         page: Int,
         perPage: Int,
         language: String
-    ): ResultWrapper<List<RepoModel>, BaseErrorData<Unit>> {
+    ): ResultWrapper<Pair<List<RepoModel>, PaginationData?>, BaseErrorData<Unit>> {
         val remoteResult = remoteRepository.getRepos(page, perPage, language)
 
-        return remoteResult.transformSuccess { getReposResponse ->
+        val totalReposCount = remoteResult.success?.totalCount
+        val totalReposLoaded = page * perPage
+        val hasNextPage = compareValues(totalReposCount, totalReposLoaded) > 0
+        val nextPage = if(hasNextPage)  page+1 else 0
+
+
+        val transformedResult = remoteResult.transformSuccess { getReposResponse ->
             getReposResponse.repos.map { repoPayload ->
                 repoPayload.mapTo()
             }
         }
+        return CompleteResultWrapper(
+                Pair(
+                        transformedResult.success ?: emptyList(),
+                        PaginationData(nextPage, hasNextPage)
+                ),
+                transformedResult.error,
+                transformedResult.keyValueMap,
+                transformedResult.statusCode
+        )
     }
 
-    override suspend fun getAllLocalRepos(): ResultWrapper<List<RepoModel>, BaseErrorData<Unit>> {
+    override suspend fun getAllLocalRepos(): ResultWrapper<Pair<List<RepoModel>, PaginationData?>, BaseErrorData<Unit>> {
         val localResponse = localRepository.getRepos()
 
-        return localResponse.transformSuccess { repoEntities ->
+        val transformedResult = localResponse.transformSuccess { repoEntities ->
             repoEntities.map { repoEntity ->
                 repoEntity.mapTo()
             }
         }
+
+        return CompleteResultWrapper(
+                success = Pair(
+                        transformedResult.success ?: emptyList(),
+                        null
+                ),
+                error = transformedResult.error
+        )
     }
 
     override suspend fun getAllRepos(
@@ -50,7 +75,7 @@ class RepoRepositoryImpl(
         page: Int,
         perPage: Int,
         language: String
-    ): ResultWrapper<List<RepoModel>, BaseErrorData<Unit>> {
+    ): ResultWrapper<Pair<List<RepoModel>, PaginationData?>, BaseErrorData<Unit>> {
         return if (fromRemote) {
             getAllRemoteRepos(page, perPage, language)
         } else {

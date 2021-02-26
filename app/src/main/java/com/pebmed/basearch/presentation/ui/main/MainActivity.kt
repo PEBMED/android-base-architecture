@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import br.com.pebmed.domain.base.PaginationData
 import br.com.pebmed.domain.entities.RepoModel
 import com.pebmed.basearch.R
 import com.pebmed.basearch.presentation.extensions.setGone
@@ -69,10 +70,8 @@ class MainActivity : AppCompatActivity(), EndlessRecyclerView.Callback {
                 }
 
                 is ViewState.Success -> {
-                    recyclerViewRepos.apply {
-                        stopPaging()
-                        nextPage(2)
-                        hasNextPage(true)
+                    if(!reposAdapter.isEmpty()) {
+                        recyclerViewRepos.stopPaging()
                     }
                     showReposList(it.data)
                 }
@@ -156,13 +155,16 @@ class MainActivity : AppCompatActivity(), EndlessRecyclerView.Callback {
         textReposError.text = ""
     }
 
-    private fun showReposList(repos: List<RepoModel>) {
+    private fun showReposList(repos: Pair<List<RepoModel>, PaginationData?>) {
         hideLoadingView()
         hideErrorView()
 
-        reposAdapter.addItems(repos)
-
-        recyclerViewRepos.setVisible()
+        reposAdapter.addItems(repos.first)
+        recyclerViewRepos.apply {
+            nextPage(repos.second?.nextPage)
+            hasNextPage(repos.second?.hasNextPage)
+            setVisible()
+        }
     }
 
     private fun hideReposList() {
