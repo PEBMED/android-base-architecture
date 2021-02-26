@@ -116,13 +116,11 @@ class EndlessRecyclerView @JvmOverloads constructor(
     interface Callback {
         fun loadMore(nextPage: Int)
 
-        /* Cria corpo vazio para método OnScrolled de forma que o client não tenha obrigação de
-        implementar. */
         fun onScrolled(
                 recyclerView: RecyclerView?,
                 scrollX: Int,
                 scrollY: Int
-        ){}
+        ){/** Não precisa implementar. */}
     }
 
     private fun startAnimation() {
