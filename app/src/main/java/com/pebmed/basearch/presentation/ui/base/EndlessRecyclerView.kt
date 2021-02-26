@@ -13,7 +13,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.pebmed.basearch.R
 
-
+/**
+ * @Descrição: EndlessRecyclerView é uma recycler view customizada que avisa quando a parte visível
+ * da lista está chegando ao fim.
+ */
 class EndlessRecyclerView @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null,
         defStyleAttr: Int = 0
