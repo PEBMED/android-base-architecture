@@ -127,7 +127,6 @@ class MainActivity : AppCompatActivity(), EndlessRecyclerView.Callback {
     }
 
     override fun loadMore(nextPage: Int) {
-        Toast.makeText(baseContext, "LoadMore", Toast.LENGTH_SHORT).show()
         viewModel.loadRepos(nextPage)
     }
 
