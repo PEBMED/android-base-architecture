@@ -19,9 +19,6 @@ class EndlessRecyclerView @JvmOverloads constructor(
         defStyleAttr: Int = 0
 ) : RecyclerView(context, attrs, defStyleAttr) {
     companion object {
-        const val PAGE_START = 1
-        const val PER_PAGE = 12
-
         private const val INSTANCE_STATE_KEY = "instanceState"
         private const val INSTANCE_STATE_NEXT_PAGE = "instanceStateNextPage"
         private const val INSTANCE_STATE_IS_PAGING = "instanceStateIsPaging"
@@ -34,7 +31,7 @@ class EndlessRecyclerView @JvmOverloads constructor(
 
     private var callback: Callback? = null
     private var hasNextPage = false
-    private var nextPage = PAGE_START
+    private var nextPage = 0
     private var isPaging: Boolean = false
     private var animate = false
     private val scrollListener = recyclerScrollListener()

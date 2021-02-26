@@ -25,7 +25,7 @@ class GetReposUseCase(
         val result = repoRepository.getAllRepos(
             fromRemote = params.forceSync,
             page = params.page,
-            perPage = 5,
+            perPage = PaginationData.PER_PAGE,
             language = "java"
         )
 
