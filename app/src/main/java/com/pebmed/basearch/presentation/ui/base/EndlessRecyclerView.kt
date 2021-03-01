@@ -144,11 +144,15 @@ class EndlessRecyclerView @JvmOverloads constructor(
                 is LinearLayoutManager -> layoutManager as? LinearLayoutManager
                 is GridLayoutManager -> layoutManager as? GridLayoutManager
                 else -> null
-            }?.let {
-                val totalItemCount = it.itemCount
+            }?.let { linearLayoutManager ->
+                val totalItemCount = linearLayoutManager.itemCount
                 val lastVisibleItem =
-                        if (it is GridLayoutManager) it.findLastCompletelyVisibleItemPosition()
-                        else it.findLastVisibleItemPosition()
+                        if (linearLayoutManager is GridLayoutManager){
+                            linearLayoutManager.findLastCompletelyVisibleItemPosition()
+                        }
+                        else {
+                            linearLayoutManager.findLastVisibleItemPosition()
+                        }
 
                 if (lastVisibleItem >= totalItemCount - 2
                         && hasNextPage()
