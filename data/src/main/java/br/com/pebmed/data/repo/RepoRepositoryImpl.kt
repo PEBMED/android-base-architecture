@@ -33,8 +33,12 @@ class RepoRepositoryImpl(
         val totalReposCount = remoteResult.success?.totalCount
         val totalReposLoaded = page * perPage
         val hasNextPage = compareValues(totalReposCount, totalReposLoaded) > 0
-        val nextPage = if(hasNextPage)  page+1 else 0
-
+        val nextPage =
+                if(hasNextPage){
+                    page+1
+                } else {
+                    0
+                }
 
         return remoteResult.transformSuccess { getReposResponse ->
             Pair(
