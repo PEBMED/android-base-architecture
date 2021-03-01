@@ -129,6 +129,7 @@ class MainActivity : AppCompatActivity(), EndlessRecyclerView.Callback {
         viewModel.loadRepos(nextPage)
     }
 
+    //region ViewStates
     private fun showLoadingView() {
         hideErrorView()
         hideReposList()
