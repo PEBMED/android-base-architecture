@@ -7,7 +7,6 @@ import br.com.pebmed.domain.repository.RepoRepository
 import br.com.pebmed.data.base.SharedPreferencesUtil
 import br.com.pebmed.data.repo.local.RepoLocalDataSource
 import br.com.pebmed.data.repo.remote.RepoRemoteDataSource
-import br.com.pebmed.domain.base.CompleteResultWrapper
 import br.com.pebmed.domain.base.PaginationData
 
 class RepoRepositoryImpl(
