@@ -29,7 +29,7 @@ class GetReposUseCase(
             language = "java"
         )
 
-        if (result.success != null && params.forceSync) {
+        if (result.success?.first?.isNotEmpty() == true && params.forceSync) {
             repoRepository.saveLastSyncDate(getCurrentDateTime().toCacheFormat())
         }
 
