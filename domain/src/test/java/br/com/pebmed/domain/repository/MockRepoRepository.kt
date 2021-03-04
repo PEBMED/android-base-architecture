@@ -2,6 +2,7 @@ package br.com.pebmed.domain.repository
 
 import br.com.pebmed.domain.MockGitRepoModel
 import br.com.pebmed.domain.base.ResultWrapper
+import br.com.pebmed.domain.entities.RepoListModel
 import io.mockk.coEvery
 
 class MockRepoRepository(val mock: RepoRepository) {
@@ -15,7 +16,7 @@ class MockRepoRepository(val mock: RepoRepository) {
                     language = "java"
             )
         } returns ResultWrapper(
-                success = Pair(MockGitRepoModel.mockListWithOneGenericItem(), null)
+                success = RepoListModel(MockGitRepoModel.mockListWithOneGenericItem())
         )
     }
 
@@ -28,7 +29,7 @@ class MockRepoRepository(val mock: RepoRepository) {
                 language = "java"
             )
         } returns ResultWrapper(
-            success = Pair(emptyList(), null)
+            success = RepoListModel(emptyList())
         )
     }
 
@@ -41,7 +42,7 @@ class MockRepoRepository(val mock: RepoRepository) {
                 language = "java"
             )
         } returns ResultWrapper(
-            success = Pair(MockGitRepoModel.mockListWithOneGenericItem(), null)
+            success = RepoListModel(MockGitRepoModel.mockListWithOneGenericItem())
         )
     }
 
