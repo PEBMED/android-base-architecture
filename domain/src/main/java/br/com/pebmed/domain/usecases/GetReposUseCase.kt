@@ -2,9 +2,10 @@ package br.com.pebmed.domain.usecases
 
 import br.com.pebmed.domain.base.BaseErrorData
 import br.com.pebmed.domain.base.BaseErrorStatus
+import br.com.pebmed.domain.base.PaginationRules
 import br.com.pebmed.domain.base.ResultWrapper
 import br.com.pebmed.domain.base.usecase.BaseAsyncUseCase
-import br.com.pebmed.domain.entities.RepoModel
+import br.com.pebmed.domain.entities.RepoListModel
 import br.com.pebmed.domain.extensions.getCurrentDateTime
 import br.com.pebmed.domain.extensions.toCacheFormat
 import br.com.pebmed.domain.repository.RepoRepository
@@ -18,12 +19,13 @@ import br.com.pebmed.domain.usecases.GetReposUseCase.Params
  */
 class GetReposUseCase(
     private val repoRepository: RepoRepository
-) : BaseAsyncUseCase<ResultWrapper<List<RepoModel>, BaseErrorData<BaseErrorStatus>>, Params>() {
+) : BaseAsyncUseCase<ResultWrapper<RepoListModel, BaseErrorData<BaseErrorStatus>>, Params>() {
 
-    override suspend fun runAsync(params: Params): ResultWrapper<List<RepoModel>, BaseErrorData<BaseErrorStatus>> {
+    override suspend fun runAsync(params: Params): ResultWrapper<RepoListModel, BaseErrorData<BaseErrorStatus>> {
         val result = repoRepository.getAllRepos(
             fromRemote = params.forceSync,
-            page = 1,
+            page = params.page,
+            perPage = PaginationRules.PER_PAGE,
             language = "java"
         )
 
@@ -34,5 +36,5 @@ class GetReposUseCase(
         return result.transformError { BaseErrorData(errorBody = BaseErrorStatus.DEFAULT_ERROR) }
     }
 
-    data class Params(val forceSync: Boolean)
+    data class Params(val forceSync: Boolean, val page: Int)
 }

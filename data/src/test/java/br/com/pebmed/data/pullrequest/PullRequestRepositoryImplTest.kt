@@ -26,14 +26,12 @@ class PullRequestRepositoryImplTest {
         mockPullRequestRemoteDataSource.mockGetPullRequestListWithOneItem()
 
         //ACT
-        val result = pullRequestRepositoryImpl.getPullRequests(owner = "", repoName = "")
+        pullRequestRepositoryImpl.getPullRequests(owner = "", repoName = "")
 
         //ASSERT
         coVerify {
             mockPullRequestRemoteDataSource.mock.getPullRequests(any(), any())
         }
-        confirmVerified(mockPullRequestRemoteDataSource)
-
-        assertNotNull(result.success)
+        confirmVerified(mockPullRequestRemoteDataSource.mock)
     }
 }

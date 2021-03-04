@@ -7,11 +7,13 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import br.com.pebmed.domain.entities.RepoListModel
 import br.com.pebmed.domain.entities.RepoModel
 import com.pebmed.basearch.R
 import com.pebmed.basearch.presentation.extensions.setGone
 import com.pebmed.basearch.presentation.extensions.setVisible
 import com.pebmed.basearch.presentation.extensions.showToast
+import com.pebmed.basearch.presentation.ui.base.EndlessRecyclerView
 import com.pebmed.basearch.presentation.ui.base.Navigator
 import com.pebmed.basearch.presentation.ui.base.ViewState
 import com.pebmed.basearch.presentation.ui.billing.BillingActivity
@@ -23,7 +25,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), EndlessRecyclerView.Callback {
     private val viewModel by viewModel<MainViewModel>()
     private lateinit var reposAdapter: ReposAdapter
     private val networkConnectivityManager by inject<NetworkConnectivityManager>()
@@ -61,10 +63,15 @@ class MainActivity : AppCompatActivity() {
         viewModel.reposState.observe(this, Observer {
             when (it) {
                 is ViewState.Loading -> {
-                    showLoadingView()
+                    if(reposAdapter.isEmpty()) {
+                        showLoadingView()
+                    }
                 }
 
                 is ViewState.Success -> {
+                    if(!reposAdapter.isEmpty()) {
+                        recyclerViewRepos.stopPaging()
+                    }
                     showReposList(it.data)
                 }
 
@@ -115,6 +122,11 @@ class MainActivity : AppCompatActivity() {
 
         recyclerViewRepos.layoutManager = LinearLayoutManager(this)
         recyclerViewRepos.adapter = reposAdapter
+        recyclerViewRepos.callback(this)
+    }
+
+    override fun loadMore(nextPage: Int) {
+        viewModel.loadRepos(nextPage)
     }
 
     //region ViewStates
@@ -142,13 +154,16 @@ class MainActivity : AppCompatActivity() {
         textReposError.text = ""
     }
 
-    private fun showReposList(repos: List<RepoModel>) {
+    private fun showReposList(data: RepoListModel) {
         hideLoadingView()
         hideErrorView()
 
-        reposAdapter.addItems(repos)
-
-        recyclerViewRepos.setVisible()
+        reposAdapter.addItems(data.listOfRepoModel)
+        recyclerViewRepos.apply {
+            nextPage(data.nextPage)
+            hasNextPage(data.hasNextPage)
+            setVisible()
+        }
     }
 
     private fun hideReposList() {

@@ -1,12 +1,13 @@
 package br.com.pebmed.data.repo
 
-import br.com.pebmed.domain.base.BaseErrorData
-import br.com.pebmed.domain.base.ResultWrapper
-import br.com.pebmed.domain.entities.RepoModel
-import br.com.pebmed.domain.repository.RepoRepository
 import br.com.pebmed.data.base.SharedPreferencesUtil
 import br.com.pebmed.data.repo.local.RepoLocalDataSource
 import br.com.pebmed.data.repo.remote.RepoRemoteDataSource
+import br.com.pebmed.domain.base.BaseErrorData
+import br.com.pebmed.domain.base.ResultWrapper
+import br.com.pebmed.domain.entities.RepoListModel
+import br.com.pebmed.domain.entities.RepoModel
+import br.com.pebmed.domain.repository.RepoRepository
 
 class RepoRepositoryImpl(
     private val remoteRepository: RepoRemoteDataSource,
@@ -23,34 +24,53 @@ class RepoRepositoryImpl(
 
     override suspend fun getAllRemoteRepos(
         page: Int,
+        perPage: Int,
         language: String
-    ): ResultWrapper<List<RepoModel>, BaseErrorData<Unit>> {
-        val remoteResult = remoteRepository.getRepos(page, language)
+    ): ResultWrapper<RepoListModel, BaseErrorData<Unit>> {
+        val remoteResult = remoteRepository.getRepos(page, perPage, language)
+
+        val totalReposCount = remoteResult.success?.totalCount
+        val totalReposLoaded = page * perPage
+        val hasNextPage = compareValues(totalReposCount, totalReposLoaded) > 0
+        val nextPage =
+            if (hasNextPage) {
+                page + 1
+            } else {
+                0
+            }
 
         return remoteResult.transformSuccess { getReposResponse ->
-            getReposResponse.repos.map { repoPayload ->
-                repoPayload.mapTo()
-            }
+            RepoListModel(
+                getReposResponse.repos.map { repoPayload ->
+                    repoPayload.mapTo()
+                },
+                hasNextPage,
+                nextPage
+            )
         }
+
     }
 
-    override suspend fun getAllLocalRepos(): ResultWrapper<List<RepoModel>, BaseErrorData<Unit>> {
+    override suspend fun getAllLocalRepos(): ResultWrapper<RepoListModel, BaseErrorData<Unit>> {
         val localResponse = localRepository.getRepos()
 
         return localResponse.transformSuccess { repoEntities ->
-            repoEntities.map { repoEntity ->
-                repoEntity.mapTo()
-            }
+            RepoListModel(
+                listOfRepoModel = repoEntities.map { repoEntity ->
+                    repoEntity.mapTo()
+                }
+            )
         }
     }
 
     override suspend fun getAllRepos(
         fromRemote: Boolean,
         page: Int,
+        perPage: Int,
         language: String
-    ): ResultWrapper<List<RepoModel>, BaseErrorData<Unit>> {
+    ): ResultWrapper<RepoListModel, BaseErrorData<Unit>> {
         return if (fromRemote) {
-            getAllRemoteRepos(page, language)
+            getAllRemoteRepos(page, perPage, language)
         } else {
             getAllLocalRepos()
         }

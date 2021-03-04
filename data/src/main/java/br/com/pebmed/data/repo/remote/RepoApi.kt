@@ -6,9 +6,10 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface RepoApi {
-    @GET("/search/repositories?sort=stars&per_page=10")
+    @GET("/search/repositories?sort=stars")
     suspend fun getRepos(
         @Query("page") page: Int,
+        @Query("per_page") perPage: Int,
         @Query("q") language: String
     ): Response<GetReposResponse>
 }
