@@ -29,15 +29,12 @@ class GetReposUseCase(
             language = "java"
         )
 
-        if (hasValidResult(result) && params.forceSync) {
+        if (result.success != null && params.forceSync) {
             repoRepository.saveLastSyncDate(getCurrentDateTime().toCacheFormat())
         }
 
         return result.transformError { BaseErrorData(errorBody = BaseErrorStatus.DEFAULT_ERROR) }
     }
-
-    private fun hasValidResult(result: ResultWrapper<RepoListModel, BaseErrorData<Unit>>) =
-        result.success?.listOfRepoModel?.isNotEmpty() == true
 
     data class Params(val forceSync: Boolean, val page: Int)
 }

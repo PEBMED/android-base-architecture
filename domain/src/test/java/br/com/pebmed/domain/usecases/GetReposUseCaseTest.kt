@@ -50,9 +50,10 @@ class GetReposUseCaseTest {
     }
 
     @Test
-    fun shouldNotSaveLastSyncDateWhenGetReposSucceedAndResultIsEmpty() {
+    fun shouldSaveLastSyncDateWhenGetReposSucceedAndResultIsEmpty() {
         //ARRANGE
         mockRepoRepository.mockGetAllReposSuccessWithEmptyResult()
+        mockRepoRepository.mockSaveLastSyncDateSuccess()
         val fakePage = 1
         val fakePerPage = 5
         val fakeLanguage = "java"
@@ -69,8 +70,8 @@ class GetReposUseCaseTest {
                     perPage = fakePerPage,
                     language = fakeLanguage
                 )
+                mockRepoRepository.mock.saveLastSyncDate(any())
             }
-            verify (exactly = 0) {mockRepoRepository.mock.saveLastSyncDate(any())}
 
             confirmVerified(mockRepoRepository.mock)
         }
