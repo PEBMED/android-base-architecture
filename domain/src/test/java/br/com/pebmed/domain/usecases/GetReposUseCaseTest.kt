@@ -50,7 +50,7 @@ class GetReposUseCaseTest {
     }
 
     @Test
-    fun `SHOULDN'T save last sync date WHEN result success is empty`() {
+    fun `SHOULD not save last sync date WHEN result success is empty`() {
         //ARRANGE
         mockRepoRepository.mockGetAllReposSuccessWithResultEmpty()
         val fakePage = 1
@@ -77,7 +77,7 @@ class GetReposUseCaseTest {
     }
 
     @Test
-    fun `SHOULDN'T save last sync date WHEN force sync param is false`() {
+    fun `SHOULD not save last sync date WHEN force sync param is false`() {
         //ARRANGE
         mockRepoRepository.mockGetAllReposSuccessWithOneListItemAndForceSyncFalse()
         val fakePage = 1
