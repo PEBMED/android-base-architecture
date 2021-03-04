@@ -20,7 +20,7 @@ class MockRepoRepository(val mock: RepoRepository) {
         )
     }
 
-    fun mockGetAllReposSuccessWithResultEmpty() {
+    fun mockGetAllReposSuccessWithEmptyResult() {
         coEvery {
             mock.getAllRepos(
                 fromRemote = true,
