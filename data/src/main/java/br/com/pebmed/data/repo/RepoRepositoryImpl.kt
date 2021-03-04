@@ -1,13 +1,13 @@
 package br.com.pebmed.data.repo
 
-import br.com.pebmed.domain.base.BaseErrorData
-import br.com.pebmed.domain.base.ResultWrapper
-import br.com.pebmed.domain.entities.RepoModel
-import br.com.pebmed.domain.repository.RepoRepository
 import br.com.pebmed.data.base.SharedPreferencesUtil
 import br.com.pebmed.data.repo.local.RepoLocalDataSource
 import br.com.pebmed.data.repo.remote.RepoRemoteDataSource
-import br.com.pebmed.domain.base.PaginationData
+import br.com.pebmed.domain.base.BaseErrorData
+import br.com.pebmed.domain.base.ResultWrapper
+import br.com.pebmed.domain.entities.RepoListModel
+import br.com.pebmed.domain.entities.RepoModel
+import br.com.pebmed.domain.repository.RepoRepository
 
 class RepoRepositoryImpl(
     private val remoteRepository: RepoRemoteDataSource,
@@ -26,39 +26,39 @@ class RepoRepositoryImpl(
         page: Int,
         perPage: Int,
         language: String
-    ): ResultWrapper<Pair<List<RepoModel>, PaginationData?>, BaseErrorData<Unit>> {
+    ): ResultWrapper<RepoListModel, BaseErrorData<Unit>> {
         val remoteResult = remoteRepository.getRepos(page, perPage, language)
 
         val totalReposCount = remoteResult.success?.totalCount
         val totalReposLoaded = page * perPage
         val hasNextPage = compareValues(totalReposCount, totalReposLoaded) > 0
         val nextPage =
-                if(hasNextPage){
-                    page+1
-                } else {
-                    0
-                }
+            if (hasNextPage) {
+                page + 1
+            } else {
+                0
+            }
 
         return remoteResult.transformSuccess { getReposResponse ->
-            Pair(
-                    getReposResponse.repos.map { repoPayload ->
-                        repoPayload.mapTo()
-                    },
-                    PaginationData(nextPage, hasNextPage)
+            RepoListModel(
+                getReposResponse.repos.map { repoPayload ->
+                    repoPayload.mapTo()
+                },
+                hasNextPage,
+                nextPage
             )
         }
 
     }
 
-    override suspend fun getAllLocalRepos(): ResultWrapper<Pair<List<RepoModel>, PaginationData?>, BaseErrorData<Unit>> {
+    override suspend fun getAllLocalRepos(): ResultWrapper<RepoListModel, BaseErrorData<Unit>> {
         val localResponse = localRepository.getRepos()
 
         return localResponse.transformSuccess { repoEntities ->
-            Pair(
-                    repoEntities.map { repoEntity ->
-                        repoEntity.mapTo()
-                    },
-                    null
+            RepoListModel(
+                listOfRepoModel = repoEntities.map { repoEntity ->
+                    repoEntity.mapTo()
+                }
             )
         }
     }
@@ -68,7 +68,7 @@ class RepoRepositoryImpl(
         page: Int,
         perPage: Int,
         language: String
-    ): ResultWrapper<Pair<List<RepoModel>, PaginationData?>, BaseErrorData<Unit>> {
+    ): ResultWrapper<RepoListModel, BaseErrorData<Unit>> {
         return if (fromRemote) {
             getAllRemoteRepos(page, perPage, language)
         } else {

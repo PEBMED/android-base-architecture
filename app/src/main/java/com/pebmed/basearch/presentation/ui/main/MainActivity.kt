@@ -7,7 +7,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import br.com.pebmed.domain.base.PaginationData
+import br.com.pebmed.domain.entities.RepoListModel
 import br.com.pebmed.domain.entities.RepoModel
 import com.pebmed.basearch.R
 import com.pebmed.basearch.presentation.extensions.setGone
@@ -154,14 +154,14 @@ class MainActivity : AppCompatActivity(), EndlessRecyclerView.Callback {
         textReposError.text = ""
     }
 
-    private fun showReposList(repos: Pair<List<RepoModel>, PaginationData?>) {
+    private fun showReposList(data: RepoListModel) {
         hideLoadingView()
         hideErrorView()
 
-        reposAdapter.addItems(repos.first)
+        reposAdapter.addItems(data.listOfRepoModel)
         recyclerViewRepos.apply {
-            nextPage(repos.second?.nextPage)
-            hasNextPage(repos.second?.hasNextPage)
+            nextPage(data.nextPage)
+            hasNextPage(data.hasNextPage)
             setVisible()
         }
     }

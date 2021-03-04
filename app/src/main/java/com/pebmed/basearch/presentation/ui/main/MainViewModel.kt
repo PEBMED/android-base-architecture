@@ -6,9 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import br.com.pebmed.domain.base.BaseErrorData
 import br.com.pebmed.domain.base.BaseErrorStatus
-import br.com.pebmed.domain.base.PaginationData
-import br.com.pebmed.domain.base.PaginationData.Companion.PAGE_START
-import br.com.pebmed.domain.entities.RepoModel
+import br.com.pebmed.domain.base.PaginationRules.PAGE_START
+import br.com.pebmed.domain.entities.RepoListModel
 import br.com.pebmed.domain.usecases.GetReposUseCase
 import com.pebmed.basearch.presentation.extensions.loadViewState
 import com.pebmed.basearch.presentation.ui.base.ViewState
@@ -17,8 +16,8 @@ import kotlinx.coroutines.launch
 
 class MainViewModel(private val getReposUseCase: GetReposUseCase) : ViewModel() {
     private val _reposState =
-        MutableLiveData<ViewState<Pair<List<RepoModel>, PaginationData?>, BaseErrorData<BaseErrorStatus>>>()
-    val reposState: LiveData<ViewState<Pair<List<RepoModel>, PaginationData?>, BaseErrorData<BaseErrorStatus>>>
+        MutableLiveData<ViewState<RepoListModel, BaseErrorData<BaseErrorStatus>>>()
+    val reposState: LiveData<ViewState<RepoListModel, BaseErrorData<BaseErrorStatus>>>
         get() = _reposState
 
     init {
